@@ -10,6 +10,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+GLFWApplication* currentApp;
+
 GLFWApplication::GLFWApplication(
 	int width,
 	int height,
@@ -37,11 +39,15 @@ GLFWApplication::GLFWApplication(
 		throw "Failed to initialize GLEW";
 	}
 	glViewport(0, 0, width, height);
+	glfwSetKeyCallback(window, keyCallback);
+	initialize();
 	while (!glfwWindowShouldClose(window)) {
+		currentApp = this;
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 		tick();
 	}
+
 }
 
 
@@ -53,8 +59,8 @@ void GLFWApplication::initialize() {
 	return;
 }
 
-bool GLFWApplication::tick() {
-	return false;
+void GLFWApplication::tick() {
+	return;
 }
 
 void GLFWApplication::readKeys() {
@@ -72,6 +78,21 @@ void GLFWApplication::setKey(int code) {
 void GLFWApplication::resetKey(int code) {
 	keys[code >> 6] &= ~(1LL << (code & 63));
 }
+
+// Temporarily disable warnings about unused parameters
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4100)
+#endif
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+	if (action == GLFW_PRESS) currentApp->setKey(key);
+	else if (action == GLFW_RELEASE) currentApp->resetKey(key);
+}
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)

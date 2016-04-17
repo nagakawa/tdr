@@ -2,10 +2,20 @@
 
 #include <stdint.h>
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define DEFAULT_TITLE "GLFWApplication"
 
+/*
+	GLFWApplication: a class for applications.
+
+	Users should create subclasses of GLFWApplication
+	for their own purposes.
+*/
 class GLFWApplication {
 public:
 	GLFWApplication(
@@ -17,12 +27,18 @@ public:
 	);
 	~GLFWApplication();
 	virtual void initialize();
-	virtual bool tick();
+	virtual void tick();
 	virtual void readKeys();
+	// These methods must be public in order to be
+	// referenceable by keyCallback.
+	void setKey(int code);
+	void resetKey(int code);
 protected:
 	bool testKey(int code);
 private:
 	uint64_t keys[16];
-	void setKey(int code);
-	void resetKey(int code);
 };
+
+extern GLFWApplication* currentApp;
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
