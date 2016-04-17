@@ -30,19 +30,25 @@ public:
 	virtual void initialize();
 	virtual void tick();
 	virtual void readKeys();
+	virtual void onMouse(double xpos, double ypos);
 	// These methods must be public in order to be
 	// referenceable by keyCallback.
 	void setKey(int code);
 	void resetKey(int code);
+	double getFPS() { return fps; }
+	double getDelta() { return delta;  }
+	GLFWwindow* underlying() { return window; }
 protected:
 	bool testKey(int code);
 private:
 	uint64_t keys[16];
 	GLFWwindow* window;
 	GLdouble fps;
+	GLdouble delta;
 	GLdouble currentTime;
 };
 
 extern GLFWApplication* currentApp;
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void mouseCallback(GLFWwindow* window, double xpos, double ypos);

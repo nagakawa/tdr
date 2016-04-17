@@ -12,6 +12,7 @@ public:
 	GLuint id;
 	GLenum shaderType;
 private:
+	void init(const char* source, GLenum type);
 };
 
-void openShaderFromFile(const char* fname, GLenum type, Shader& s);
+Shader* openShaderFromFile(const char* fname, GLenum type);

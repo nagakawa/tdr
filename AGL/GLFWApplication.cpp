@@ -35,19 +35,23 @@ GLFWApplication::GLFWApplication(
 	}
 	glViewport(0, 0, width, height);
 	glfwSetKeyCallback(window, keyCallback);
-	initialize();
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, mouseCallback);
 }
 
 void GLFWApplication::start() {
 	currentTime = glfwGetTime();
+	initialize();
 	while (!glfwWindowShouldClose(window)) {
 		GLdouble prevTime = currentTime;
 		currentTime = glfwGetTime();
-		fps = 1.0 / (currentTime - prevTime);
+		delta = currentTime - prevTime;
+		fps = 1.0 / delta;
 		currentApp = this;
 		glfwPollEvents();
-		glfwSwapBuffers(window);
+		readKeys();
 		tick();
+		glfwSwapBuffers(window);
 	}
 	delete this;
 }
@@ -80,17 +84,19 @@ void GLFWApplication::resetKey(int code) {
 	keys[code >> 6] &= ~(1LL << (code & 63));
 }
 
-// Temporarily disable warnings about unused parameters
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4100)
-#endif
+#include "begincbackdecl.h"
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (action == GLFW_PRESS) currentApp->setKey(key);
 	else if (action == GLFW_RELEASE) currentApp->resetKey(key);
 }
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
+void GLFWApplication::onMouse(double xpos, double ypos) {
+	return;
+}
+
+void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+	currentApp->onMouse(xpos, ypos);
+}
+
+#include "endcbackdecl.h"

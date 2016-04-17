@@ -45,6 +45,12 @@
     <ClInclude Include="Renderable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="begincbackdecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="endcbackdecl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLFWApplication.cpp">

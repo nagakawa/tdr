@@ -2,7 +2,7 @@
 class Renderable {
 public:
 	Renderable();
-	virtual ~Renderable();
+	~Renderable();
 	virtual void setUp();
 	virtual void tearDown();
 	virtual void tick();

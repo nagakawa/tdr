@@ -1,9 +1,11 @@
 #include "Renderable.h"
 
 Renderable::Renderable() {
+	setUp();
 }
 
 Renderable::~Renderable() {
+	tearDown();
 }
 
 void Renderable::setUp() {

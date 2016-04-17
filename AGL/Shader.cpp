@@ -3,6 +3,10 @@
 #include "cross.h"
 
 Shader::Shader(const char* source, GLenum type) {
+	init(source, type);
+}
+
+void Shader::init(const char* source, GLenum type) {
 	id = glCreateShader(type);
 	glShaderSource(id, 1, &source, NULL);
 	glCompileShader(id);
@@ -29,21 +33,20 @@ Shader::Shader(FILE* f, GLenum type) {
 	fread(string, fsize, 1, f);
 	fclose(f);
 	string[fsize] = 0;
-	Shader(string, type);
+	init(string, type);
 }
 
 Shader::~Shader() {
 	glDeleteShader(id);
 }
 
-void openShaderFromFile(const char* fname, GLenum type, Shader& s) {
+Shader* openShaderFromFile(const char* fname, GLenum type) {
 	FILE* f;
 	fopen_s(&f, fname, "rb");
 	if (f == nullptr) {
 		fprintf(stderr, "File %s missing or unreadable!", fname);
 		throw "nofile";
 	}
-	Shader shader(f, type);
-	s = shader;
-	fclose(f);
+	Shader* shader = new Shader(f, type);
+	return shader;
 }
