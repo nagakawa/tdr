@@ -1,6 +1,6 @@
 ## TDR
 
-Tsubakura's Danmaku Recombombulator
+Tsubakura's Danmaku Recombobulator
 
 ### Installation
 
