@@ -28,7 +28,7 @@ GLFWApplication::GLFWApplication(
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	GLFWwindow* window = glfwCreateWindow(actualWidth, actualHeight, title, nullptr, nullptr);
+	window = glfwCreateWindow(actualWidth, actualHeight, title, nullptr, nullptr);
 	if (window == nullptr) {
 		glfwTerminate();
 		throw "Failed to create GLFW window";
@@ -41,15 +41,17 @@ GLFWApplication::GLFWApplication(
 	glViewport(0, 0, width, height);
 	glfwSetKeyCallback(window, keyCallback);
 	initialize();
+}
+
+void GLFWApplication::start() {
 	while (!glfwWindowShouldClose(window)) {
 		currentApp = this;
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 		tick();
 	}
-
+	delete this;
 }
-
 
 GLFWApplication::~GLFWApplication() {
 	glfwTerminate();

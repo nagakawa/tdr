@@ -25,6 +25,7 @@ public:
 		int actualHeight = 0,
 		const char* title = DEFAULT_TITLE
 	);
+	void start();
 	~GLFWApplication();
 	virtual void initialize();
 	virtual void tick();
@@ -37,6 +38,7 @@ protected:
 	bool testKey(int code);
 private:
 	uint64_t keys[16];
+	GLFWwindow* window;
 };
 
 extern GLFWApplication* currentApp;
