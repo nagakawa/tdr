@@ -6,7 +6,7 @@
 // Preprocessor directives!
 // (BTW shader.id or shader->id?)
 #define SETUNSP(shader, type, uname, value) \
-	glGetUniform##type(glGetUniformLocation((shader).id, name), value)
+	glUniform##type(glGetUniformLocation((shader).id, name), value)
 
 class ShaderProgram {
 public:
