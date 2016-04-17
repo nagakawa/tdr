@@ -1,8 +1,3 @@
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4224)
-#endif
-
 #include "GLFWApplication.h"
 
 #include <iostream>
@@ -91,10 +86,6 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode
 	if (action == GLFW_PRESS) currentApp->setKey(key);
 	else if (action == GLFW_RELEASE) currentApp->resetKey(key);
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)
