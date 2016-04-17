@@ -3,12 +3,11 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-class VBO {
+class VAO {
 public:
-	VBO();
-	~VBO();
+	VAO();
+	~VAO();
 	void setActive();
-	void feedData(GLint size, void* data, GLenum usage);
 	GLuint id;
 };
 

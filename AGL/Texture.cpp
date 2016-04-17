@@ -14,8 +14,14 @@ Texture::Texture(const char* fname) {
 }
 
 Texture::~Texture() {
+	glDeleteTextures(1, &id);
 }
 
 void Texture::bind() {
 	glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void Texture::bindTo(GLint slot) {
+	glActiveTexture(GL_TEXTURE0 + slot);
+	bind();
 }

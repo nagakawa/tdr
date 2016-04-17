@@ -5,6 +5,7 @@ VBO::VBO() {
 }
 
 VBO::~VBO() {
+	glDeleteBuffers(1, &id);
 }
 
 void VBO::setActive() {

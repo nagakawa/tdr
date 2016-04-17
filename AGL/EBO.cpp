@@ -5,6 +5,7 @@ EBO::EBO() {
 }
 
 EBO::~EBO() {
+	glDeleteBuffers(1, &id);
 }
 
 void EBO::setActive() {

@@ -5,6 +5,7 @@ ShaderProgram::ShaderProgram() {
 }
 
 ShaderProgram::~ShaderProgram() {
+	glDeleteProgram(id);
 }
 
 // Hmm, Shader shader or Shader& shader? I wonder...
