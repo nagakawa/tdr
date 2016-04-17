@@ -22,3 +22,7 @@ At the time of writing, TDR consists of two components:
 Plus a few test components:
 
 * AGLTest: test program for AGL.
+
+### Resource Credits
+
+Sample images (crate, awesome face), used in AGL test, by [Learn OpenGL](http://www.learnopengl.com), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
