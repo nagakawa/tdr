@@ -39,7 +39,11 @@ GLFWApplication::GLFWApplication(
 }
 
 void GLFWApplication::start() {
+	currentTime = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) {
+		GLdouble prevTime = currentTime;
+		currentTime = glfwGetTime();
+		fps = 1.0 / (currentTime - prevTime);
 		currentApp = this;
 		glfwPollEvents();
 		glfwSwapBuffers(window);

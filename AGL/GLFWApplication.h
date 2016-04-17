@@ -39,6 +39,8 @@ protected:
 private:
 	uint64_t keys[16];
 	GLFWwindow* window;
+	GLdouble fps;
+	GLdouble currentTime;
 };
 
 extern GLFWApplication* currentApp;
