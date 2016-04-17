@@ -18,7 +18,6 @@ void ShaderProgram::link() {
 	GLchar infoLog[512];
 	glGetProgramiv(id, GL_LINK_STATUS, &success);
 	if (!success) {
-		// oh shit
 		glGetProgramInfoLog(id, 512, NULL, infoLog);
 		throw infoLog;
 	}
