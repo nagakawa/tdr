@@ -17,6 +17,7 @@ At the time of writing, TDR consists of two components:
 
 * AGL: a C++ wrapper around OpenGL.
 * TDR: the engine itself (NYI)
+* Some future scripting layer
 
 Plus a few test components:
 
