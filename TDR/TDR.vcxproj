@@ -137,12 +137,6 @@
       <Project>{95c9cd1f-1c18-4305-b843-9c1a4f6600e5}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="LayeredPriorityRenderable.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="LayeredPriorityRenderable.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

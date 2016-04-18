@@ -139,6 +139,7 @@
     <ClInclude Include="EBO.h" />
     <ClInclude Include="endcbackdecl.h" />
     <ClInclude Include="GLFWApplication.h" />
+    <ClInclude Include="LayeredPriorityRenderable.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="EBO.cpp" />
     <ClCompile Include="GLFWApplication.cpp" />
+    <ClCompile Include="LayeredPriorityRenderable.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
