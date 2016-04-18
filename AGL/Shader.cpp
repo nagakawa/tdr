@@ -42,7 +42,7 @@ Shader::~Shader() {
 
 Shader* openShaderFromFile(const char* fname, GLenum type) {
 	FILE* f;
-	fopen_s(&f, fname, "rb");
+	openFile(&f, fname, "rb");
 	if (f == nullptr) {
 		fprintf(stderr, u8"File %s missing or unreadable!", fname);
 		throw u8"nofile";
