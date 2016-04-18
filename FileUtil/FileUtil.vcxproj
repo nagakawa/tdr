@@ -121,7 +121,7 @@
     <ClInclude Include="cross.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cross.cpp" />
+    <ClCompile Include="cross.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

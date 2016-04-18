@@ -15,6 +15,7 @@ These instructions are for Visual Studio 2015. For other compilers / IDEs, you'r
 
 At the time of writing, TDR consists of two components:
 
+* FileUtil: a library to settle encoding differences between Windows and other OSes
 * AGL: a C++ wrapper around OpenGL.
 * TDR: the engine itself (NYI)
 * Some future scripting layer
@@ -22,6 +23,7 @@ At the time of writing, TDR consists of two components:
 Plus a few test components:
 
 * AGLTest: test program for AGL.
+* TDRTest: test program for TDR.
 
 ### Resource Credits
 
