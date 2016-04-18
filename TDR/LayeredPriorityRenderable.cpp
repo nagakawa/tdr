@@ -1,12 +1,12 @@
 #include "LayeredPriorityRenderable.h"
 
 LayeredPriorityRenderable::LayeredPriorityRenderable() {
-	renderables = new std::multimap<uint32_t, std::shared_ptr<Renderable>>;
+	renderables = std::unique_ptr<std::multimap<uint32_t, std::shared_ptr<Renderable>>>(new std::multimap<uint32_t, std::shared_ptr<Renderable>>);
 	setUp();
 }
 
 LayeredPriorityRenderable::~LayeredPriorityRenderable() {
-	delete renderables;
+	renderables.reset();
 	tearDown();
 }
 

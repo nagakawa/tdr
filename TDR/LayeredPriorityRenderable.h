@@ -15,6 +15,6 @@ public:
 	void update();
 	void attach(uint32_t priority, std::shared_ptr<Renderable> r);
 private:
-	std::multimap<uint32_t, std::shared_ptr<Renderable>>* renderables;
+	std::unique_ptr<std::multimap<uint32_t, std::shared_ptr<Renderable>>> renderables;
 };
 
