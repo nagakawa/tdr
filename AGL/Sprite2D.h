@@ -19,7 +19,7 @@
 
 namespace agl {
 	const char* VERTEX_SOURCE = "\
-#version 330 core \
+#version 330 core \n\
 layout (location = 0) in vec4 source; \
 layout (location = 1) in vec4 dest; \
 layout (location = 2) in vec2 pos; \
@@ -31,7 +31,7 @@ void main() { \
 } \
 ";
 	const char* FRAGMENT_SOURCE = "\
-#version 330 core \
+#version 330 core \n\
 in vec2 texCoord; \
 out vec4 color; \
 uniform sampler2D tex; \
