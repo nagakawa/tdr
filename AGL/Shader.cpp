@@ -22,7 +22,7 @@ void Shader::init(const char* source, GLenum type) {
 
 Shader::Shader(FILE* f, GLenum type) {
 	if (f == nullptr) {
-		throw "Tried to pass in a null pointer!";
+		throw u8"Tried to pass in a null pointer!";
 	}
 	// Slurp the source
 	// Thanks http://stackoverflow.com/questions/14002954/c-programming-how-to-read-the-whole-file-contents-into-a-buffer
@@ -44,8 +44,8 @@ Shader* openShaderFromFile(const char* fname, GLenum type) {
 	FILE* f;
 	fopen_s(&f, fname, "rb");
 	if (f == nullptr) {
-		fprintf(stderr, "File %s missing or unreadable!", fname);
-		throw "nofile";
+		fprintf(stderr, u8"File %s missing or unreadable!", fname);
+		throw u8"nofile";
 	}
 	Shader* shader = new Shader(f, type);
 	return shader;

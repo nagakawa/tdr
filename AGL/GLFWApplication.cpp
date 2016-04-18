@@ -26,12 +26,12 @@ GLFWApplication::GLFWApplication(
 	window = glfwCreateWindow(actualWidth, actualHeight, title, nullptr, nullptr);
 	if (window == nullptr) {
 		glfwTerminate();
-		throw "Failed to create GLFW window";
+		throw u8"Failed to create GLFW window";
 	}
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		throw "Failed to initialize GLEW";
+		throw u8"Failed to initialize GLEW";
 	}
 	glViewport(0, 0, width, height);
 	glfwSetKeyCallback(window, keyCallback);

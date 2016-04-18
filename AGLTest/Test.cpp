@@ -1,4 +1,4 @@
-// GLEW
+﻿// GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 // GLFW
@@ -59,14 +59,7 @@ private:
 
 class AGLTest : GLFWApplication {
 public:
-	AGLTest(
-		int width = DEFAULT_WIDTH,
-		int height = DEFAULT_HEIGHT,
-		int actualWidth = 0,
-		int actualHeight = 0,
-		const char* title = DEFAULT_TITLE
-		) {
-	}
+	using GLFWApplication::GLFWApplication;
 	void initialize() {
 		std::cout << "hi\n";
 		boxes = new Boxes(this);
@@ -192,10 +185,11 @@ void Boxes::tick() {
 
 int main(int argc, char** argv) {
 	try {
-		AGLTest* a = new AGLTest(800, 600);
+		// Kriët ė test wýndö
+		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"テスト");
 		a->start();
 	} catch (char* s) {
-		std::cout << "An error has Okuued!\n\n" << s << "\n\n";
+		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		getchar();
 	}
 }

@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AGLTest", "AGLTest\AGLTest.
 		{95C9CD1F-1C18-4305-B843-9C1A4F6600E5} = {95C9CD1F-1C18-4305-B843-9C1A4F6600E5}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TDR", "TDR\TDR.vcxproj", "{25A8FDC4-9E83-42DF-9E1D-E957E703D376}"
+	ProjectSection(ProjectDependencies) = postProject
+		{95C9CD1F-1C18-4305-B843-9C1A4F6600E5} = {95C9CD1F-1C18-4305-B843-9C1A4F6600E5}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{E6F91CF8-298C-4356-813E-F55AA69A080A}.Release|x64.Build.0 = Release|x64
 		{E6F91CF8-298C-4356-813E-F55AA69A080A}.Release|x86.ActiveCfg = Release|Win32
 		{E6F91CF8-298C-4356-813E-F55AA69A080A}.Release|x86.Build.0 = Release|Win32
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Debug|x64.ActiveCfg = Debug|x64
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Debug|x64.Build.0 = Debug|x64
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Debug|x86.ActiveCfg = Debug|Win32
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Debug|x86.Build.0 = Debug|Win32
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Release|x64.ActiveCfg = Release|x64
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Release|x64.Build.0 = Release|x64
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Release|x86.ActiveCfg = Release|Win32
+		{25A8FDC4-9E83-42DF-9E1D-E957E703D376}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
