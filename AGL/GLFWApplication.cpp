@@ -5,7 +5,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-GLFWApplication* currentApp;
+using namespace agl;
+
+GLFWApplication* agl::currentApp;
 
 GLFWApplication::GLFWApplication(
 	int width,
@@ -23,6 +25,7 @@ GLFWApplication::GLFWApplication(
 	currInRF = 0;
 	rollingFPS = 60;
 	cumulDelta = 0;
+	projection = glm::scale(projection, glm::vec3(1.0f / width, 1.0f / height, 1));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
@@ -103,7 +106,7 @@ void GLFWApplication::resetKey(int code) {
 
 #include "begincbackdecl.h"
 
-void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
+void agl::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
 	if (action == GLFW_PRESS) currentApp->setKey(key);
 	else if (action == GLFW_RELEASE) currentApp->resetKey(key);
 }
@@ -112,7 +115,7 @@ void GLFWApplication::onMouse(double xpos, double ypos) {
 	return;
 }
 
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+void agl::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 	currentApp->onMouse(xpos, ypos);
 }
 

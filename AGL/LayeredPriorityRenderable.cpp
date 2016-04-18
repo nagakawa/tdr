@@ -3,6 +3,8 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+using namespace agl;
+
 LayeredPriorityRenderable::LayeredPriorityRenderable() {
 	renderables = std::unique_ptr<std::multimap<uint32_t, std::shared_ptr<Renderable>>>(new std::multimap<uint32_t, std::shared_ptr<Renderable>>);
 	setUp();

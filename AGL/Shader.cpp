@@ -2,6 +2,8 @@
 
 #include "cross.h"
 
+using namespace agl;
+
 Shader::Shader(const char* source, GLenum type) {
 	init(source, type);
 }
@@ -40,7 +42,7 @@ Shader::~Shader() {
 	glDeleteShader(id);
 }
 
-Shader* openShaderFromFile(const char* fname, GLenum type) {
+Shader* agl::openShaderFromFile(const char* fname, GLenum type) {
 	FILE* f;
 	openFile(&f, fname, "rb");
 	if (f == nullptr) {

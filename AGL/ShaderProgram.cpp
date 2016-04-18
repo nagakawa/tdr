@@ -1,5 +1,7 @@
 #include "ShaderProgram.h"
 
+using namespace agl;
+
 ShaderProgram::ShaderProgram() {
 	id = glCreateProgram();
 }

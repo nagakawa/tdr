@@ -33,7 +33,7 @@
 
 class AGLTest;
 
-class Boxes : Renderable {
+class Boxes : agl::Renderable {
 public:
 	Boxes(AGLTest* a);
 	void setUp();
@@ -49,18 +49,18 @@ public:
 	void update() {
 	}
 private:
-	Texture* container;
-	Texture* awesome;
-	VBO* vbo;
-	EBO* ebo;
-	VAO* vao;
-	ShaderProgram* program;
+	agl::Texture* container;
+	agl::Texture* awesome;
+	agl::VBO* vbo;
+	agl::EBO* ebo;
+	agl::VAO* vao;
+	agl::ShaderProgram* program;
 	AGLTest* app;
 };
 
-class AGLTest : GLFWApplication {
+class AGLTest : agl::GLFWApplication {
 public:
-	using GLFWApplication::GLFWApplication;
+	using agl::GLFWApplication::GLFWApplication;
 	void initialize() {
 		std::cout << "hi\n";
 		boxes = new Boxes(this);
@@ -136,20 +136,20 @@ Boxes::Boxes(AGLTest* a) {
 	setUp();
 }
 void Boxes::setUp() {
-	container = new Texture("textures/container.jpg");
-	awesome = new Texture("textures/awesomeface.png");
-	vbo = new VBO();
-	ebo = new EBO();
-	Shader* vertexShader = openShaderFromFile("shader/vertex.glsl", GL_VERTEX_SHADER);
-	Shader* fragmentShader = openShaderFromFile("shader/fragment.glsl", GL_FRAGMENT_SHADER);
-	program = new ShaderProgram();
+	container = new agl::Texture("textures/container.jpg");
+	awesome = new agl::Texture("textures/awesomeface.png");
+	vbo = new agl::VBO();
+	ebo = new agl::EBO();
+	agl::Shader* vertexShader = agl::openShaderFromFile("shader/vertex.glsl", GL_VERTEX_SHADER);
+	agl::Shader* fragmentShader = agl::openShaderFromFile("shader/fragment.glsl", GL_FRAGMENT_SHADER);
+	program = new agl::ShaderProgram();
 	program->attach(*vertexShader);
 	program->attach(*fragmentShader);
 	program->link();
 	program->use();
 	delete vertexShader;
 	delete fragmentShader;
-	vao = new VAO();
+	vao = new agl::VAO();
 	vao->setActive();
 	vbo->feedData(sizeof(vertices), vertices, GL_STATIC_DRAW);
 	ebo->feedData(sizeof(indices), indices, GL_STATIC_DRAW);

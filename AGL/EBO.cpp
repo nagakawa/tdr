@@ -1,5 +1,7 @@
 #include "EBO.h"
 
+using namespace agl;
+
 EBO::EBO() {
 	glGenBuffers(1, &id);
 }

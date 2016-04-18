@@ -1,5 +1,7 @@
 #include "Renderable.h"
 
+using namespace agl;
+
 Renderable::Renderable() {
 	setUp();
 }
