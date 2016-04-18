@@ -40,6 +40,7 @@ GLFWApplication::GLFWApplication(
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouseCallback);
+	setVSyncEnable(true);
 }
 
 void GLFWApplication::start() {
@@ -52,9 +53,9 @@ void GLFWApplication::start() {
 		fps = 1.0 / delta;
 		cumulDelta += delta;
 		++currInRF;
-		if (currInRF >= ROLLING_FRAME_COUNT) {
+		if (cumulDelta >= FPS_UPDATE_PERIOD) {
+			rollingFPS = currInRF / cumulDelta;
 			currInRF = 0;
-			rollingFPS = ROLLING_FRAME_COUNT / cumulDelta;
 			cumulDelta = 0;
 		}
 		currentApp = this;
@@ -84,6 +85,10 @@ void GLFWApplication::readKeys() {
 
 bool GLFWApplication::testKey(int code) {
 	return (keys[code >> 6] >> (code & 63)) & 1;
+}
+
+void GLFWApplication::setVSyncEnable(bool enable) {
+	glfwSwapInterval(enable);
 }
 
 void GLFWApplication::setKey(int code) {

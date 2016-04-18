@@ -9,7 +9,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define DEFAULT_TITLE "GLFWApplication"
-#define ROLLING_FRAME_COUNT 30
+#define FPS_UPDATE_PERIOD 0.25
 
 /*
 	GLFWApplication: a class for applications.
@@ -42,6 +42,7 @@ public:
 	GLFWwindow* underlying() { return window; }
 protected:
 	bool testKey(int code);
+	void setVSyncEnable(bool enable);
 private:
 	uint64_t keys[16];
 	GLFWwindow* window;
