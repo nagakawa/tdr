@@ -25,6 +25,8 @@ GLFWApplication::GLFWApplication(
 	currInRF = 0;
 	rollingFPS = 60;
 	cumulDelta = 0;
+	w = width;
+	h = height;
 	projection = glm::scale(projection, glm::vec3(1.0f / width, 1.0f / height, 1));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);

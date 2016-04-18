@@ -58,7 +58,7 @@ private:
 	AGLTest* app;
 };
 
-class AGLTest : agl::GLFWApplication {
+class AGLTest : public agl::GLFWApplication {
 public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialize() {
@@ -174,7 +174,8 @@ void Boxes::tick() {
 		app->cameraPos + app->cameraFront, // target
 		app->cameraUp); // up
 	glm::mat4 projection;
-	projection = glm::perspective(glm::radians(app->fov), 800.0f / 600.0f, 0.1f, 100.0f);
+	GLfloat aspect = ((GLfloat) app->getWidth()) / app->getHeight();
+	projection = glm::perspective(glm::radians(app->fov), aspect, 0.1f, 100.0f);
 	for (int i = 0; i < 10; ++i) {
 		glm::mat4 model;
 		model = glm::translate(model, cubePositions[i]);

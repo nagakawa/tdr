@@ -17,6 +17,10 @@ Texture::Texture(const char* fname) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+agl::Texture::Texture(Texture & t) {
+	id = t.id;
+}
+
 Texture::~Texture() {
 	glDeleteTextures(1, &id);
 }

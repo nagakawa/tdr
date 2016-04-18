@@ -7,6 +7,7 @@ namespace agl {
 	class Texture {
 	public:
 		Texture(const char* fname);
+		Texture(Texture& t);
 		~Texture();
 		void bind();
 		void bindTo(GLint slot);

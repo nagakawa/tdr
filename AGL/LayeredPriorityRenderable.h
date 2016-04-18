@@ -6,7 +6,6 @@
 #include "Renderable.h"
 
 namespace agl {
-
 	class LayeredPriorityRenderable : Renderable {
 	public:
 		LayeredPriorityRenderable();

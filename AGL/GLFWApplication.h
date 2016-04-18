@@ -47,6 +47,8 @@ namespace agl {
 		double getFPS() { return fps; }
 		double getDelta() { return delta; }
 		double getRollingFPS() { return rollingFPS; }
+		GLint getWidth() { return w; }
+		GLint getHeight() { return h; }
 		GLFWwindow* underlying() { return window; }
 	protected:
 		bool testKey(int code);
@@ -61,6 +63,8 @@ namespace agl {
 		GLdouble cumulDelta;
 		GLint currInRF;
 		glm::mat4 projection;
+		GLint w;
+		GLint h;
 	};
 
 	extern GLFWApplication* currentApp;
