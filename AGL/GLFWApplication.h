@@ -9,6 +9,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define DEFAULT_TITLE "GLFWApplication"
+#define ROLLING_FRAME_COUNT 30
 
 /*
 	GLFWApplication: a class for applications.
@@ -36,7 +37,8 @@ public:
 	void setKey(int code);
 	void resetKey(int code);
 	double getFPS() { return fps; }
-	double getDelta() { return delta;  }
+	double getDelta() { return delta; }
+	double getRollingFPS() { return rollingFPS; }
 	GLFWwindow* underlying() { return window; }
 protected:
 	bool testKey(int code);
@@ -44,8 +46,11 @@ private:
 	uint64_t keys[16];
 	GLFWwindow* window;
 	GLdouble fps;
+	GLdouble rollingFPS;
 	GLdouble delta;
 	GLdouble currentTime;
+	GLdouble cumulDelta;
+	GLint currInRF;
 };
 
 extern GLFWApplication* currentApp;

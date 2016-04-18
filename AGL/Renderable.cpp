@@ -12,7 +12,7 @@ void Renderable::setUp() {
 }
 
 void Renderable::tearDown() {
-	tearDown();
+	_tearDown();
 	tornDown = true;
 }
 

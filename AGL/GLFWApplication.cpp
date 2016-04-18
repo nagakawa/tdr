@@ -18,6 +18,9 @@ GLFWApplication::GLFWApplication(
 	// you're working on if not set
 	if (actualWidth == 0) actualWidth = width;
 	if (actualHeight == 0) actualHeight = height;
+	currInRF = 0;
+	rollingFPS = 60;
+	cumulDelta = 0;
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -47,6 +50,13 @@ void GLFWApplication::start() {
 		currentTime = glfwGetTime();
 		delta = currentTime - prevTime;
 		fps = 1.0 / delta;
+		cumulDelta += delta;
+		++currInRF;
+		if (currInRF >= ROLLING_FRAME_COUNT) {
+			currInRF = 0;
+			rollingFPS = ROLLING_FRAME_COUNT / cumulDelta;
+			cumulDelta = 0;
+		}
 		currentApp = this;
 		glfwPollEvents();
 		readKeys();

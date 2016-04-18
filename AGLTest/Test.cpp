@@ -22,6 +22,7 @@
 
 // Others
 #include <iostream>
+#include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
@@ -68,6 +69,9 @@ public:
 		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		boxes->tick();
+		char* ctitle = new char[256];
+		snprintf(ctitle, 255, "TestApp | FPS: %lf", getRollingFPS());
+		glfwSetWindowTitle(underlying(), ctitle);
 	}
 	void readKeys() {
 		// Test if window should close
