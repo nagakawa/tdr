@@ -1,5 +1,8 @@
 #include "LayeredPriorityRenderable.h"
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 LayeredPriorityRenderable::LayeredPriorityRenderable() {
 	renderables = std::unique_ptr<std::multimap<uint32_t, std::shared_ptr<Renderable>>>(new std::multimap<uint32_t, std::shared_ptr<Renderable>>);
 	setUp();
@@ -21,8 +24,12 @@ void LayeredPriorityRenderable::_tearDown() {
 }
 
 void LayeredPriorityRenderable::tick() {
+	uint32_t prev = 0;
 	for (auto it = renderables->begin(); it != renderables->end();) {
+		uint32_t prio = it->first;
 		std::shared_ptr<Renderable> r = it->second;
+		if (prio != prev) glClear(GL_DEPTH_BUFFER_BIT);
+		prev = prio;
 		if (r->isTornDown()) {
 			it = renderables->erase(it);
 		} else {
