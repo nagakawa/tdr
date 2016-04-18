@@ -70,7 +70,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		boxes->tick();
 		char* ctitle = new char[256];
-		snprintf(ctitle, 255, "TestApp | FPS: %lf", getRollingFPS());
+		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
 		glfwSetWindowTitle(underlying(), ctitle);
 	}
 	void readKeys() {

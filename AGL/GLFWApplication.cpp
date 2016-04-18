@@ -12,7 +12,9 @@ GLFWApplication::GLFWApplication(
 	int height,
 	int actualWidth,
 	int actualHeight,
-	const char* title
+	const char* title,
+	int glMajor,
+	int glMinor
 	) {
 	// Set actual width and height of window to whatever
 	// you're working on if not set
@@ -22,8 +24,8 @@ GLFWApplication::GLFWApplication(
 	rollingFPS = 60;
 	cumulDelta = 0;
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	window = glfwCreateWindow(actualWidth, actualHeight, title, nullptr, nullptr);

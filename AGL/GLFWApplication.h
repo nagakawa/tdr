@@ -9,7 +9,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
 #define DEFAULT_TITLE "GLFWApplication"
-#define FPS_UPDATE_PERIOD 0.25
+#define FPS_UPDATE_PERIOD 0.5
 
 /*
 	GLFWApplication: a class for applications.
@@ -24,7 +24,9 @@ public:
 		int height = DEFAULT_HEIGHT,
 		int actualWidth = 0,
 		int actualHeight = 0,
-		const char* title = DEFAULT_TITLE
+		const char* title = DEFAULT_TITLE,
+		int glMajor = 3,
+		int glMinor = 3
 	);
 	void start();
 	~GLFWApplication();
