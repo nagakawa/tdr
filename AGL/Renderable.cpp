@@ -12,6 +12,8 @@ void Renderable::setUp() {
 }
 
 void Renderable::tearDown() {
+	tearDown();
+	tornDown = true;
 }
 
 void Renderable::tick() {
@@ -20,3 +22,5 @@ void Renderable::tick() {
 void Renderable::update() {
 }
 
+void Renderable::_tearDown() {
+}

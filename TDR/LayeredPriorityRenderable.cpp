@@ -13,7 +13,7 @@ LayeredPriorityRenderable::~LayeredPriorityRenderable() {
 void LayeredPriorityRenderable::setUp() {
 }
 
-void LayeredPriorityRenderable::tearDown() {
+void LayeredPriorityRenderable::_tearDown() {
 	for (auto it = renderables->begin(); it != renderables->end(); ++it) {
 		std::shared_ptr<Renderable> r = it->second;
 		r->tearDown();
@@ -21,9 +21,14 @@ void LayeredPriorityRenderable::tearDown() {
 }
 
 void LayeredPriorityRenderable::tick() {
-	for (auto it = renderables->begin(); it != renderables->end(); ++it) {
+	for (auto it = renderables->begin(); it != renderables->end();) {
 		std::shared_ptr<Renderable> r = it->second;
-		r->tick();
+		if (r->isTornDown()) {
+			it = renderables->erase(it);
+		} else {
+			r->tick();
+			++it;
+		}
 	}
 }
 
