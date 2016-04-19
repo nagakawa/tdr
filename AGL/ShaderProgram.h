@@ -8,6 +8,9 @@
 #define SETUNSP(shader, type, uname, value) \
 	glUniform##type(glGetUniformLocation((shader).id, uname), value)
 
+#define SETUNSP2(shader, type, uname, value1, value2) \
+	glUniform##type(glGetUniformLocation((shader).id, uname), value1, value2)
+
 #define SETUNSPM(shader, type, uname, value) \
 	glUniformMatrix##type(glGetUniformLocation((shader).id, uname), 1, GL_FALSE, value)
 

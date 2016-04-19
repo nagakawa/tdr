@@ -11,7 +11,12 @@ namespace agl {
 		~Texture();
 		void bind();
 		void bindTo(GLint slot);
+		GLint getWidth() { return width; }
+		GLint getHeight() { return height; }
 		GLuint id;
+	private:
+		GLint width;
+		GLint height;
 	};
 }
 

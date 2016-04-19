@@ -49,10 +49,17 @@ void agl::Sprite2D::setUp() {
 void agl::Sprite2D::tick() {
 	glEnable(GL_BLEND);
 	program->use();
-	texture->bind();
-	SETUNSP(*program, 1i, "tex", 0);
+	setTexture(texture);
 	vao->setActive();
 	glDrawElementsInstanced(GL_TRIANGLES, 2, GL_UNSIGNED_INT, 0, sprites->size());
+}
+
+void agl::Sprite2D::setTexture(std::shared_ptr<Texture> tex) {
+	texture = tex;
+	texture->bind();
+	SETUNSP(*program, 1i, "tex", 0);
+	SETUNSP2(*program, 2f, "texDimensions", tex->getWidth(), tex->getHeight());
+	SETUNSP2(*program, 2f, "screenDimensions", app->getWidth(), app->getHeight);
 }
 
 void agl::Sprite2D::update() {

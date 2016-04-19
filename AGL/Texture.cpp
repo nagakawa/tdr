@@ -5,7 +5,6 @@
 using namespace agl;
 
 Texture::Texture(const char* fname) {
-	int width, height;
 	unsigned char* image = SOIL_load_image(fname, &width, &height, 0, SOIL_LOAD_RGBA);
 	if (image == nullptr)
 		throw "Image could not be read!";
@@ -33,3 +32,4 @@ void Texture::bindTo(GLint slot) {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	bind();
 }
+
