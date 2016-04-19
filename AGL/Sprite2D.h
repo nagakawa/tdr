@@ -64,6 +64,7 @@ void main() { \
 		int addSprite(Sprite2DInfo loc);
 		void setTexture(std::shared_ptr<Texture> tex);
 		void setApp(GLFWApplication* a) { app = a; }
+		Sprite2DInfo get(int index) { return (*sprites)[index]; }
 	protected:
 		void _tearDown();
 	private:
