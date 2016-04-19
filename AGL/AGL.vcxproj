@@ -153,10 +153,12 @@
     <ClInclude Include="endcbackdecl.h" />
     <ClInclude Include="GLFWApplication.h" />
     <ClInclude Include="LayeredPriorityRenderable.h" />
+    <ClInclude Include="rect.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
+    <ClInclude Include="Sprite2D.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="VAO.h" />
     <ClInclude Include="VBO.h" />
@@ -168,6 +170,7 @@
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
+    <ClCompile Include="Sprite2D.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VAO.cpp" />
     <ClCompile Include="VBO.cpp" />

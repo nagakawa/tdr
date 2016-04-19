@@ -58,8 +58,8 @@ void agl::Sprite2D::setTexture(std::shared_ptr<Texture> tex) {
 	texture = tex;
 	texture->bind();
 	SETUNSP(*program, 1i, "tex", 0);
-	SETUNSP2(*program, 2f, "texDimensions", tex->getWidth(), tex->getHeight());
-	SETUNSP2(*program, 2f, "screenDimensions", app->getWidth(), app->getHeight);
+	SETUNSP2(*program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
+	SETUNSP2(*program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
 }
 
 void agl::Sprite2D::update() {
