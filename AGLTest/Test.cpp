@@ -215,6 +215,7 @@ void Boxes::setUp() {
 	glEnableVertexAttribArray(1);
 }
 void Boxes::tick() {
+	glDisable(GL_BLEND);
 	vao->setActive();
 	program->use();
 	glEnable(GL_DEPTH_TEST);
@@ -248,7 +249,7 @@ void Boxes::tick() {
 int main(int argc, char** argv) {
 	try {
 		// Kriët ė test wýndö
-		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"テスト");
+		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App");
 		a->start();
 	} catch (char* s) {
 		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
