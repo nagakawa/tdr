@@ -18,6 +18,8 @@ Texture::Texture(const char* fname) {
 
 agl::Texture::Texture(Texture & t) {
 	id = t.id;
+	width = t.width;
+	height = t.height;
 }
 
 Texture::~Texture() {

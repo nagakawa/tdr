@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 namespace agl {
+	void resetEBO();
 	class EBO {
 	public:
 		EBO();

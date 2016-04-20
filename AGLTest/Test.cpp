@@ -19,9 +19,11 @@
 #include "EBO.h"
 #include "Shader.h"
 #include "ShaderProgram.h"
+#include "Sprite2D.h"
 
 // Others
 #include <iostream>
+#include <memory>
 #include <string>
 #include <cstdio>
 #include <cstdlib>
@@ -58,17 +60,58 @@ private:
 	AGLTest* app;
 };
 
+#define DIGIT_WIDTH 14.8f
+#define DIGIT_HEIGHT 18
+#define DIGIT_BASEX 16
+#define DIGIT_BASEY 230
+
 class AGLTest : public agl::GLFWApplication {
 public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialize() {
 		std::cout << "hi\n";
 		boxes = new Boxes(this);
+		ptex = new agl::Texture("textures/fuckyou.png");
+		stex = std::make_shared<agl::Texture>(*ptex);
+		sprites = new agl::Sprite2D(stex);
+		sprites->setApp(this);
+		sprites->addSprite({
+			{0, 448, 512, 512},
+			{0, 0, 512, 64}
+		});
+		sprites->addSprite({
+			{DIGIT_BASEX, DIGIT_BASEY, DIGIT_BASEX + 4 * DIGIT_WIDTH, DIGIT_BASEY + DIGIT_HEIGHT},
+			{50, 500, 50 + 4 * DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
+		});
+		sprites->addSprite({
+			{ DIGIT_BASEX + 14 * DIGIT_WIDTH, DIGIT_BASEY, DIGIT_BASEX + 15 * DIGIT_WIDTH, DIGIT_BASEY + DIGIT_HEIGHT },
+			{50 + 6 * DIGIT_WIDTH, 500, 50 + 7 * DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
+		});
+		for (int i = 0; i < 4; ++i) {
+			GLfloat x = 50 + (4 + i + (i >= 2)) * DIGIT_WIDTH;
+			sprites->addSprite({
+				{0, DIGIT_BASEY, 0, DIGIT_BASEY + DIGIT_HEIGHT},
+				{x, 500, x + DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
+			});
+		}
+		sprites->setUp();
 	}
+	bool ff = true;
 	void tick() {
 		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		++frame;
+		int which = (frame >> 6) & 3;
+		sprites->getLoc(0)->source.top = (GLfloat) (448 - (which << 6));
+		sprites->getLoc(0)->source.bottom = (GLfloat) (512 - (which << 6));
+		int rfps = (int) (getRollingFPS() * 100);
+		for (int i = 3; i >= 0; --i) {
+			setDigit(i, rfps % 10);
+			rfps /= 10;
+		}
+		sprites->update();
 		boxes->tick();
+		sprites->tick();
 		char* ctitle = new char[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
 		glfwSetWindowTitle(underlying(), ctitle);
@@ -117,6 +160,10 @@ public:
 	void start() {
 		GLFWApplication::start();
 	}
+	~AGLTest() {
+		delete boxes;
+		delete sprites;
+	}
 	GLfloat getMix() { return mix; }
 	GLfloat mix = 0.0f;
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -125,10 +172,19 @@ public:
 	GLfloat deltaTime = 0.0f;
 	GLfloat lastFrame = 0.0f;
 	GLfloat lastX = 400, lastY = 300;
-	GLfloat yaw = 0, pitch = 0;
+	GLfloat yaw = 90, pitch = 0;
 	bool firstMouse = true;
 	GLfloat fov = 45.0f;
 	Boxes* boxes;
+	std::shared_ptr<agl::Texture> stex;
+	agl::Texture* ptex;
+	agl::Sprite2D* sprites;
+	int frame = 0;
+	void setDigit(int i, int v) {
+		agl::Sprite2DInfo* spr = sprites->getLoc(3 + i);
+		spr->source.left = DIGIT_BASEX + (4 + v) * DIGIT_WIDTH;
+		spr->source.right = DIGIT_BASEX + (5 + v) * DIGIT_WIDTH;
+	}
 };
 
 Boxes::Boxes(AGLTest* a) {
@@ -159,6 +215,8 @@ void Boxes::setUp() {
 	glEnableVertexAttribArray(1);
 }
 void Boxes::tick() {
+	vao->setActive();
+	program->use();
 	glEnable(GL_DEPTH_TEST);
 	container->bindTo(0);
 	SETUNSP(*program, 1i, "ourTexture", 0);
@@ -183,7 +241,6 @@ void Boxes::tick() {
 		SETUNSPM(*program, 4fv, "model", glm::value_ptr(model));
 		SETUNSPM(*program, 4fv, "view", glm::value_ptr(view));
 		SETUNSPM(*program, 4fv, "projection", glm::value_ptr(projection));
-		vao->setActive();
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	}
 }

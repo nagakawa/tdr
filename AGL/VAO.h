@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 namespace agl {
+	void resetVAO();
 	class VAO {
 	public:
 		VAO();

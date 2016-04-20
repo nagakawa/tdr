@@ -13,3 +13,7 @@ VAO::~VAO() {
 void VAO::setActive() {
 	glBindVertexArray(id);
 }
+
+void agl::resetVAO() {
+	glBindVertexArray(0);
+}

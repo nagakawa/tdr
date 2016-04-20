@@ -7,7 +7,7 @@ Renderable::Renderable() {
 }
 
 Renderable::~Renderable() {
-	tearDown();
+	if (!tornDown) tearDown();
 }
 
 void Renderable::setUp() {

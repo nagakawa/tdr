@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 
 namespace agl {
-
+	void resetVBO();
 	class VBO {
 	public:
 		VBO();
