@@ -17,12 +17,16 @@ inline int is3ByteStarter(char c) {
 inline int is4ByteStarter(char c) {
 	return c >= 240 && c < 248;
 }
-
-#define EXTUTF8ERR(err) ((err) >> 10)
+inline int utf8DecodeErrorClass(errno_t err) {
+	return err >> 12;
+}
 
 #define ERR_UNEXPECTED_CONTINUATION 0x1000
 #define ERR_INVALID_UTF8_BYTE 0x2000
 #define ERR_CONTINUATION_EXPECTED 0x3000
+#define ERRC_UNEXPECTED_CONTINUATION 0x1
+#define ERRC_INVALID_UTF8_BYTE 0x2
+#define ERRC_CONTINUATION_EXPECTED 0x3
 
 /*
 	Returns the next UTF-8 character and advances the string pointer.
