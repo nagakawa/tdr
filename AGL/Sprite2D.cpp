@@ -78,7 +78,7 @@ void agl::Sprite2D::tick() {
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	setTexture(texture);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 6, sprites->size());
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprites->size());
 	resetVAO();
 }
 
