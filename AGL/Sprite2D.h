@@ -42,18 +42,19 @@ namespace agl {
 		int addSprite(Sprite2DInfo loc);
 		void setTexture(std::shared_ptr<Texture> tex);
 		void setApp(GLFWApplication* a) { app = a; }
-		Sprite2DInfo get(int index) { return (*sprites)[index]; }
-		Sprite2DInfo* getLoc(int index) { return sprites->data() + index; }
+		Sprite2DInfo get(int index) { return sprites[index]; }
+		Sprite2DInfo* getLoc(int index) { return sprites.data() + index; }
 	protected:
 		void _tearDown();
 	private:
 		std::shared_ptr<Texture> texture;
-		VBO* vbo;
-		VBO* instanceVBO;
-		VAO* vao;
-		ShaderProgram* program;
-		std::vector<Sprite2DInfo>* sprites;
+		VBO vbo;
+		VBO instanceVBO;
+		VAO vao;
+		ShaderProgram program;
+		std::vector<Sprite2DInfo> sprites;
 		GLFWApplication* app;
 		bool hasSetUniforms;
+		bool hasInitializedProgram;
 	};
 }

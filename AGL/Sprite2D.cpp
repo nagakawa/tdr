@@ -32,12 +32,9 @@ void main() { \n\
 
 Sprite2D::Sprite2D(std::shared_ptr<Texture> t) {
 	texture = t;
-	sprites = new std::vector<Sprite2DInfo>;
-	vbo = new VBO();
-	instanceVBO = new VBO();
-	vao = new VAO();
 	app = nullptr;
 	hasSetUniforms = false;
+	hasInitializedProgram = false;
 }
 
 Sprite2D::~Sprite2D() {
@@ -49,18 +46,18 @@ void agl::Sprite2D::setUp() {
 		throw "Current app must be set first";
 	Shader vertex(VERTEX_SOURCE, GL_VERTEX_SHADER);
 	Shader fragment(FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
-	program = new ShaderProgram();
-	program->attach(vertex);
-	program->attach(fragment);
-	program->link(); // There you go!
-	vao->setActive();
+	program.attach(vertex);
+	program.attach(fragment);
+	program.link(); // There you go!
+	hasInitializedProgram = true;
+	vao.setActive();
 	// Vertex data
-	vbo->feedData(sizeof(vertices), (void*) vertices, GL_DYNAMIC_DRAW);
+	vbo.feedData(sizeof(vertices), (void*) vertices, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
 	// Instance data
-	instanceVBO->setActive();
-	instanceVBO->feedData(sprites->size() * sizeof(Sprite2DInfo), sprites->data(), GL_DYNAMIC_DRAW);
+	instanceVBO.setActive();
+	instanceVBO.feedData(sprites.size() * sizeof(Sprite2DInfo), sprites.data(), GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Sprite2DInfo), (GLvoid*) offsetof(Sprite2DInfo, source));
@@ -78,37 +75,33 @@ void agl::Sprite2D::tick() {
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	setTexture(texture);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprites->size());
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprites.size());
 	resetVAO();
 }
 
 void agl::Sprite2D::setTexture(std::shared_ptr<Texture> tex) {
-	vao->setActive();
-	program->use();
+	vao.setActive();
+	program.use();
 	tex->bindTo(0);
 	if (app == nullptr) throw "App must be set first";
 	if (texture == tex && hasSetUniforms) return;
 	texture = tex;
-	SETUNSP(*program, 1i, "tex", 0);
-	SETUNSP2(*program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
-	SETUNSP2(*program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
+	SETUNSP(program, 1i, "tex", 0);
+	SETUNSP2(program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
+	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
 	hasSetUniforms = true;
 }
 
 void agl::Sprite2D::update() {
-	instanceVBO->feedData(sprites->size() * sizeof(Sprite2DInfo), sprites->data(), GL_DYNAMIC_DRAW);
+	instanceVBO.feedData(sprites.size() * sizeof(Sprite2DInfo), sprites.data(), GL_DYNAMIC_DRAW);
 }
 
 int agl::Sprite2D::addSprite(Sprite2DInfo loc) {
-	int size = sprites->size();
-	sprites->push_back(loc);
-	if (program != nullptr) update();
+	int size = sprites.size();
+	sprites.push_back(loc);
+	if (hasInitializedProgram) update();
 	return size;
 }
 
 void agl::Sprite2D::_tearDown() {
-	delete sprites;
-	delete vbo;
-	delete instanceVBO;
-	delete vao;
 }
