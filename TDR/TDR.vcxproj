@@ -138,11 +138,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="CommonData.h" />
     <ClInclude Include="defset.h" />
     <ClInclude Include="Replay.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CommonData.cpp" />
     <ClCompile Include="Replay.cpp" />
   </ItemGroup>
