@@ -4,16 +4,10 @@
 
 namespace tdr {
 	typedef struct { int32_t u; } fix1616;
-	fix1616 operator*(fix1616 a, fix1616 b) {
-		int64_t prod = (((int64_t) a.u) * b.u) >> 16;
-		if (prod >= 0x100000000) prod = 0xFFFFFFFF;
-		if (prod < -((int64_t) 0x100000000)) prod = -((int64_t) 0xFFFFFFFF);
-		return { (int32_t) prod };
-	}
-	fix1616 operator/(fix1616 a, fix1616 b) {
-		int64_t aex = (((int64_t) a.u) << 16);
-		return { (int32_t) (aex / b.u) };
-	}
+	fix1616 operator+(fix1616 a, fix1616 b);
+	fix1616 operator-(fix1616 a, fix1616 b);
+	fix1616 operator*(fix1616 a, fix1616 b);
+	fix1616 operator/(fix1616 a, fix1616 b);
 	struct Bullet {
 		fix1616 x, y;
 		fix1616 xs, ys;
