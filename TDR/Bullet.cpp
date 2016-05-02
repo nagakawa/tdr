@@ -38,6 +38,11 @@ bool tdr::operator<(fix1616 a, fix1616 b) {
 	return a.u < b.u;
 }
 
+fix1616 tdr::multiply1616By230(fix1616 a, uint32_t b) {
+	int64_t res = ((int64_t) a.u) * b >> 30;
+	return { (int32_t) res };
+}
+
 #define TAU_TIMES_2TT28 0x6487ED51
 #define CORDIC_ITERATIONS 31
 #define CORDIC_K 0x26DD3B6A
