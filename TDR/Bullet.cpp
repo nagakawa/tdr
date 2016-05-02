@@ -51,7 +51,8 @@ const int32_t arctangents[] = { 0x3243F6A8, 0x1DAC6705, 0xFADBAFC, 0x7F56EA6, 0x
 // t = angle in 1/65536 of a turn
 // c = reference to where you want cosine to be stored
 // s = reference to where you want sine to be stored
-void tdr::sincos(fix1616 t, fix1616& c, fix1616& s) {
+// Both of the results will be stored in 2.30 format.
+void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 	if (t.u > 0x40000000 || t.u < -((int32_t) 0x40000000))
 		t.u += 0x80000000; // Plus, minus, that doesn't even matter ~
 	// Multiply by tau to convert turns into radians
@@ -73,8 +74,7 @@ void tdr::sincos(fix1616 t, fix1616& c, fix1616& s) {
 		radians -= (radians < 0) ? -arctangents[i] : arctangents[i];
 		power >>= 1;
 	}
-	// Convert raw values into fix1616's
-	c = { vx >> 14 };
-	s = { vy >> 14 };
+	c = vx;
+	s = vy;
 }
 

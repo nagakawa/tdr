@@ -15,7 +15,7 @@ namespace tdr {
 	inline fix1616 intToFix(int i) {
 		return { i << 16 };
 	}
-	void sincos(fix1616 t, fix1616& c, fix1616& s);
+	void sincos(fix1616 t, int32_t& c, int32_t& s);
 	struct Bullet {
 		uint64_t id;
 		fix1616 x, y;
