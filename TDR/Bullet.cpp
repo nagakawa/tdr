@@ -58,7 +58,8 @@ const int32_t arctangents[] = { 0x3243F6A8, 0x1DAC6705, 0xFADBAFC, 0x7F56EA6, 0x
 // s = reference to where you want sine to be stored
 // Both of the results will be stored in 2.30 format.
 void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
-	if (t.u > 0x40000000 || t.u < -((int32_t) 0x40000000))
+	bool inv = t.u > 0x40000000 || t.u < -((int32_t) 0x40000000);
+	if (inv)
 		t.u += 0x80000000; // Plus, minus, that doesn't even matter ~
 	// Multiply by tau to convert turns into radians
 	// (in 32.32 format)
@@ -79,7 +80,7 @@ void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 		radians -= (radians < 0) ? -arctangents[i] : arctangents[i];
 		power >>= 1;
 	}
-	c = vx;
-	s = vy;
+	c = inv ? -vx : vx;
+	s = inv ? -vy : vy;
 }
 
