@@ -30,6 +30,14 @@ fix1616 tdr::operator/(fix1616 a, fix1616 b) {
 	return { (int32_t) res };
 }
 
+bool tdr::operator==(fix1616 a, fix1616 b) {
+	return a.u == b.u;
+}
+
+bool tdr::operator<(fix1616 a, fix1616 b) {
+	return a.u < b.u;
+}
+
 #define TAU_TIMES_2TT28 0x6487ED51
 #define CORDIC_ITERATIONS 31
 #define CORDIC_K 0x26DD3B6A

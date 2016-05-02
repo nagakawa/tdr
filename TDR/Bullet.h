@@ -10,6 +10,8 @@ namespace tdr {
 	fix1616 operator-(fix1616 a, fix1616 b);
 	fix1616 operator*(fix1616 a, fix1616 b);
 	fix1616 operator/(fix1616 a, fix1616 b);
+	bool operator==(fix1616 a, fix1616 b);
+	bool operator<(fix1616 a, fix1616 b);
 	inline fix1616 intToFix(int i) {
 		return { i << 16 };
 	}
