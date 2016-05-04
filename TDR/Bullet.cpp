@@ -38,6 +38,12 @@ bool tdr::operator<(fix1616 a, fix1616 b) {
 	return a.u < b.u;
 }
 
+bool tdr::isWithin(fix1616 x, fix1616 y, fix1616 r) {
+	uint64_t distsq = ((int64_t) x.u) * x.u + ((int64_t) y.u) * y.u;
+	uint64_t thresh = ((int64_t) r.u) * r.u;
+	return distsq <= thresh;
+}
+
 fix1616 tdr::multiply1616By230(fix1616 a, uint32_t b) {
 	int64_t res = ((int64_t) a.u) * b >> 30;
 	return { (int32_t) res };

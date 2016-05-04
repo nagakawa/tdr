@@ -12,6 +12,7 @@ namespace tdr {
 	fix1616 operator/(fix1616 a, fix1616 b);
 	bool operator==(fix1616 a, fix1616 b);
 	bool operator<(fix1616 a, fix1616 b);
+	bool isWithin(fix1616 x, fix1616 y, fix1616 r);
 	fix1616 multiply1616By230(fix1616 a, uint32_t b);
 	inline fix1616 intToFix(int i) {
 		return { i << 16 };

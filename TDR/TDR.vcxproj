@@ -69,20 +69,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(SolutionDir)\gtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\gtk\lib;$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(SolutionDir)\gtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\gtk\lib;$(SolutionDir)\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(SolutionDir)\gtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\gtk\lib;$(SolutionDir)\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\AGL;$(SolutionDir)\FileUtil;$(SolutionDir)\include;$(SolutionDir)\gtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib;$(SolutionDir)\gtk\lib;$(SolutionDir)\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
