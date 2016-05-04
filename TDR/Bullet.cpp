@@ -1,5 +1,7 @@
 #include "Bullet.h"
 
+#include <math.h>
+
 using namespace tdr;
 
 fix1616 tdr::operator+(fix1616 a, fix1616 b) {
@@ -42,6 +44,10 @@ bool tdr::isWithin(fix1616 x, fix1616 y, fix1616 r) {
 	uint64_t distsq = ((int64_t) x.u) * x.u + ((int64_t) y.u) * y.u;
 	uint64_t thresh = ((int64_t) r.u) * r.u;
 	return distsq <= thresh;
+}
+
+bool tdr::isWithin(float x, float y, float r) {
+	return x * x + y * y <= r * r;
 }
 
 fix1616 tdr::multiply1616By230(fix1616 a, uint32_t b) {
@@ -88,5 +94,10 @@ void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 	}
 	c = inv ? -vx : vx;
 	s = inv ? -vy : vy;
+}
+
+void tdr::sincos(float t, float& c, float& s) {
+	c = (float) cos(t);
+	s = (float) sin(t);
 }
 

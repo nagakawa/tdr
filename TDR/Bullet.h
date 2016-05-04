@@ -4,8 +4,6 @@
 
 namespace tdr {
 	typedef struct { int32_t u; } fix1616;
-#define F16_ZERO { 0 }
-#define F16_ONE { 1 }
 #define CELESTIAL 0x7FFFFFFF
 #define ABYSS ((int32_t) 0x80000000)
 	fix1616 operator+(fix1616 a, fix1616 b);
@@ -15,15 +13,21 @@ namespace tdr {
 	bool operator==(fix1616 a, fix1616 b);
 	bool operator<(fix1616 a, fix1616 b);
 	bool isWithin(fix1616 x, fix1616 y, fix1616 r);
+	bool isWithin(float x, float y, float r);
 	fix1616 multiply1616By230(fix1616 a, uint32_t b);
 	inline fix1616 intToFix(int i) {
 		return { i << 16 };
 	}
 	void sincos(fix1616 t, int32_t& c, int32_t& s);
+	void sincos(float t, float& c, float& s);
 #ifdef FIXED_POINT
 	typedef fix1616 Coord;
+#define C_ZERO { 0 }
+#define C_ONE { 1 }
 #else
 	typedef float Coord;
+#define C_ZERO 0.0f
+#define C_ONE 1.0f
 #endif
 	struct Bullet {
 		uint64_t id;
@@ -48,6 +52,7 @@ namespace tdr {
 		// 0 -> ready
 		// -1 -> can't graze anymore
 		int8_t timeToNextGraze;
+		uint8_t alpha;
 		int isLaser : 1;
 		int markedForDeletion : 1;
 		int useRadial : 1;

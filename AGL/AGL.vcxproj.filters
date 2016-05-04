@@ -57,6 +57,9 @@
     <ClInclude Include="rect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BlendMode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLFWApplication.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Sprite2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendMode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
