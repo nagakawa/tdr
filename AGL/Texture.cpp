@@ -16,7 +16,20 @@ Texture::Texture(const char* fname) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-agl::Texture::Texture(Texture & t) {
+agl::Texture::Texture(int width, int height, unsigned char* data) {
+	this->width = width;
+	this->height = height;
+	if (data == nullptr)
+		throw "Image could not be read!";
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(data);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+agl::Texture::Texture(Texture& t) {
 	id = t.id;
 	width = t.width;
 	height = t.height;

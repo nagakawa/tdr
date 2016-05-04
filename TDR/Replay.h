@@ -15,6 +15,7 @@ namespace tdr {
 	private:
 		CommonData cd;
 		std::vector<uint64_t> keypresses;
+		std::vector<uint16_t> fpses;
 		uint64_t functionalSeed;
 		uint64_t aestheticSeed;
 	};
