@@ -214,3 +214,8 @@ ModelManifest.xml
 # Includes and libraries
 include/
 lib/
+gtk/
+
+include64/
+lib64/
+gtk64/
