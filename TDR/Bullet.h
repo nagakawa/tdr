@@ -20,22 +20,22 @@ namespace tdr {
 		return { i << 16 };
 	}
 	void sincos(fix1616 t, int32_t& c, int32_t& s);
+#ifdef FIXED_POINT
+	typedef fix1616 Coord;
+#else
+	typedef float Coord;
+#endif
 	struct Bullet {
 		uint64_t id;
-		fix1616 x, y;
-		fix1616 xs, ys;
-		fix1616 xa, ya;
-		// Angles are represented as such:
-		// 0x0000.0000: 0 rad
-		// 0x4000.0000: pi/2 rad
-		// 0x8000.0000: pi rad
-		// 0xC000.0000: 3pi/2 rad
-		fix1616 speed, angle, angularVelocity;
-		fix1616 visualAngle;
+		Coord x, y;
+		Coord xs, ys;
+		Coord xa, ya;
+		Coord speed, angle, angularVelocity;
+		Coord visualAngle;
 		// Width and length would be the same for ordinary bullets,
 		// but different for lasers.
-		fix1616 visualWidth, collisionWidth;
-		fix1616 visualLength, collisionLength;
+		Coord visualWidth, collisionWidth;
+		Coord visualLength, collisionLength;
 		uint16_t left, top, right, bottom; // texcoords
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
