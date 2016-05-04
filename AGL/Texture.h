@@ -7,7 +7,7 @@ namespace agl {
 	class Texture {
 	public:
 		Texture(const char* fname);
-		Texture(int width, int height, unsigned char* data);
+		Texture(int w, int h, unsigned char* data);
 		Texture(Texture& t);
 		~Texture();
 		void bind();
@@ -18,6 +18,7 @@ namespace agl {
 	private:
 		GLint width;
 		GLint height;
+		void setTexture(int w, int h, unsigned char* data);
 	};
 }
 

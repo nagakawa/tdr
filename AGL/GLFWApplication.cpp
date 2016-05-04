@@ -33,6 +33,7 @@ GLFWApplication::GLFWApplication(
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	window = glfwCreateWindow(actualWidth, actualHeight, title, nullptr, nullptr);
 	if (window == nullptr) {
 		glfwTerminate();
@@ -44,6 +45,7 @@ GLFWApplication::GLFWApplication(
 		throw u8"Failed to initialize GLEW";
 	}
 	glViewport(0, 0, width, height);
+	glEnable(GL_MULTISAMPLE);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouseCallback);
