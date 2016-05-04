@@ -6,6 +6,8 @@ namespace tdr {
 	typedef struct { int32_t u; } fix1616;
 #define F16_ZERO { 0 }
 #define F16_ONE { 1 }
+#define CELESTIAL 0x7FFFFFFF
+#define ABYSS ((int32_t) 0x80000000)
 	fix1616 operator+(fix1616 a, fix1616 b);
 	fix1616 operator-(fix1616 a, fix1616 b);
 	fix1616 operator*(fix1616 a, fix1616 b);

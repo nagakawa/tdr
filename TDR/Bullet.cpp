@@ -3,30 +3,30 @@
 using namespace tdr;
 
 fix1616 tdr::operator+(fix1616 a, fix1616 b) {
-	if (b.u > 0 && ((int32_t) 0xFFFFFFFF) - b.u < a.u)
-		return { (int32_t) 0xFFFFFFFF };
-	if (b.u < 0 && -((int32_t) 0xFFFFFFFF) - b.u > a.u)
-		return { -((int32_t) 0xFFFFFFFF) };
+	if (b.u > 0 && ((int32_t) CELESTIAL) - b.u < a.u)
+		return { (int32_t) CELESTIAL };
+	if (b.u < 0 && ((int32_t) ABYSS) - b.u > a.u)
+		return { ((int32_t) ABYSS) };
 	return { a.u + b.u };
 }
 fix1616 tdr::operator-(fix1616 a, fix1616 b) {
-	if (b.u > 0 && -((int32_t) 0xFFFFFFFF) + b.u < a.u)
-		return { -(int32_t) 0xFFFFFFFF };
-	if (b.u < 0 && ((int32_t) 0xFFFFFFFF) + b.u > a.u)
-		return { ((int32_t) 0xFFFFFFFF) };
+	if (b.u > 0 && -((int32_t) CELESTIAL) + b.u < a.u)
+		return { -(int32_t) CELESTIAL };
+	if (b.u < 0 && ((int32_t) ABYSS) + b.u > a.u)
+		return { ((int32_t) ABYSS) };
 	return { a.u - b.u };
 }
 fix1616 tdr::operator*(fix1616 a, fix1616 b) {
 	int64_t prod = (((int64_t) a.u) * b.u) >> 16;
-	if (prod >= 0x100000000) prod = 0xFFFFFFFF;
-	if (prod < -((int64_t) 0x100000000)) prod = -((int64_t) 0xFFFFFFFF);
+	if (prod >= 0x100000000) prod = CELESTIAL;
+	if (prod < -((int64_t) 0x100000000)) prod = ((int64_t) ABYSS);
 	return { (int32_t) prod };
 }
 fix1616 tdr::operator/(fix1616 a, fix1616 b) {
 	int64_t aex = (((int64_t) a.u) << 16);
 	int64_t res = aex / b.u;
-	if (res > ((int64_t) 0xFFFFFFFF)) return { (int32_t) 0xFFFFFFFF };
-	if (res < -((int64_t) 0xFFFFFFFF)) return { -((int32_t) 0xFFFFFFFF) };
+	if (res > CELESTIAL) return { CELESTIAL };
+	if (res < ABYSS) return { ABYSS };
 	return { (int32_t) res };
 }
 
@@ -66,7 +66,7 @@ const int32_t arctangents[] = { 0x3243F6A8, 0x1DAC6705, 0xFADBAFC, 0x7F56EA6, 0x
 void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 	bool inv = t.u > 0x40000000 || t.u < -((int32_t) 0x40000000);
 	if (inv)
-		t.u += 0x80000000; // Plus, minus, that doesn't even matter ~
+		t.u = (int32_t) (((uint32_t) t.u) + 0x80000000); // Plus, minus, that doesn't even matter ~
 	// Multiply by tau to convert turns into radians
 	// (in 32.32 format)
 	int32_t radians = (int32_t) ((((int64_t) t.u) * TAU_TIMES_2TT28) >> 28);
