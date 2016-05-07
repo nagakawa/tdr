@@ -3,7 +3,7 @@
 using namespace agl;
 
 
-const char* agl::VERTEX_SOURCE = "\
+const char* agl::S2D_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 pos; \n\
 layout (location = 1) in vec4 source; \n\
@@ -19,7 +19,7 @@ void main() { \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
 } \
 ";
-const char* agl::FRAGMENT_SOURCE = "\
+const char* agl::S2D_FRAGMENT_SOURCE = "\
 #version 330 core \n\
 in vec2 texCoord; \n\
 out vec4 color; \n\
@@ -44,15 +44,15 @@ Sprite2D::~Sprite2D() {
 void agl::Sprite2D::setUp() {
 	if (app == nullptr)
 		throw "Current app must be set first";
-	Shader vertex(VERTEX_SOURCE, GL_VERTEX_SHADER);
-	Shader fragment(FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
+	Shader vertex(S2D_VERTEX_SOURCE, GL_VERTEX_SHADER);
+	Shader fragment(S2D_FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link(); // There you go!
 	hasInitializedProgram = true;
 	vao.setActive();
 	// Vertex data
-	vbo.feedData(sizeof(vertices), (void*) vertices, GL_DYNAMIC_DRAW);
+	vbo.feedData(sizeof(rectangleVertices), (void*) rectangleVertices, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
 	// Instance data
@@ -70,8 +70,7 @@ void agl::Sprite2D::setUp() {
 
 void agl::Sprite2D::tick() {
 	glEnable(GL_BLEND);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	BM_ALPHA.use();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	setTexture(texture);

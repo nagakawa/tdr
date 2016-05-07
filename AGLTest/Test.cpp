@@ -20,6 +20,7 @@
 #include "Shader.h"
 #include "ShaderProgram.h"
 #include "Sprite2D.h"
+#include "Text.h"
 
 // Others
 #include <iostream>
@@ -95,6 +96,12 @@ public:
 			});
 		}
 		sprites->setUp();
+		fy = new agl::Text();
+		fy->setApp(this);
+		fy->setFont("Meiryo");
+		fy->setText(u8"Test application.\nぱんご");
+		fy->setPosition(glm::vec2(530, 30));
+		fy->setUp();
 	}
 	bool ff = true;
 	void tick() {
@@ -112,6 +119,7 @@ public:
 		sprites->update();
 		boxes->tick();
 		sprites->tick();
+		fy->tick();
 		char* ctitle = new char[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
 		glfwSetWindowTitle(underlying(), ctitle);
@@ -163,6 +171,7 @@ public:
 	~AGLTest() {
 		delete boxes;
 		delete sprites;
+		delete fy;
 	}
 	GLfloat getMix() { return mix; }
 	GLfloat mix = 0.0f;
@@ -179,6 +188,7 @@ public:
 	std::shared_ptr<agl::Texture> stex;
 	agl::Texture* ptex;
 	agl::Sprite2D* sprites;
+	agl::Text* fy;
 	int frame = 0;
 	void setDigit(int i, int v) {
 		agl::Sprite2DInfo* spr = sprites->getLoc(3 + i);

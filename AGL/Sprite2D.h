@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <memory>
 #include <vector>
+#include "BlendMode.h"
 #include "EBO.h"
 #include "GLFWApplication.h"
 #include "Renderable.h"
@@ -20,14 +21,8 @@
 #include "rect.h"
 
 namespace agl {
-	extern const char* VERTEX_SOURCE;
-	extern const char* FRAGMENT_SOURCE;
-	const GLfloat vertices[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 1.0f
-	};
+	extern const char* S2D_VERTEX_SOURCE;
+	extern const char* S2D_FRAGMENT_SOURCE;
 	struct Sprite2DInfo {
 		Rect source;
 		Rect dest;

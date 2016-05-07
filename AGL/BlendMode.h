@@ -8,10 +8,10 @@ namespace agl {
 		GLenum eqRGB;
 		GLenum eqAlpha;
 		GLenum srcFuncRGB;
-		GLenum srcFuncAlpha;
 		GLenum destFuncRGB;
+		GLenum srcFuncAlpha;
 		GLenum destFuncAlpha;
-		void use();
+		void use() const;
 	};
 	extern const BlendMode BM_ALPHA;
 	extern const BlendMode BM_ADD;
