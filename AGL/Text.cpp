@@ -29,8 +29,8 @@ uniform vec4 bottomColor; \n\
 uniform float scale; \n\
 \n\
 void main() { \n\
-	vec2 e1 = vec2(0.5 * scale, 0) / texSize; \n\
-	vec2 e2 = vec2(0, 0.5 * scale) / texSize; \n\
+	vec2 e1 = vec2(min(1, 0.5 * scale), 0) / texSize; \n\
+	vec2 e2 = vec2(0, min(1, 0.5 * scale)) / texSize; \n\
 	float a = texture(tex, texCoord).a; \n\
 	a = (a - 205.0 / 255) * 255 / 50; \n\
 	float an = texture(tex, texCoord + e2).a; \n\
