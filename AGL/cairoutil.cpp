@@ -12,7 +12,8 @@ cairo_t* agl::createCairoContext(
 	) {
 	buffer = new unsigned char[channels * width * height];
 	surface = cairo_image_surface_create_for_data(buffer, CAIRO_FORMAT_ARGB32, width, height, channels * width);
-	return cairo_create(surface);
+	cairo_t* context = cairo_create(surface);
+	return context;
 }
 
 cairo_t* agl::createLayoutContext() {
@@ -29,6 +30,7 @@ void agl::getTextSize(PangoLayout& layout, unsigned int& width, unsigned int& he
 }
 
 void agl::renderText(const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t) {
+	if (margin <= 2) throw "Margin is too narrow! It must be greater than 2.";
 	cairo_t* layoutContext = createLayoutContext();
 	PangoLayout* layout = pango_cairo_create_layout(layoutContext);
 	pango_layout_set_text(layout, text, -1);
@@ -42,6 +44,10 @@ void agl::renderText(const char* text, const char* font, unsigned int& width, un
 	cairo_surface_t* surface;
 	unsigned char* surfaceData;
 	cairo_t* renderContext = createCairoContext(width, height, 4, surface, surfaceData);
+	/*PangoContext* pangoContext = pango_cairo_create_context(renderContext);
+	cairo_font_options_t* fontOptions = cairo_font_options_create();
+	cairo_font_options_set_antialias(fontOptions, CAIRO_ANTIALIAS_BEST);
+	pango_cairo_context_set_font_options(pangoContext, fontOptions);*/
 	cairo_set_source_rgba(renderContext, 1, 1, 1, 1);
 	pango_cairo_show_layout(renderContext, layout);
 	t.setTexture(width, height, surfaceData, GL_BGRA);

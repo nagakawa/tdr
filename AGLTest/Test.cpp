@@ -101,6 +101,8 @@ public:
 		fy->setMargin(240);
 		fy->setFont("Segoe UI");
 		fy->setSize(0.7);
+		fy->setTopColor(glm::vec4(0.7f, 0.0f, 0.3f, 1.0f));
+		fy->setBottomColor(glm::vec4(0.3f, 0.7f, 0.0f, 0.8f));
 		fy->setText(u8"Bad translation\nΚακή μετάφραση\nMala traducción\n下手な翻訳\n잘못된 번역\nתרגום גרוע\nترجمة سيئة\nD́ȉa͟c̈r̆ȉt̂ics\nThe Touhou Project (東方Project Tōhō Purojekuto, lit. Eastern Project), also known as Toho Project or Project Shrine Maiden, is a series of Japanese bullet hell shooter video games developed by the single-person Team Shanghai Alice. Team Shanghai Alice's sole member, ZUN, independently produces the games' graphics, music, and programming.\n東方Project（とうほうプロジェクト）とは、同人サークルの上海アリス幻樂団によって製作されている著作物である。弾幕系シューティングを中心としたゲーム、書籍、音楽CDなどから成る。東方Projectの作品を一括して東方、東方Projectシリーズなどと称することもある。狭義には、上海アリス幻樂団のメンバー「ZUN」が制作している同人作品の一連の作品をあらわす。");
 		fy->setPosition(glm::vec2(530, 30));
 		fy->setUp();
