@@ -29,17 +29,22 @@ uniform vec4 bottomColor; \n\
 uniform float scale; \n\
 \n\
 void main() { \n\
-	vec2 e1 = vec2(1, 0) / texSize; \n\
-	vec2 e2 = vec2(0, 1) / texSize; \n\
+	vec2 e1 = vec2(0.5 * scale, 0) / texSize; \n\
+	vec2 e2 = vec2(0, 0.5 * scale) / texSize; \n\
 	float a = texture(tex, texCoord).a; \n\
 	a = (a - 205.0 / 255) * 255 / 50; \n\
 	float an = texture(tex, texCoord + e2).a; \n\
 	float as = texture(tex, texCoord - e2).a; \n\
 	float aw = texture(tex, texCoord - e1).a; \n\
 	float ae = texture(tex, texCoord + e1).a; \n\
-	float av = (an + as + aw + ae) * 0.25; \n\
+	float ann = texture(tex, texCoord + 2 * e2).a; \n\
+	float ass = texture(tex, texCoord - 2 * e2).a; \n\
+	float aww = texture(tex, texCoord - 2 * e1).a; \n\
+	float aee = texture(tex, texCoord + 2 * e1).a; \n\
+	float av = (an + as + aw + ae + ann + ass + aww + aee) * 0.125; \n\
 	av = (av - 205.0 / 255) * 255 / 50; \n\
-	a = a + 0.5 * scale * av * (1 - a); \n\
+	a = a + (av - 0.5) * (1 - a); \n\
+	a = clamp(a, 0, 1); \n\
 	color = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColor, topColor, texCoord.y); \n\
 } \
 ";
