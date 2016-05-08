@@ -6,23 +6,19 @@ const char* agl::TXT_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 pos; \n\
 out vec2 texCoord; \n\
-out vec2 screenSize; \n\
 uniform vec2 topLeft; \n\
 uniform vec2 texDimensions; \n\
 uniform vec2 screenDimensions; \n\
-uniform float scale; \n\
 \n\
 void main() { \n\
 	texCoord = pos; \n\
-	vec2 position = (topLeft + pos * texDimensions * scale) / screenDimensions; \n\
+	vec2 position = (topLeft + pos * texDimensions) / screenDimensions; \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
-	screenSize = screenDimensions; \n\
 } \
 ";
 const char* agl::TXT_FRAGMENT_SOURCE = "\
 #version 330 core \n\
 in vec2 texCoord; \n\
-in vec2 screenSize; \n\
 out vec4 color; \n\
 uniform sampler2D tex; \n\
 uniform vec4 topColor; \n\
@@ -52,8 +48,9 @@ Text::~Text() {
 	delete texture;
 }
 
-void agl::Text::setText(std::string txt) {
-	renderText(txt.c_str(), font.c_str(), width, height, margin, size, *texture);
+void agl::Text::setText(std::string txt, bool relayout) {
+	if (relayout)
+		renderText(txt.c_str(), font.c_str(), width, height, margin, size, *texture);
 	text = txt;
 }
 
@@ -85,7 +82,6 @@ void agl::Text::tick() {
 	texture->bindTo(0);
 	if (app == nullptr) throw "App must be set first";
 	SETUNSP(program, 1i, "tex", 0);
-	SETUNSP(program, 1f, "scale", (GLfloat) size);
 	SETUNSP2(program, 2f, "topLeft", position.x, position.y);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) width, (GLfloat) height);
 	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
