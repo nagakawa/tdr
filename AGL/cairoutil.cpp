@@ -28,10 +28,12 @@ void agl::getTextSize(PangoLayout& layout, unsigned int& width, unsigned int& he
 	height /= PANGO_SCALE;
 }
 
-void agl::renderText(const char* text, const char* font, unsigned int& width, unsigned int& height, Texture& t) {
+void agl::renderText(const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t) {
 	cairo_t* layoutContext = createLayoutContext();
 	PangoLayout* layout = pango_cairo_create_layout(layoutContext);
 	pango_layout_set_text(layout, text, -1);
+	pango_layout_set_width(layout, (int) (margin * PANGO_SCALE / fontSize));
+	pango_layout_set_wrap(layout, PANGO_WRAP_WORD);
 	PangoFontDescription* desc = pango_font_description_from_string(font);
 	pango_layout_set_font_description(layout, desc);
 	pango_font_description_free(desc);

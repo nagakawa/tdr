@@ -41,6 +41,10 @@ namespace agl {
 		void setFont(std::string fnt) { font = fnt; }
 		unsigned int getWidth() { return width; }
 		unsigned int getHeight() { return height; }
+		unsigned int getMargin() { return margin; }
+		void setMargin(unsigned int m) { margin = m; }
+		double getSize() { return size; }
+		void setSize(double s) { size = s; }
 		void setUp();
 		void tick();
 		void update();
@@ -70,5 +74,7 @@ namespace agl {
 		glm::vec4 bottomColor;
 		glm::vec2 position;
 		std::string font;
+		unsigned int margin;
+		double size;
 	};
 }

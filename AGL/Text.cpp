@@ -6,28 +6,32 @@ const char* agl::TXT_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 pos; \n\
 out vec2 texCoord; \n\
+out vec2 screenSize; \n\
 uniform vec2 topLeft; \n\
 uniform vec2 texDimensions; \n\
 uniform vec2 screenDimensions; \n\
+uniform float scale; \n\
 \n\
 void main() { \n\
 	texCoord = pos; \n\
-	vec2 position = (topLeft + pos * texDimensions) / screenDimensions; \n\
+	vec2 position = (topLeft + pos * texDimensions * scale) / screenDimensions; \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
+	screenSize = screenDimensions; \n\
 } \
 ";
 const char* agl::TXT_FRAGMENT_SOURCE = "\
 #version 330 core \n\
 in vec2 texCoord; \n\
+in vec2 screenSize; \n\
 out vec4 color; \n\
 uniform sampler2D tex; \n\
 uniform vec4 topColor; \n\
 uniform vec4 bottomColor; \n\
 \n\
 void main() { \n\
-	vec4 texc = texture(tex, texCoord); \n\
-	texc.a = (texc.a - 205.0 / 255) * 255 / 50; \n\
-	color = texc * mix(bottomColor, topColor, texCoord.y); \n\
+	float a = texture(tex, texCoord).a; \
+	a = (a - 205.0 / 255) * 255 / 50; \n\
+	color = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColor, topColor, texCoord.y); \n\
 } \
 ";
 
@@ -35,6 +39,8 @@ Text::Text() {
 	texture = new Texture();
 	width = 0;
 	height = 0;
+	margin = 999;
+	size = 1;
 	app = nullptr;
 	hasInitializedProgram = false;
 	topColor = bottomColor = glm::vec4(0, 0, 0, 1);
@@ -47,7 +53,7 @@ Text::~Text() {
 }
 
 void agl::Text::setText(std::string txt) {
-	renderText(txt.c_str(), font.c_str(), width, height, *texture);
+	renderText(txt.c_str(), font.c_str(), width, height, margin, size, *texture);
 	text = txt;
 }
 
@@ -79,6 +85,7 @@ void agl::Text::tick() {
 	texture->bindTo(0);
 	if (app == nullptr) throw "App must be set first";
 	SETUNSP(program, 1i, "tex", 0);
+	SETUNSP(program, 1f, "scale", (GLfloat) size);
 	SETUNSP2(program, 2f, "topLeft", position.x, position.y);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) width, (GLfloat) height);
 	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
