@@ -8,9 +8,15 @@ using namespace agl;
 cairo_t* agl::createCairoContext(
 	int width, int height, int channels,
 	cairo_surface_t*& surface,
-	unsigned char*& buffer
+	unsigned char*& buffer,
+	bool updated
 	) {
-	buffer = (unsigned char*) calloc(channels * width * height, sizeof(unsigned char));
+	if (!updated && buffer != nullptr) {
+		memset(buffer, 0, width * height * channels);
+	} else {
+		free(buffer);
+		buffer = (unsigned char*) calloc(channels * width * height, sizeof(unsigned char));
+	}
 	surface = cairo_image_surface_create_for_data(buffer, CAIRO_FORMAT_ARGB32, width, height, channels * width);
 	cairo_t* context = cairo_create(surface);
 	return context;
@@ -29,7 +35,7 @@ void agl::getTextSize(PangoLayout& layout, unsigned int& width, unsigned int& he
 	height /= PANGO_SCALE;
 }
 
-void agl::renderText(const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t, bool rich) {
+void agl::renderText(unsigned char*& buffer, const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t, bool rich) {
 	cairo_t* layoutContext = createLayoutContext();
 	PangoLayout* layout = pango_cairo_create_layout(layoutContext);
 	if (rich) {
@@ -54,18 +60,18 @@ void agl::renderText(const char* text, const char* font, unsigned int& width, un
 	pango_font_description_set_absolute_size(desc, fontSize * PANGO_SCALE * 20);
 	pango_layout_set_font_description(layout, desc);
 	pango_font_description_free(desc);
+	unsigned int oldWidth = width, oldHeight = height;
 	getTextSize(*layout, width, height);
+	bool updated = oldWidth != width || oldHeight != height;
 	cairo_surface_t* surface;
-	unsigned char* surfaceData;
-	cairo_t* renderContext = createCairoContext(width, height, 4, surface, surfaceData);
+	cairo_t* renderContext = createCairoContext(width, height, 4, surface, buffer, updated);
 	/*PangoContext* pangoContext = pango_cairo_create_context(renderContext);
 	cairo_font_options_t* fontOptions = cairo_font_options_create();
 	cairo_font_options_set_antialias(fontOptions, CAIRO_ANTIALIAS_BEST);
 	pango_cairo_context_set_font_options(pangoContext, fontOptions);*/
 	cairo_set_source_rgba(renderContext, 1, 1, 1, 1);
 	pango_cairo_show_layout(renderContext, layout);
-	t.changeTexture(width, height, surfaceData, GL_BGRA);
-	free(surfaceData);
+	t.changeTexture(width, height, buffer, GL_BGRA);
 	g_object_unref(layout);
 	cairo_destroy(layoutContext);
 	cairo_destroy(renderContext);

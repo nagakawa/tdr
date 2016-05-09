@@ -80,5 +80,6 @@ namespace agl {
 		unsigned int margin;
 		double size;
 		bool rich;
+		unsigned char* buffer;
 	};
 }
