@@ -31,8 +31,9 @@ uniform float scale; \n\
 void main() { \n\
 	vec2 e1 = vec2(min(1, 0.5 * scale), 0) / texSize; \n\
 	vec2 e2 = vec2(0, min(1, 0.5 * scale)) / texSize; \n\
-	float a = texture(tex, texCoord).a; \n\
-	a = (a - 205.0 / 255) * 255 / 50; \n\
+	float a = texture(tex, texCoord).a; \n"
+#ifdef _DEBUG
+	"a = (a - 205.0 / 255) * 255 / 50; \n\
 	float an = texture(tex, texCoord + e2).a; \n\
 	float as = texture(tex, texCoord - e2).a; \n\
 	float aw = texture(tex, texCoord - e1).a; \n\
@@ -43,8 +44,9 @@ void main() { \n\
 	float aee = texture(tex, texCoord + 2 * e1).a; \n\
 	float av = (an + as + aw + ae + ann + ass + aww + aee) * 0.125; \n\
 	av = (av - 205.0 / 255) * 255 / 50; \n\
-	a = a + (av - 0.5) * (1 - a); \n\
-	a = clamp(a, 0, 1); \n\
+	a = a + (av - 0.5) * (1 - a); \n"
+#endif
+"	a = clamp(a, 0, 1); \n\
 	color = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColor, topColor, texCoord.y); \n\
 } \
 ";
@@ -60,23 +62,22 @@ Text::Text() {
 	topColor = bottomColor = glm::vec4(0, 0, 0, 1);
 	position = glm::vec2(0, 0);
 	font = "VL Gothic";
+	texture->bind();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 }
 
 Text::~Text() {
 	delete texture;
 }
 
-GLfloat TEXT_BORDER_COLOR[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+void agl::Text::relayout() {
+	renderText(text.c_str(), font.c_str(), width, height, margin, size, *texture);
+}
 
-void agl::Text::setText(std::string txt, bool relayout) {
-	if (relayout) {
-		renderText(txt.c_str(), font.c_str(), width, height, margin, size, *texture);
-		texture->bind();
-		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, TEXT_BORDER_COLOR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	}
+void agl::Text::setText(std::string txt, bool rl) {
 	text = txt;
+	if (rl) relayout();
 }
 
 void agl::Text::setUp() {

@@ -33,6 +33,22 @@ void agl::Texture::setTexture(int w, int h, unsigned char* data, GLenum texForma
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void agl::Texture::changeTexture(int w, int h, unsigned char * data, GLenum texFormat) {
+	width = w;
+	height = h;
+	if (data == nullptr)
+		throw "Image could not be read!";
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, texFormat, GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+
 agl::Texture::Texture(Texture& t) {
 	id = t.id;
 	width = t.width;
@@ -55,4 +71,3 @@ void Texture::bindTo(GLint slot) {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	bind();
 }
-

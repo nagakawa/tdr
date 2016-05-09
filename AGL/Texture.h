@@ -15,11 +15,12 @@ namespace agl {
 		void bindTo(GLint slot);
 		GLint getWidth() { return width; }
 		GLint getHeight() { return height; }
-		void setTexture(int w, int h, unsigned char* data, GLenum texFormat = GL_RGBA);
+		void changeTexture(int w, int h, unsigned char* data, GLenum texFormat = GL_RGBA);
 		GLuint id;
 	private:
 		GLint width;
 		GLint height;
+		void setTexture(int w, int h, unsigned char* data, GLenum texFormat = GL_RGBA);
 	};
 }
 

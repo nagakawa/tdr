@@ -36,7 +36,8 @@ namespace agl {
 		Text();
 		~Text();
 		std::string getText() { return text; }
-		void setText(std::string txt, bool relayout = true);
+		void relayout();
+		void setText(std::string txt, bool rl = true);
 		std::string getFont() { return font; }
 		void setFont(std::string fnt) { font = fnt; }
 		unsigned int getWidth() { return width; }

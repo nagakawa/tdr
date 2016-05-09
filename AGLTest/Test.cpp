@@ -86,10 +86,10 @@ public:
 		});
 		sprites->addSprite({
 			{ DIGIT_BASEX + 14 * DIGIT_WIDTH, DIGIT_BASEY, DIGIT_BASEX + 15 * DIGIT_WIDTH, DIGIT_BASEY + DIGIT_HEIGHT },
-			{50 + 6 * DIGIT_WIDTH, 500, 50 + 7 * DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
+			{50 + 7 * DIGIT_WIDTH, 500, 50 + 8 * DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
 		});
-		for (int i = 0; i < 4; ++i) {
-			GLfloat x = 50 + (4 + i + (i >= 2)) * DIGIT_WIDTH;
+		for (int i = 0; i < 5; ++i) {
+			GLfloat x = 50 + (4 + i + (i >= 3)) * DIGIT_WIDTH;
 			sprites->addSprite({
 				{0, DIGIT_BASEY, 0, DIGIT_BASEY + DIGIT_HEIGHT},
 				{x, 500, x + DIGIT_WIDTH, 500 + DIGIT_HEIGHT}
@@ -106,6 +106,7 @@ public:
 		fy->setText(u8"Bad translation\nΚακή μετάφραση\nMala traducción\nплохой перевод\n下手な翻訳\n잘못된 번역\nתרגום גרוע\nترجمة سيئة\nD́ȉa͟c̈r̆ȉt̂ics\nThe Touhou Project (東方Project Tōhō Purojekuto, lit. Eastern Project), also known as Toho Project or Project Shrine Maiden, is a series of Japanese bullet hell shooter video games developed by the single-person Team Shanghai Alice. Team Shanghai Alice's sole member, ZUN, independently produces the games' graphics, music, and programming.\n東方Project（とうほうプロジェクト）とは、同人サークルの上海アリス幻樂団によって製作されている著作物である。弾幕系シューティングを中心としたゲーム、書籍、音楽CDなどから成る。東方Projectの作品を一括して東方、東方Projectシリーズなどと称することもある。狭義には、上海アリス幻樂団のメンバー「ZUN」が制作している同人作品の一連の作品をあらわす。");
 		fy->setPosition(glm::vec2(530, 20));
 		fy->setUp();
+		setVSyncEnable(false);
 	}
 	bool ff = true;
 	void tick() {
@@ -116,13 +117,14 @@ public:
 		sprites->getLoc(0)->source.top = (GLfloat) (448 - (which << 6));
 		sprites->getLoc(0)->source.bottom = (GLfloat) (512 - (which << 6));
 		int rfps = (int) (getRollingFPS() * 100);
-		for (int i = 3; i >= 0; --i) {
+		for (int i = 4; i >= 0; --i) {
 			setDigit(i, rfps % 10);
 			rfps /= 10;
 		}
 		sprites->update();
 		boxes->tick();
 		sprites->tick();
+		fy->relayout();
 		fy->tick();
 		char* ctitle = new char[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());

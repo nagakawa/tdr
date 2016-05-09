@@ -30,7 +30,6 @@ void agl::getTextSize(PangoLayout& layout, unsigned int& width, unsigned int& he
 }
 
 void agl::renderText(const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t) {
-	if (margin <= 2) throw "Margin is too narrow! It must be greater than 2.";
 	cairo_t* layoutContext = createLayoutContext();
 	PangoLayout* layout = pango_cairo_create_layout(layoutContext);
 	pango_layout_set_text(layout, text, -1);
@@ -50,7 +49,7 @@ void agl::renderText(const char* text, const char* font, unsigned int& width, un
 	pango_cairo_context_set_font_options(pangoContext, fontOptions);*/
 	cairo_set_source_rgba(renderContext, 1, 1, 1, 1);
 	pango_cairo_show_layout(renderContext, layout);
-	t.setTexture(width, height, surfaceData, GL_BGRA);
+	t.changeTexture(width, height, surfaceData, GL_BGRA);
 	free(surfaceData);
 	g_object_unref(layout);
 	cairo_destroy(layoutContext);
