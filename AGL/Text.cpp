@@ -59,6 +59,7 @@ Text::Text() {
 	texture->bind();
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	rich = false;
 }
 
 Text::~Text() {
@@ -66,7 +67,7 @@ Text::~Text() {
 }
 
 void agl::Text::relayout() {
-	renderText(text.c_str(), font.c_str(), width, height, margin, size, *texture);
+	renderText(text.c_str(), font.c_str(), width, height, margin, size, *texture, rich);
 }
 
 void agl::Text::setText(std::string txt, bool rl) {

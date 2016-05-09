@@ -58,6 +58,8 @@ namespace agl {
 			bottomColor = col;
 		}
 		glm::vec2 getPosition() { return position; }
+		bool isRich() { return rich; }
+		void setRich(bool r) { rich = r; }
 		void setPosition(glm::vec2 pos) { position = pos; }
 		void setApp(GLFWApplication* a) { app = a; }
 	protected:
@@ -77,5 +79,6 @@ namespace agl {
 		std::string font;
 		unsigned int margin;
 		double size;
+		bool rich;
 	};
 }
