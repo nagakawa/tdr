@@ -127,7 +127,7 @@ public:
 		sprites->tick();
 		//fy->relayout();
 		fy->tick();
-		char* ctitle = new char[256];
+		char ctitle[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
 		glfwSetWindowTitle(underlying(), ctitle);
 	}

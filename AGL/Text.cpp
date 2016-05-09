@@ -29,16 +29,16 @@ uniform vec4 bottomColor; \n\
 uniform float scale; \n\
 \n\
 void main() { \n\
-	vec2 e1 = vec2(min(1, 0.5 * scale), 0) / texSize; \n\
-	vec2 e2 = vec2(0, min(1, 0.5 * scale)) / texSize; \n\
 	float a = texture(tex, texCoord).a; \n"
 #ifdef FXAA
-"	float an = texture(tex, texCoord + e2).a; \n\
+"	vec2 e1 = vec2(min(1, 0.5 * scale), 0) / texSize; \n\
+	vec2 e2 = vec2(0, min(1, 0.5 * scale)) / texSize; \n\
+	float an = texture(tex, texCoord + e2).a; \n\
 	float as = texture(tex, texCoord - e2).a; \n\
 	float aw = texture(tex, texCoord - e1).a; \n\
 	float ae = texture(tex, texCoord + e1).a; \n\
-	float av = (an + as + aw + ae) * 0.25; \n"
-"	a = a  + (av - 0.5) * (1 - a); \n"
+	float av = (an + as + aw + ae) * 0.25; \n\
+	a = a  + (av - 0.5) * (1 - a); \n"
 #endif
 "	a = clamp(a, 0, 1); \n\
 	color = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColor, topColor, texCoord.y); \n\
