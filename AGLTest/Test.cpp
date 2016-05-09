@@ -126,7 +126,7 @@ public:
 		sprites->update();
 		boxes->tick();
 		sprites->tick();
-		//for (int i = 0; i < 1; ++i) fy->relayout();
+		for (int i = 0; i < 1; ++i) fy->relayout();
 		fy->tick();
 		char ctitle[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());

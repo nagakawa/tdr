@@ -15,5 +15,5 @@ namespace agl {
 		);
 	cairo_t* createLayoutContext();
 	void getTextSize(PangoLayout& layout, unsigned int& width, unsigned int& height);
-	void renderText(unsigned char*& buffer, const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t, bool rich);
+	void renderText(unsigned char*& buffer, const char* text, const char* font, unsigned int& width, unsigned int& height, unsigned int margin, double fontSize, Texture& t, bool updated);
 }

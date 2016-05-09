@@ -81,5 +81,6 @@ namespace agl {
 		double size;
 		bool rich;
 		unsigned char* buffer;
+		bool remark;
 	};
 }

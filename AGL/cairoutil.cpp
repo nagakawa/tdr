@@ -62,7 +62,7 @@ void agl::renderText(unsigned char*& buffer, const char* text, const char* font,
 	pango_font_description_free(desc);
 	unsigned int oldWidth = width, oldHeight = height;
 	getTextSize(*layout, width, height);
-	bool updated = oldWidth != width || oldHeight != height;
+	bool updated = oldWidth * oldHeight != width * height;
 	cairo_surface_t* surface;
 	cairo_t* renderContext = createCairoContext(width, height, 4, surface, buffer, updated);
 	/*PangoContext* pangoContext = pango_cairo_create_context(renderContext);
