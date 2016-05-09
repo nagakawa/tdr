@@ -10,7 +10,7 @@ cairo_t* agl::createCairoContext(
 	cairo_surface_t*& surface,
 	unsigned char*& buffer
 	) {
-	buffer = new unsigned char[channels * width * height];
+	buffer = (unsigned char*) calloc(channels * width * height, sizeof(unsigned char));
 	surface = cairo_image_surface_create_for_data(buffer, CAIRO_FORMAT_ARGB32, width, height, channels * width);
 	cairo_t* context = cairo_create(surface);
 	return context;
