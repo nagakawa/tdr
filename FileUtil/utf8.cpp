@@ -1,6 +1,6 @@
 #include "utf8.h"
 
-errno_t utf8Next(char** strRef, int* codeRef) {
+int utf8Next(char** strRef, int* codeRef) {
 	char* str = *strRef;
 	char first = *str;
 	if (isASCII(first)) {

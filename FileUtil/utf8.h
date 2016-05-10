@@ -17,7 +17,7 @@ inline int is3ByteStarter(char c) {
 inline int is4ByteStarter(char c) {
 	return c >= 240 && c < 248;
 }
-inline int utf8DecodeErrorClass(errno_t err) {
+inline int utf8DecodeErrorClass(int err) {
 	return err >> 12;
 }
 
@@ -41,4 +41,4 @@ inline int utf8DecodeErrorClass(errno_t err) {
 		ERR_INVALID_UTF8_BYTE + 0x100 * bytes advanced + byte
 			if an unexpected continuation byte was found
 */
-errno_t utf8Next(char** strRef, int* codeRef);
+int utf8Next(char** strRef, int* codeRef);

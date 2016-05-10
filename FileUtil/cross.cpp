@@ -6,7 +6,7 @@ extern "C" {
 }
 #endif
 
-errno_t openFile(FILE** streamptr,
+int openFile(FILE** streamptr,
 	const char* filename,
 	const char* mode) {
 #ifdef _WIN32
@@ -20,12 +20,15 @@ errno_t openFile(FILE** streamptr,
 	int fnamelen = strlen(filename);
 	wchar_t* wname = (wchar_t*) malloc(sizeof(wchar_t) * (fnamelen + 1));
 	MultiByteToWideChar(CP_UTF8, 0, filename, -1, wname, fnamelen + 1);
-	errno_t err = _wfopen_s(streamptr, wname, wmode);
+	int err = _wfopen_s(streamptr, wname, wmode);
 	free(wmode);
 	free(wname);
 	return err;
 #else
 	/* Non-Window OSes use UTF-8 filenames */
-	return fopen_s(streamptr, filename, mode);
+	// return fopen_s(streamptr, filename, mode);
+	*streamptr = fopen(filename, mode);
+	if (*streamptr != NULL) return 0;
+	else return -1;
 #endif
 }
