@@ -38,7 +38,6 @@ Sprite2D::Sprite2D(std::shared_ptr<Texture> t) {
 }
 
 Sprite2D::~Sprite2D() {
-	Renderable::~Renderable();
 }
 
 void agl::Sprite2D::setUp() {

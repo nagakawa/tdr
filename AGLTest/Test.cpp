@@ -4,7 +4,7 @@
 // GLFW
 #include <GLFW/glfw3.h>
 // SOIL
-#include <SOIL.h>
+#include <SOIL/SOIL.h>
 // GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -242,9 +242,9 @@ void Boxes::tick() {
 	awesome->bindTo(1);
 	SETUNSP(*program, 1i, "ourTexture2", 1);
 	SETUNSP(*program, 1f, "m", app->mix);
-	GLfloat radius = 10.0f;
-	GLfloat camX = (GLfloat) sin(glfwGetTime()) * radius;
-	GLfloat camZ = (GLfloat) cos(glfwGetTime()) * radius;
+	// GLfloat radius = 10.0f;
+	// GLfloat camX = (GLfloat) sin(glfwGetTime()) * radius;
+	// GLfloat camZ = (GLfloat) cos(glfwGetTime()) * radius;
 	glm::mat4 view;
 	view = glm::lookAt(
 		app->cameraPos, // position

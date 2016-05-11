@@ -32,8 +32,9 @@ Shader::Shader(FILE* f, GLenum type) {
 	long fsize = ftell(f);
 	fseek(f, 0, SEEK_SET);
 	char* string = (char*) malloc(fsize+1);
-	fread(string, fsize, 1, f);
+	size_t br = fread(string, fsize, 1, f);
 	fclose(f);
+	if (br < 1) throw u8"fread did not read as much as it should have";
 	string[fsize] = 0;
 	init(string, type);
 }

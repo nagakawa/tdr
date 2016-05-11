@@ -108,8 +108,8 @@ void agl::Text::tick() {
 	SETUNSP2(program, 2f, "topLeft", position.x, position.y);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) width, (GLfloat) height);
 	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
-	SETUNSPV(program, 4fv, "topColor", topColor.data);
-	SETUNSPV(program, 4fv, "bottomColor", bottomColor.data);
+	SETUNSPV(program, 4fv, "topColor", (GLfloat*) &topColor);
+	SETUNSPV(program, 4fv, "bottomColor", (GLfloat*) &bottomColor);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	resetVAO();
 }

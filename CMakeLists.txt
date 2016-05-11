@@ -18,21 +18,9 @@ set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
 
-add_subdirectory(FileUtil)
-add_subdirectory(AGL)
-add_subdirectory(AGLTest)
-
-FIND_PACKAGE(OpenGL)
-
-if (OPENGL_FOUND)
-  INCLUDE_DIRECTORIES("${OPENGL_INCLUDE_DIR}")
-endif()
-
-FIND_PACKAGE(GLEW)
-
-if (GLEW_FOUND)
-  INCLUDE_DIRECTORIES("${GLEW_INCLUDE_DIR}")
-endif()
+ADD_SUBDIRECTORY(FileUtil)
+ADD_SUBDIRECTORY(AGL)
+ADD_SUBDIRECTORY(AGLTest)
 
 # actual target:
 # ADD_LIBRARY(tdr ${tdr_library}_SCRS ${tdr_library_HDRS})

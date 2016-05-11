@@ -35,7 +35,7 @@ namespace agl {
 			int glMinor = 3
 			);
 		void start();
-		~GLFWApplication();
+		virtual ~GLFWApplication();
 		virtual void initialize();
 		virtual void tick();
 		virtual void readKeys();

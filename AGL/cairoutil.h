@@ -2,6 +2,7 @@
 
 #include <pango/pangocairo.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "Texture.h"

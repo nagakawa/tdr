@@ -8,7 +8,7 @@ These instructions are for Visual Studio 2015. For other compilers / IDEs, you'r
 
 * Download GLFW, SOIL, GLEW, and GLM **(Make sure you get the 32-bit versions if you're building for 32 bits, and the 64-bit versions if you're building for 64)**
 * Copy GLFW (glfw3.lib), SOIL (SOIL.lib), and GLEW (glew32s.lib) library files into a lib/ directory
-* Copy their includes, plus GLM, into include/
+* Copy their includes, plus GLM, into include/ (place SOIL.h in include/SOIL/)
 * Get the GTK+ bundle from [here](https://github.com/hexchat/gtk-win32); copy the directory here and rename it gtk/
 * Play around in Visual Studio!
 

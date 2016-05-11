@@ -5,8 +5,9 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 # ######### General setup ##########
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 
-set (PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
-set (PROJECT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE(../dependencies.txt)
+
+SET(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../AGL ${PROJECT_SOURCE_DIR}/../FileUtil)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror -O3")
 
 # ########## AGLTest executable ##########
