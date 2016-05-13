@@ -5,7 +5,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 # ######### General setup ##########
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
 
-INCLUDE(../dependencies.txt)
+INCLUDE(../dependencies.cmake)
 
 # ########## AGL executable ##########
 # Sources:
