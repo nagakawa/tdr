@@ -71,7 +71,7 @@ void agl::renderText(unsigned char*& buffer, const char* text, const char* font,
 	pango_cairo_context_set_font_options(pangoContext, fontOptions);*/
 	cairo_set_source_rgba(renderContext, 1, 1, 1, 1);
 	pango_cairo_show_layout(renderContext, layout);
-	t.changeTexture(width, height, buffer, GL_BGRA);
+	t.changeTexture(width, height, buffer, {GL_RGBA, GL_BGRA, GL_UNSIGNED_BYTE, true});
 	g_object_unref(layout);
 	cairo_destroy(layoutContext);
 	cairo_destroy(renderContext);
