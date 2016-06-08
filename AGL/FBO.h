@@ -11,7 +11,7 @@ namespace agl {
 		RBO();
 		~RBO();
 		void setActive();
-    void allocateStorage(GLenum format, GLint width, GLint height);
+    void allocateStorage(GLenum format, GLint width, GLint height, bool multisample = false);
 		GLuint id;
 	};
   class FBO {
@@ -23,14 +23,20 @@ namespace agl {
     bool isComplete();
     void attachTexture(GLenum attachment, Texture* texture, GLenum texTarget = GL_TEXTURE_2D, GLuint mipmap = 0);
     void attachRBO(GLenum attachment, RBO* rbo);
+    void blitTo(FBO& other, int width, int height);
 		GLuint id;
 	};
   struct FBOTex {
     FBO* fbo;
     Texture* texture;
   };
+  struct FBOTexMS {
+    FBOTex ms;
+    FBOTex ss;
+  };
   FBO* getActiveFBO();
   GLuint getActiveFBOID();
   FBOTex makeFBOForMe(GLint width, GLint height);
+  FBOTexMS makeFBOForMeMS(GLint width, GLint height);
   void setDefaultFBOAsActive();
 }

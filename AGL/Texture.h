@@ -10,9 +10,11 @@ namespace agl {
 		GLenum pixelType;
 		bool checkForNullData;
 		bool genMipMap;
+		bool multisample;
 	};
-	#define DEFAULT_TEX_INIT {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true}
-	#define TEX_INIT_FOR_FBO {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false}
+	#define DEFAULT_TEX_INIT {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true, false}
+	#define TEX_INIT_FOR_FBO {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false}
+	#define TEX_INIT_FOR_FBO_MS {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true}
 	class Texture {
 	public:
 		Texture(const char* fname, TexInitInfo info = DEFAULT_TEX_INIT);
@@ -29,6 +31,7 @@ namespace agl {
 	private:
 		GLint width;
 		GLint height;
+		bool ms;
 		void setTexture(int w, int h, unsigned char* data, TexInitInfo info = DEFAULT_TEX_INIT);
 	};
 }

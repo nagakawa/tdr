@@ -73,9 +73,11 @@ public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialize() {
 		std::cout << "hi\n";
-		agl::FBOTex ft = agl::makeFBOForMe(800, 600);
-		fboTex = ft.texture;
-		fbo = ft.fbo;
+		agl::FBOTexMS ft = agl::makeFBOForMeMS(800, 600);
+		fboTex = ft.ss.texture;
+		fboTexMS = ft.ms.texture;
+		fboSS = ft.ss.fbo;
+		fboMS = ft.ms.fbo;
 		boxes = new Boxes(this);
 		ptex = new agl::Texture("textures/fuckyou.png");
 		stex = std::make_shared<agl::Texture>(*ptex);
@@ -129,7 +131,7 @@ public:
 	}
 	bool ff = true;
 	void tick() {
-		fbo->setActive();
+		fboMS->setActive();
 		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		++frame;
@@ -146,6 +148,7 @@ public:
 		sprites->tick();
 		//for (int i = 0; i < 1; ++i) fy->relayout();
 		fy->tick();
+		fboMS->blitTo(*fboSS, 800, 600);
 		agl::setDefaultFBOAsActive();
 		glClearColor(1.0f, 0.5f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -202,7 +205,8 @@ public:
 		delete boxes;
 		delete sprites;
 		delete fy;
-		delete fbo;
+		delete fboSS;
+		delete fboMS;
 		delete view;
 	}
 	GLfloat getMix() { return mix; }
@@ -222,8 +226,10 @@ public:
 	agl::Texture* ptex;
 	agl::Sprite2D* sprites;
 	agl::Text* fy;
-	agl::FBO* fbo;
+	agl::FBO* fboMS;
+	agl::FBO* fboSS;
 	agl::Texture* fboTex;
+	agl::Texture* fboTexMS;
 	agl::Sprite2D* view;
 	int frame = 0;
 	void setDigit(int i, int v) {
@@ -295,7 +301,7 @@ void Boxes::tick() {
 int main(int argc, char** argv) {
 	try {
 		// Kriët ė test wýndö
-		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App"/*, 4, 5, true*/);
+		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 4, 5, true);
 		a->start();
 	} catch (char const* s) {
 		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
