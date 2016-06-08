@@ -93,7 +93,7 @@ GLFWApplication::GLFWApplication(
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 		GLint flags;
 		glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
-		if (flags & GL_CONTEXT_FLAG_DEBUG_BIT) {
+		if (flags & GL_CONTEXT_FLAG_DEBUG_BIT || glMajor >= 5 || (glMajor == 4 && glMinor >= 3)) {
 		    // initialize debug output
 				glEnable(GL_DEBUG_OUTPUT);
 		    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);

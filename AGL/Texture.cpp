@@ -26,6 +26,10 @@ void agl::Texture::setTexture(int w, int h, unsigned char* data, TexInitInfo inf
 	glGenTextures(1, &id);
 	//printf(u8"テクスチャは追加された。(%d)\n", id);
 	glBindTexture(GL_TEXTURE_2D, id);
+	if (!info.genMipMap) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+	}
 	glTexImage2D(GL_TEXTURE_2D, 0, info.internalFormat, w, h, 0, info.texFormat, info.pixelType, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
