@@ -24,6 +24,7 @@ SET(AGL_library_SRCS
     Renderable.cpp
     VAO.cpp
     cairoutil.cpp
+    FBO.cpp
 )
 
 # Headers:
@@ -45,6 +46,8 @@ SET(AGL_library_HDRS
     Renderable.h
     Sprite2D.h
     rect.h
+    FBO.h
+    debug.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

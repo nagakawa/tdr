@@ -13,9 +13,9 @@ void Shader::init(const char* source, GLenum type) {
 	glShaderSource(id, 1, &source, NULL);
 	glCompileShader(id);
 	GLint success;
-	GLchar infoLog[512];
 	glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 	if (!success) {
+		GLchar infoLog[512];
 		glGetShaderInfoLog(id, 512, NULL, infoLog);
 		throw infoLog;
 	}
@@ -37,6 +37,7 @@ Shader::Shader(FILE* f, GLenum type) {
 	if (br < 1) throw u8"fread did not read as much as it should have";
 	string[fsize] = 0;
 	init(string, type);
+	free(string);
 }
 
 Shader::~Shader() {

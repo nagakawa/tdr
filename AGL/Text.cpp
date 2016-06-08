@@ -65,6 +65,7 @@ Text::Text() {
 
 Text::~Text() {
 	delete texture;
+	free(buffer);
 }
 
 void agl::Text::relayout() {

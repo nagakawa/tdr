@@ -9,8 +9,10 @@ namespace agl {
 		GLenum texFormat;
 		GLenum pixelType;
 		bool checkForNullData;
+		bool genMipMap;
 	};
-	#define DEFAULT_TEX_INIT {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true}
+	#define DEFAULT_TEX_INIT {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true}
+	#define TEX_INIT_FOR_FBO {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false}
 	class Texture {
 	public:
 		Texture(const char* fname, TexInitInfo info = DEFAULT_TEX_INIT);

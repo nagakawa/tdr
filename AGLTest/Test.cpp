@@ -21,6 +21,8 @@
 #include "ShaderProgram.h"
 #include "Sprite2D.h"
 #include "Text.h"
+#include "FBO.h"
+#include "debug.h"
 
 // Others
 #include <iostream>
@@ -71,6 +73,9 @@ public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialize() {
 		std::cout << "hi\n";
+		agl::FBOTex ft = agl::makeFBOForMe(800, 600);
+		fboTex = ft.texture;
+		fbo = ft.fbo;
 		boxes = new Boxes(this);
 		ptex = new agl::Texture("textures/fuckyou.png");
 		stex = std::make_shared<agl::Texture>(*ptex);
@@ -105,13 +110,26 @@ public:
 		fy->setBottomColor(glm::vec4(0.3f, 0.7f, 0.0f, 0.8f));
 		fy->setRich(true);
 		//fy->setText("Fuck you!");
-		fy->setText(u8"<i>Bad</i> translation\nΚακή μετάφραση\nMala traducción\nплохой перевод\n下手な翻訳\n잘못된 번역\nתרגום גרוע\nترجمة سيئة\nD́ȉa͟c̈r̆ȉt̂ics\nThe Touhou Project (東方Project Tōhō Purojekuto, lit. Eastern Project), also known as Toho Project or Project Shrine Maiden, is a series of Japanese bullet hell shooter video games developed by the single-person Team Shanghai Alice. Team Shanghai Alice's sole member, <b>ZUN</b>, independently produces the games' graphics, music, and programming.\n東方Project（とうほうプロジェクト）とは、同人サークルの上海アリス幻樂団によって製作されている著作物である。弾幕系シューティングを中心としたゲーム、書籍、音楽CDなどから成る。東方Projectの作品を一括して東方、東方Projectシリーズなどと称することもある。狭義には、上海アリス幻樂団のメンバー「<b>ZUN</b>」が制作している同人作品の一連の作品をあらわす。");
+		fy->setText(u8"<i>Bad</i> translation\n<u>Κακή μετάφραση</u>\nMala traducción\nплохой перевод\n下手な翻訳\n잘못된 번역\nתרגום גרוע\nترجمة سيئة\nD́ȉa͟c̈r̆ȉt̂ics\nThe Touhou Project (東方Project Tōhō Purojekuto, lit. Eastern Project), also known as Toho Project or Project Shrine Maiden, is a series of Japanese bullet hell shooter video games developed by the single-person Team Shanghai Alice. Team Shanghai Alice's sole member, <b>ZUN</b>, independently produces the games' graphics, music, and programming.\n東方Project（とうほうプロジェクト）とは、同人サークルの上海アリス幻樂団によって製作されている著作物である。弾幕系シューティングを中心としたゲーム、書籍、音楽CDなどから成る。東方Projectの作品を一括して東方、東方Projectシリーズなどと称することもある。狭義には、上海アリス幻樂団のメンバー「<b>ZUN</b>」が制作している同人作品の一連の作品をあらわす。");
 		fy->setPosition(glm::vec2(530, 20));
 		fy->setUp();
+		vtex = std::make_shared<agl::Texture>(*fboTex);
+		view = new agl::Sprite2D(vtex);
+		view->setApp(this);
+		view->addSprite({
+			{0, 0, 800, 600},
+			{0, 0, 800, 600}
+		});
+		view->addSprite({
+			{0, 0, 800, 600},
+			{640, 0, 800, 120}
+		});
+		view->setUp();
 		//setVSyncEnable(false);
 	}
 	bool ff = true;
 	void tick() {
+		fbo->setActive();
 		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		++frame;
@@ -126,8 +144,12 @@ public:
 		sprites->update();
 		boxes->tick();
 		sprites->tick();
-		for (int i = 0; i < 1; ++i) fy->relayout();
+		//for (int i = 0; i < 1; ++i) fy->relayout();
 		fy->tick();
+		agl::setDefaultFBOAsActive();
+		glClearColor(1.0f, 0.5f, 0.7f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		view->tick();
 		char ctitle[256];
 		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
 		glfwSetWindowTitle(underlying(), ctitle);
@@ -180,6 +202,8 @@ public:
 		delete boxes;
 		delete sprites;
 		delete fy;
+		delete fbo;
+		delete view;
 	}
 	GLfloat getMix() { return mix; }
 	GLfloat mix = 0.0f;
@@ -194,9 +218,13 @@ public:
 	GLfloat fov = 45.0f;
 	Boxes* boxes;
 	std::shared_ptr<agl::Texture> stex;
+	std::shared_ptr<agl::Texture> vtex;
 	agl::Texture* ptex;
 	agl::Sprite2D* sprites;
 	agl::Text* fy;
+	agl::FBO* fbo;
+	agl::Texture* fboTex;
+	agl::Sprite2D* view;
 	int frame = 0;
 	void setDigit(int i, int v) {
 		agl::Sprite2DInfo* spr = sprites->getLoc(3 + i);
@@ -267,7 +295,7 @@ void Boxes::tick() {
 int main(int argc, char** argv) {
 	try {
 		// Kriët ė test wýndö
-		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App");
+		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App"/*, 3, 3, true*/);
 		a->start();
 	} catch (char const* s) {
 		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";

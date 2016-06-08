@@ -32,7 +32,8 @@ namespace agl {
 			int actualHeight = 0,
 			const char* title = DEFAULT_TITLE,
 			int glMajor = 3,
-			int glMinor = 3
+			int glMinor = 3,
+			bool debug = false
 			);
 		void start();
 		virtual ~GLFWApplication();

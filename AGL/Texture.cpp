@@ -17,19 +17,21 @@ agl::Texture::Texture(int w, int h, unsigned char* data, TexInitInfo info) {
 	setTexture(w, h, data, info);
 }
 
+#include <stdio.h>
 void agl::Texture::setTexture(int w, int h, unsigned char* data, TexInitInfo info) {
 	width = w;
 	height = h;
 	if (info.checkForNullData && data == nullptr)
 		throw "Image could not be read!";
 	glGenTextures(1, &id);
+	//printf(u8"テクスチャは追加された。(%d)\n", id);
 	glBindTexture(GL_TEXTURE_2D, id);
 	glTexImage2D(GL_TEXTURE_2D, 0, info.internalFormat, w, h, 0, info.texFormat, info.pixelType, data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	if (info.genMipMap) glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -61,6 +63,7 @@ agl::Texture::Texture() {
 
 Texture::~Texture() {
 	glDeleteTextures(1, &id);
+	//printf(u8"テクスチャは削除された。(%d)\n", id);
 }
 
 void Texture::bind() {
