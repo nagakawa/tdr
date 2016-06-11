@@ -12,9 +12,9 @@ namespace agl {
 		bool genMipMap;
 		bool multisample;
 	};
-	#define DEFAULT_TEX_INIT {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true, false}
-	#define TEX_INIT_FOR_FBO {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false}
-	#define TEX_INIT_FOR_FBO_MS {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true}
+	#define DEFAULT_TEX_INIT ((TexInitInfo) {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true, false})
+	#define TEX_INIT_FOR_FBO ((TexInitInfo) {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false})
+	#define TEX_INIT_FOR_FBO_MS ((TexInitInfo) {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true})
 	class Texture {
 	public:
 		Texture(const char* fname, TexInitInfo info = DEFAULT_TEX_INIT);

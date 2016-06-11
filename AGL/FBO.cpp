@@ -71,11 +71,12 @@ void RBO::allocateStorage(GLenum format, GLint width, GLint height, bool multisa
 }
 
 FBOTex agl::makeFBOForMe(GLint width, GLint height) {
-  FBO* fbo = new FBO();
+  std::shared_ptr<FBO> fbo = std::make_shared<FBO>();
   if (fbo == nullptr) throw "For some reason we could not get an FBO.";
-  Texture* tex = new Texture(width, height, nullptr, TEX_INIT_FOR_FBO);
+  std::shared_ptr<Texture> tex = std::make_shared<Texture>(
+    width, height, nullptr, TEX_INIT_FOR_FBO);
   if (tex == nullptr) throw "For some reason we could not get a texture.";
-  fbo->attachTexture(GL_COLOR_ATTACHMENT0, tex);
+  fbo->attachTexture(GL_COLOR_ATTACHMENT0, tex.get());
   RBO* rbo = new RBO();
   if (rbo == nullptr) throw "For some reason we could not get an RBO.";
   rbo->allocateStorage(GL_DEPTH24_STENCIL8, width, height);
@@ -85,11 +86,12 @@ FBOTex agl::makeFBOForMe(GLint width, GLint height) {
 }
 
 FBOTexMS agl::makeFBOForMeMS(GLint width, GLint height) {
-  FBO* fbo = new FBO();
+  std::shared_ptr<FBO> fbo = std::make_shared<FBO>();
   if (fbo == nullptr) throw "For some reason we could not get an FBO.";
-  Texture* tex = new Texture(width, height, nullptr, TEX_INIT_FOR_FBO_MS);
+  std::shared_ptr<Texture> tex = std::make_shared<Texture>(
+    width, height, nullptr, TEX_INIT_FOR_FBO_MS);
   if (tex == nullptr) throw "For some reason we could not get a texture.";
-  fbo->attachTexture(GL_COLOR_ATTACHMENT0, tex, GL_TEXTURE_2D_MULTISAMPLE);
+  fbo->attachTexture(GL_COLOR_ATTACHMENT0, tex.get(), GL_TEXTURE_2D_MULTISAMPLE);
   RBO* rbo = new RBO();
   if (rbo == nullptr) throw "For some reason we could not get an RBO.";
   rbo->allocateStorage(GL_DEPTH24_STENCIL8, width, height, true);

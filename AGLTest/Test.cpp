@@ -205,8 +205,6 @@ public:
 		delete boxes;
 		delete sprites;
 		delete fy;
-		delete fboSS;
-		delete fboMS;
 		delete view;
 	}
 	GLfloat getMix() { return mix; }
@@ -226,10 +224,10 @@ public:
 	agl::Texture* ptex;
 	agl::Sprite2D* sprites;
 	agl::Text* fy;
-	agl::FBO* fboMS;
-	agl::FBO* fboSS;
-	agl::Texture* fboTex;
-	agl::Texture* fboTexMS;
+	std::shared_ptr<agl::FBO> fboMS;
+	std::shared_ptr<agl::FBO> fboSS;
+	std::shared_ptr<agl::Texture> fboTex;
+	std::shared_ptr<agl::Texture> fboTexMS;
 	agl::Sprite2D* view;
 	int frame = 0;
 	void setDigit(int i, int v) {

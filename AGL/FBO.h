@@ -3,6 +3,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <stdlib.h>
+#include <memory>
 #include "Texture.h"
 
 namespace agl {
@@ -27,8 +28,8 @@ namespace agl {
 		GLuint id;
 	};
   struct FBOTex {
-    FBO* fbo;
-    Texture* texture;
+    std::shared_ptr<FBO> fbo;
+    std::shared_ptr<Texture> texture;
   };
   struct FBOTexMS {
     FBOTex ms;
