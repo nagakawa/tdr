@@ -10,6 +10,7 @@ int openFile(FILE** streamptr,
 	const char* filename,
 	const char* mode) {
 #ifdef _WIN32
+#warning Use a better OS! (just a suggestion)
 	/* Windows uses UTF-16 filenames */
 	int modelen = strlen(mode);
 	wchar_t* wmode = (wchar_t*) malloc(sizeof(wchar_t) * (modelen + 11 + 1));

@@ -1,12 +1,10 @@
 # ########## Project setup ##########
-PROJECT(tdr)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+cmake_policy(SET CMP0048 NEW)
+PROJECT(tdr VERSION 0.0)
 
 # ######### General setup ##########
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
-
-SET(TDR_VERSION_MAJOR "0")
-SET(TDR_VERSION_MINOR "0")
 
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
 
@@ -21,6 +19,8 @@ include_directories("${PROJECT_SOURCE_DIR}")
 ADD_SUBDIRECTORY(FileUtil)
 ADD_SUBDIRECTORY(AGL)
 ADD_SUBDIRECTORY(AGLTest)
+ADD_SUBDIRECTORY(TDR)
+ADD_SUBDIRECTORY(TDRTest)
 
 # actual target:
 # ADD_LIBRARY(tdr ${tdr_library}_SCRS ${tdr_library_HDRS})

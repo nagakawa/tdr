@@ -48,7 +48,7 @@ Plus a few test components:
 
 This project uses [GTK+2](http://www.gtk.org/), licensed under the [GNU LGPL version 2.1](http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html).
 
-TDR itself is licensed under the MIT license; see `LICENSE` for details. As far as I know, I'm not frooping up with licensing.
+TDR itself is licensed under the MIT license; see `LICENSE` for details. As far as I know, I'm not frooping up with licensing. If I am frooping around with licenses, then ***let me know ASAP!***
 
 ### Resource Credits
 
