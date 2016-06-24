@@ -16,6 +16,7 @@ void tdr::Bullet::update() {
 	y += ys;
 	xs += xa;
 	ys += ya;
+	if (delay != 0) --delay;
 	if (!detachVisualAndMovementAngles) visualAngle = angle;
 }
 
@@ -27,4 +28,18 @@ bool tdr::Bullet::graze() {
 
 void tdr::Bullet::refreshGraze() {
 	if (timeToNextGraze != 0 && grazeFrequency != -1) --timeToNextGraze;
+}
+
+tdr::Bullet::Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay) {
+	this->x = x;
+	this->y = y;
+	xs = 0;
+	ys = 0;
+	xa = 0;
+	ya = 0;
+	this->speed = speed;
+	this->angle = angle;
+	visualWidth = visualLength = graph.visualRadius;
+	collisionWidth = collisionLength = graph.collisionRadius;
+	this->delay = delay;
 }

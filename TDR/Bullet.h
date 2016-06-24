@@ -2,8 +2,16 @@
 
 #include <stdint.h>
 
+#include <rect.h>
+
 namespace tdr {
-	struct Bullet {
+	struct Graphic {
+		agl::UIRect16 texcoords;
+		float visualRadius;
+		float collisionRadius;
+	};
+	class Bullet {
+	public:
 		uint64_t id;
 		float x, y;
 		float xs, ys;
@@ -14,7 +22,7 @@ namespace tdr {
 		// but different for lasers.
 		float visualWidth, collisionWidth;
 		float visualLength, collisionLength;
-		uint16_t left, top, right, bottom; // texcoords
+		agl::UIRect16 texcoords;
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
 		//
@@ -27,6 +35,7 @@ namespace tdr {
 		// -1 -> can't graze anymore
 		int8_t timeToNextGraze;
 		uint8_t alpha;
+		uint8_t delay;
 		int isLaser : 1;
 		int markedForDeletion : 1;
 		// If true, this bullet will base xs and ys from speed and angle.
@@ -42,5 +51,7 @@ namespace tdr {
 		// This often means "decrease time to next graze by 1 frame if bullet is
 		// not yet grazeable but will be in the future".
 		void refreshGraze();
+		// Note: none of the constructors register the bullet.
+		Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay); // CreateShotA1
 	};
 }
