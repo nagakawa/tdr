@@ -3,44 +3,18 @@
 #include <stdint.h>
 
 namespace tdr {
-	typedef struct { int32_t u; } fix1616;
-#define CELESTIAL 0x7FFFFFFF
-#define ABYSS ((int32_t) 0x80000000)
-	fix1616 operator+(fix1616 a, fix1616 b);
-	fix1616 operator-(fix1616 a, fix1616 b);
-	fix1616 operator*(fix1616 a, fix1616 b);
-	fix1616 operator/(fix1616 a, fix1616 b);
-	bool operator==(fix1616 a, fix1616 b);
-	bool operator<(fix1616 a, fix1616 b);
-	bool isWithin(fix1616 x, fix1616 y, fix1616 r);
-	bool isWithin(float x, float y, float r);
-	fix1616 multiply1616By230(fix1616 a, uint32_t b);
-	inline fix1616 intToFix(int i) {
-		return { i << 16 };
-	}
-	void sincos(fix1616 t, int32_t& c, int32_t& s);
-	void sincos(float t, float& c, float& s);
-#ifdef FIXED_POINT
-	typedef fix1616 Coord;
-#define C_ZERO { 0 }
-#define C_ONE { 1 }
-#else
-	typedef float Coord;
-#define C_ZERO 0.0f
-#define C_ONE 1.0f
-#endif
 	struct Bullet {
 		uint64_t id;
-		Coord x, y;
-		Coord xs, ys;
-		Coord xa, ya;
-		Coord speed, angle, angularVelocity;
-		Coord visualAngle;
+		float x, y;
+		float xs, ys;
+		float xa, ya;
+		float speed, angle, angularVelocity;
+		float visualAngle;
 		// Width and length would be the same for ordinary bullets,
 		// but different for lasers.
-		Coord visualWidth, collisionWidth;
-		Coord visualLength, collisionLength;
-		uint16_t left, top, right, bottom; // texcoords
+		float visualWidth, collisionWidth;
+		float visualLength, collisionLength;
+		uint16_t left, top, right, bottom; // texfloats
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
 		//
@@ -55,7 +29,18 @@ namespace tdr {
 		uint8_t alpha;
 		int isLaser : 1;
 		int markedForDeletion : 1;
+		// If true, this bullet will base xs and ys from speed and angle.
+		// Otherwise, speed and angle depend on xs and ys.
 		int useRadial : 1;
 		int detachVisualAndMovementAngles : 1;
+		// Simulates movement of the bullet.
+		void update();
+		// Self explanatory. Returns true if graze succeeded, or false if
+		// graze failed. Uses traditional Touhou-style graze system.
+		bool graze();
+		// Advances to next frame in terms of graze.
+		// This often means "decrease time to next graze by 1 frame if bullet is
+		// not yet grazeable but will be in the future".
+		void refreshGraze();
 	};
 }
