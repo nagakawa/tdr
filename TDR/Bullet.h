@@ -14,7 +14,7 @@ namespace tdr {
 		// but different for lasers.
 		float visualWidth, collisionWidth;
 		float visualLength, collisionLength;
-		uint16_t left, top, right, bottom; // texfloats
+		uint16_t left, top, right, bottom; // texcoords
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
 		//
