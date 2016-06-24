@@ -15,6 +15,7 @@ SET(TDR_library_SRCS
   Bullet.cpp
   CommonData.cpp
   Replay.cpp
+  Collidable.cpp
 )
 
 # Headers:
@@ -23,6 +24,7 @@ SET(TDR_library_HDRS
     CommonData.h
     Replay.h
     defset.h
+    Collidable.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
