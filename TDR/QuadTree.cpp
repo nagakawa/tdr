@@ -64,10 +64,20 @@ bool tdr::QuadTreeNode::remove(float x, float y, QuadTreeLeaf* st) {
   if (nw == nullptr) { // No children
     for (int i = 0; i < numPoints; ++i) {
       // Remove the point, and stash it if necessary.
+      // Swap in the last point in the array where the old one was.
       if (points[i].c.x == x && points[i].c.y == y) {
         --numPoints;
         if (st != nullptr) *st = points[i];
         points[i] = points[numPoints];
+        // Update max radius
+        // Maybe switch the flat array of points with a heap if we want more
+        // speed, but that might get too complicated
+        float newMaxRadius = 0;
+        for (int j = 0; i < numPoints; ++j) {
+          if (points[i].c.radius > newMaxRadius)
+            newMaxRadius = points[i].c.radius;
+        }
+        maxRadius = newMaxRadius;
         return true;
       }
     }
