@@ -46,6 +46,20 @@ void tdr::QuadTreeNode::percolateRadiusIncrease(float r) {
   if (parent != nullptr) parent->percolateRadiusIncrease(r);
 }
 
+void tdr::QuadTreeNode::percolateRadiusDecrease() {
+  // Update max radius
+  // Maybe switch the flat array of points with a heap if we want more
+  // speed, but that might get too complicated
+  float newMaxRadius = 0;
+  for (int j = 0; j < numPoints; ++j) {
+    if (points[j].c.radius > newMaxRadius)
+      newMaxRadius = points[j].c.radius;
+  }
+  float r = maxRadius;
+  maxRadius = newMaxRadius;
+  if (maxRadius < r) parent->percolateRadiusDecrease();
+}
+
 bool tdr::QuadTreeNode::insert(QuadTreeLeaf& h) {
   if (!contains(h.c.x, h.c.y)) return false;
   if (numPoints < MAX_QT_NODES) {
@@ -53,6 +67,7 @@ bool tdr::QuadTreeNode::insert(QuadTreeLeaf& h) {
     percolateRadiusIncrease(h.c.radius);
     return true;
   }
+  ++numPoints;
   if (nw == nullptr) subdivide();
   insertInChild(h);
   return true;
@@ -69,32 +84,24 @@ bool tdr::QuadTreeNode::remove(float x, float y, QuadTreeLeaf* st) {
         --numPoints;
         if (st != nullptr) *st = points[i];
         points[i] = points[numPoints];
-        // Update max radius
-        // Maybe switch the flat array of points with a heap if we want more
-        // speed, but that might get too complicated
-        float newMaxRadius = 0;
-        for (int j = 0; i < numPoints; ++j) {
-          if (points[i].c.radius > newMaxRadius)
-            newMaxRadius = points[i].c.radius;
-        }
-        maxRadius = newMaxRadius;
+        percolateRadiusDecrease();
         return true;
       }
     }
     // No appropriate point was found.
     return false;
   } else { // there are children
+    bool success = false;
     if (x < this->x) {
-      if (y < this->y) return nw->remove(x, y, st);
-      else return sw->remove(x, y, st);
+      if (y < this->y) success = nw->remove(x, y, st);
+      else success = sw->remove(x, y, st);
     } else {
-      if (y < this->y) return ne->remove(x, y, st);
-      else return se->remove(x, y, st);
+      if (y < this->y) success = ne->remove(x, y, st);
+      else success = se->remove(x, y, st);
     }
+    if (success) --numPoints;
+    return success;
   }
-  fprintf(stderr, "Not placed in a child?\n");
-  abort();
-  return false;
 }
 
 void tdr::QuadTreeNode::insertInChild(QuadTreeLeaf& h) {

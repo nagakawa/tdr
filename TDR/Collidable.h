@@ -18,11 +18,13 @@ namespace tdr {
   bool doLinesIntersect(Line& h1, Line& h2);
   float clamp(float x, float a, float b);
   class Collidable: public agl::Renderable {
+  public:
     // How many objects there are to check collision for.
     virtual int count() = 0;
     // How much time it takes to check collisions against this collection.
     virtual int strength() = 0;
     virtual bool check(Circle& h) = 0;
     virtual bool check(Line& h) = 0;
+    virtual int collisionClass() { return -1; }
   };
 }
