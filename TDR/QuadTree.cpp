@@ -88,10 +88,15 @@ bool tdr::QuadTreeNode::remove(float x, float y, QuadTreeLeaf* st) {
 }
 
 void tdr::QuadTreeNode::insertInChild(QuadTreeLeaf& h) {
-  if (!(nw->insert(h) || ne->insert(h) || sw->insert(h) || se->insert(h))) {
-    fprintf(stderr, "Somehow, the circle could not be inserted anywhere!\n");
-    abort();
+  if (h.c.x < this->x) {
+    if (h.c.y < this->y) nw->insert(h);
+    else sw->insert(h);
+  } else {
+    if (h.c.y < this->y) ne->insert(h);
+    else se->insert(h);
   }
+  fprintf(stderr, "Somehow, the circle could not be inserted anywhere!\n");
+  abort();
 }
 
 // Thanks http://stackoverflow.com/a/1879223
