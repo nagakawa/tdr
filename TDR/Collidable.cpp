@@ -23,6 +23,10 @@ bool tdr::doCircleAndLineIntersect(Circle& h1, Line& h2) {
   return dist < radius;
 }
 
+// Because linear hitboxes are actually rectangular, the algorithm for
+// checking their intersection is quite complicated.
+// Thanks http://www.gamedev.net/page/resources/_/technical/game-programming/2d-rotated-rectangle-collision-r2604
+// now if you don't mind, I need to go to sleep
 bool tdr::doLinesIntersect(Line& h1, Line& h2) {
   float dist = hypot(h1.length, h1.width) + hypot(h2.length, h2.width);
   if (hypot(h1.x - h2.x, h1.y - h2.y) >= dist) return false;
@@ -34,6 +38,7 @@ bool tdr::doLinesIntersect(Line& h1, Line& h2) {
   float d2ay = h2.length * sin(h2.angle);
   float d2bx = -h2.width * sin(h2.angle);
   float d2by = h2.width * cos(h2.angle);
+  // yet more preprocessor sorcery
 #define MKPROJ(corner, rect, axis) \
     float corner##rect##axis##x = h##rect.x + d##axis##x; \
     float corner##rect##axis##y = h##rect.y + d##axis##y; \
@@ -56,4 +61,8 @@ bool tdr::doLinesIntersect(Line& h1, Line& h2) {
   CHKPROJ(2a);
   CHKPROJ(2b);
   return true;
+}
+
+float tdr::clamp(float x, float a, float b) {
+  return std::max(a, std::min(b, x));
 }

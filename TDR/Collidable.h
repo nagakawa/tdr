@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Renderable.h>
+
 namespace tdr {
   struct Circle {
     float x, y, radius;
@@ -14,7 +16,8 @@ namespace tdr {
   bool doCirclesIntersect(Circle& h1, Circle& h2);
   bool doCircleAndLineIntersect(Circle& h1, Line& h2);
   bool doLinesIntersect(Line& h1, Line& h2);
-  class Collidable {
+  float clamp(float x, float a, float b);
+  class Collidable: public agl::Renderable {
     // How many objects there are to check collision for.
     virtual int count() = 0;
     // How much time it takes to check collisions against this collection.

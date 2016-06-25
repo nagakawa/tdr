@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include <rect.h>
+#include "Collidable.h"
 
 namespace tdr {
 	struct Graphic {
@@ -53,5 +54,8 @@ namespace tdr {
 		void refreshGraze();
 		// Note: none of the constructors register the bullet.
 		Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay); // CreateShotA1
+	};
+	class BulletList: public Collidable {
+		// TODO
 	};
 }
