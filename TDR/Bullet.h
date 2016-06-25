@@ -39,7 +39,7 @@ namespace tdr {
 		int8_t timeToNextGraze;
 		uint8_t alpha;
 		uint8_t delay;
-		int isLaser : 1;
+		uint8_t isLaser;
 		int markedForDeletion : 1;
 		// If true, this bullet will base xs and ys from speed and angle.
 		// Otherwise, speed and angle depend on xs and ys.
