@@ -14,15 +14,17 @@ namespace tdr {
 	class Bullet {
 	public:
 		uint64_t id;
-		float x, y;
+		union {
+			Circle c;
+			Line l;
+		} hitbox;
 		float xs, ys;
 		float xa, ya;
 		float speed, angle, angularVelocity;
 		float visualAngle;
 		// Width and length would be the same for ordinary bullets,
 		// but different for lasers.
-		float visualWidth, collisionWidth;
-		float visualLength, collisionLength;
+		float visualWidth, visualLength;
 		agl::UIRect16 texcoords;
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.

@@ -12,8 +12,8 @@ void tdr::Bullet::update() {
 		speed = hypot(xs, ys); // Glad we have this!
 		angle = atan2(ys, xs);
 	}
-	x += xs;
-	y += ys;
+	hitbox.c.x += xs;
+	hitbox.c.y += ys;
 	xs += xa;
 	ys += ya;
 	if (delay != 0) --delay;
@@ -31,15 +31,14 @@ void tdr::Bullet::refreshGraze() {
 }
 
 tdr::Bullet::Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay) {
-	this->x = x;
-	this->y = y;
+	this->hitbox.c = (Circle) {x, y, graph.collisionRadius};
 	xs = 0;
 	ys = 0;
 	xa = 0;
 	ya = 0;
+	isLaser = 0;
 	this->speed = speed;
 	this->angle = angle;
 	visualWidth = visualLength = graph.visualRadius;
-	collisionWidth = collisionLength = graph.collisionRadius;
 	this->delay = delay;
 }
