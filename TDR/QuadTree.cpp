@@ -40,10 +40,17 @@ bool tdr::QuadTree::contains(float x, float y) {
   return true;
 }
 
+void tdr::QuadTree::percolateRadiusIncrease(float r) {
+  if (r > maxRadius) maxRadius = r;
+  else return;
+  if (parent != nullptr) parent->percolateRadiusIncrease(r);
+}
+
 bool tdr::QuadTree::insert(Circle& c) {
   if (!contains(c.x, c.y)) return false;
   if (numPoints < MAX_QT_NODES) {
     points[numPoints++] = c;
+    percolateRadiusIncrease(c.radius);
     return true;
   }
   if (nw == nullptr) subdivide();
@@ -70,8 +77,9 @@ bool tdr::QuadTreeNode::isWithinRange(Circle& c) {
 }
 
 bool tdr::QuadTreeNode::isWithinRange(Line& l) {
+  Line l1 = (Line) {l.x, l.y, l.angle, l.width + maxRadius, l.length};
   Line l2 = (Line) {x, y, 0, halfDim, halfDim};
-  return doLinesIntersect(l, l2);
+  return doLinesIntersect(l1, l2);
 }
 
 bool tdr::QuadTreeNode::query(Circle& c) {

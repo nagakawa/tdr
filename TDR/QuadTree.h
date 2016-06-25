@@ -24,6 +24,7 @@ namespace tdr {
     void insertInChild(Circle& c);
     bool isWithinRange(Circle& c);
     bool isWithinRange(Line& l);
+    void percolateRadiusIncrease(float r);
   public:
     QuadTreeNode(QuadTreeNode* parent, float x, float y, float halfDim);
     ~QuadTreeNode();
