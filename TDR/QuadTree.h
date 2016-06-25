@@ -23,10 +23,13 @@ namespace tdr {
     bool contains(float x, float y);
     void insertInChild(Circle& c);
     bool isWithinRange(Circle& c);
+    bool isWithinRange(Line& l);
   public:
     QuadTreeNode(QuadTreeNode* parent, float x, float y, float halfDim);
     ~QuadTreeNode();
     bool insert(Circle& c);
+    bool query(Circle& c);
+    bool query(Line& l);
   };
   class QuadTree {
     std::vector<Line> lines; // counted separately

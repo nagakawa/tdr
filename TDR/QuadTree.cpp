@@ -58,6 +58,7 @@ void tdr::QuadTree::insertInChild(Circle& c) {
   }
 }
 
+// Thanks http://stackoverflow.com/a/1879223
 bool tdr::QuadTreeNode::isWithinRange(Circle& c) {
   float rcx = c.x - x;
   float rcy = c.y - y;
@@ -66,4 +67,33 @@ bool tdr::QuadTreeNode::isWithinRange(Circle& c) {
   float dx = rcx - closestX;
   float dy = rcy - closestY;
   return hypot(dx, dy) < (c.r + maxRadius);
+}
+
+bool tdr::QuadTreeNode::isWithinRange(Line& l) {
+  Line l2 = (Line) {x, y, 0, halfDim, halfDim};
+  return doLinesIntersect(l, l2);
+}
+
+bool tdr::QuadTreeNode::query(Circle& c) {
+  if (!isWithinRange(c)) return false;
+  if (nw != nullptr) {
+    for (int i = 0; i < numPoints; ++i) {
+      if (doCirclesIntersect(c, points[i])) return true;
+    }
+    return false;
+  } else {
+    return nw->query(c) || ne->query(c) || sw->query(c) || se->query(c);
+  }
+}
+
+bool tdr::QuadTreeNode::query(Line& l) {
+  if (!isWithinRange(l)) return false;
+  if (nw != nullptr) {
+    for (int i = 0; i < numPoints; ++i) {
+      if (doCircleAndLineIntersect(points[i], l)) return true;
+    }
+    return false;
+  } else {
+    return nw->query(l) || ne->query(l) || sw->query(l) || se->query(l);
+  }
 }
