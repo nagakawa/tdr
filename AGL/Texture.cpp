@@ -8,7 +8,7 @@ const TexInitInfo agl::DEFAULT_TEX_INIT = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, t
 const TexInitInfo agl::TEX_INIT_FOR_FBO = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false};
 const TexInitInfo agl::TEX_INIT_FOR_FBO_MS = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true};
 
-agl::Texture::Texture(const char* fname, TexInitInfo info) {
+agl::Texture::Texture(const char* fname, const TexInitInfo& info) {
 	int w, h;
 	if (fname == nullptr)
 		throw "File name is null!";
@@ -17,12 +17,12 @@ agl::Texture::Texture(const char* fname, TexInitInfo info) {
 	SOIL_free_image_data(image);
 }
 
-agl::Texture::Texture(int w, int h, unsigned char* data, TexInitInfo info) {
+agl::Texture::Texture(int w, int h, unsigned char* data, const TexInitInfo& info) {
 	setTexture(w, h, data, info);
 }
 
 #include <stdio.h>
-void agl::Texture::setTexture(int w, int h, unsigned char* data, TexInitInfo info) {
+void agl::Texture::setTexture(int w, int h, unsigned char* data, const TexInitInfo& info) {
 	width = w;
 	height = h;
 	ms = info.multisample;
@@ -48,7 +48,7 @@ void agl::Texture::setTexture(int w, int h, unsigned char* data, TexInitInfo inf
 	glBindTexture(mode, 0);
 }
 
-void agl::Texture::changeTexture(int w, int h, unsigned char* data, TexInitInfo info) {
+void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info) {
 	width = w;
 	height = h;
 	GLenum mode = ms ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
@@ -71,7 +71,7 @@ void agl::Texture::changeTexture(int w, int h, unsigned char* data, TexInitInfo 
 }
 
 
-agl::Texture::Texture(Texture& t) {
+agl::Texture::Texture(const Texture& t) {
 	id = t.id;
 	width = t.width;
 	height = t.height;

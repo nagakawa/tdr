@@ -17,21 +17,21 @@ namespace agl {
 	extern const TexInitInfo TEX_INIT_FOR_FBO_MS;
 	class Texture {
 	public:
-		Texture(const char* fname, TexInitInfo info = DEFAULT_TEX_INIT);
-		Texture(int w, int h, unsigned char* data, TexInitInfo info = DEFAULT_TEX_INIT);
-		Texture(Texture& t);
+		Texture(const char* fname, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		Texture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		Texture(const Texture& t);
 		Texture();
 		~Texture();
 		void bind();
 		void bindTo(GLint slot);
 		GLint getWidth() { return width; }
 		GLint getHeight() { return height; }
-		void changeTexture(int w, int h, unsigned char* data, TexInitInfo info = DEFAULT_TEX_INIT);
+		void changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		GLuint id;
 	private:
 		GLint width;
 		GLint height;
 		bool ms;
-		void setTexture(int w, int h, unsigned char* data, TexInitInfo info = DEFAULT_TEX_INIT);
+		void setTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 	};
 }
