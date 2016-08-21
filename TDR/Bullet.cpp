@@ -6,11 +6,12 @@ using namespace tdr;
 
 void tdr::Bullet::update() {
 	if (useRadial) {
-		xs = speed * cos(angle);
-		ys = speed * sin(angle);
+		int32_t nxs, nxy;
+		sincos(angle, nxs, nxy);
+		xs = multiply1616By230(speed, nxs);
+		ys = multiply1616By230(speed, nxs);
 	} else {
-		speed = hypot(xs, ys); // Glad we have this!
-		angle = atan2(ys, xs);
+		rectp(xs, ys, speed, angle);
 	}
 	hitbox.c.x += xs;
 	hitbox.c.y += ys;
@@ -30,7 +31,7 @@ void tdr::Bullet::refreshGraze() {
 	if (timeToNextGraze != 0 && grazeFrequency != -1) --timeToNextGraze;
 }
 
-tdr::Bullet::Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay) {
+tdr::Bullet::Bullet(fix1616 x, fix1616 y, fix1616 speed, fix1616 angle, Graphic& graph, uint8_t delay) {
 	this->hitbox.c = (Circle) {x, y, graph.collisionRadius};
 	xs = 0;
 	ys = 0;

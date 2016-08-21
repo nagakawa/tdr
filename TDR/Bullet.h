@@ -8,8 +8,8 @@
 namespace tdr {
 	struct Graphic {
 		agl::UIRect16 texcoords;
-		float visualRadius;
-		float collisionRadius;
+		fix1616 visualRadius;
+		fix1616 collisionRadius;
 	};
 	class Bullet {
 	public:
@@ -18,13 +18,13 @@ namespace tdr {
 			Circle c;
 			Line l;
 		} hitbox;
-		float xs, ys;
-		float xa, ya;
-		float speed, angle, angularVelocity;
-		float visualAngle;
+		fix1616 xs, ys;
+		fix1616 xa, ya;
+		fix1616 speed, angle, angularVelocity;
+		fix1616 visualAngle;
 		// Width and length would be the same for ordinary bullets,
 		// but different for lasers.
-		float visualWidth, visualLength;
+		fix1616 visualWidth, visualLength;
 		agl::UIRect16 texcoords;
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
@@ -55,7 +55,7 @@ namespace tdr {
 		// not yet grazeable but will be in the future".
 		void refreshGraze();
 		// Note: none of the constructors register the bullet.
-		Bullet(float x, float y, float speed, float angle, Graphic& graph, uint8_t delay); // CreateShotA1
+		Bullet(fix1616 x, fix1616 y, fix1616 speed, fix1616 angle, Graphic& graph, uint8_t delay); // CreateShotA1
 	};
 	class BulletList: public Collidable {
 		// TODO

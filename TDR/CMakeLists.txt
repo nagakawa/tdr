@@ -17,7 +17,6 @@ SET(TDR_library_SRCS
   Replay.cpp
   Collidable.cpp
   bitwise.cpp
-  QuadTree.cpp
 )
 
 # Headers:
@@ -28,7 +27,6 @@ SET(TDR_library_HDRS
     defset.h
     Collidable.h
     bitwise.h
-    QuadTree.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
