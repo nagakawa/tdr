@@ -2,21 +2,33 @@
 
 #include <stdlib.h>
 
-inline int isASCII(char c) {
+/*
+	The Super Simple UTF-8 Library by Uruwi.
+	Do whatever you want with utf8.h (this file)
+	or utf8.c / utf8.cpp (should come with this one).
+	Requires at least C99 and #pragma once.
+*/
+
+inline int isASCII(unsigned char c) {
 	return c < 128;
 }
-inline int isContinuation(char c) {
+
+inline int isContinuation(unsigned char c) {
 	return c >= 128 && c < 192;
 }
-inline int is2ByteStarter(char c) {
+
+inline int is2ByteStarter(unsigned char c) {
 	return c >= 192 && c < 224;
 }
-inline int is3ByteStarter(char c) {
+
+inline int is3ByteStarter(unsigned char c) {
 	return c >= 224 && c < 240;
 }
-inline int is4ByteStarter(char c) {
+
+inline int is4ByteStarter(unsigned char c) {
 	return c >= 240 && c < 248;
 }
+
 inline int utf8DecodeErrorClass(int err) {
 	return err >> 12;
 }

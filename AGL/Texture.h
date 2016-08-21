@@ -24,8 +24,8 @@ namespace agl {
 		~Texture();
 		void bind();
 		void bindTo(GLint slot);
-		GLint getWidth() { return width; }
-		GLint getHeight() { return height; }
+		GLint getWidth() const { return width; }
+		GLint getHeight() const { return height; }
 		void changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		GLuint id;
 	private:
