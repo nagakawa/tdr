@@ -4,6 +4,10 @@
 
 using namespace agl;
 
+const TexInitInfo agl::DEFAULT_TEX_INIT = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true, false};
+const TexInitInfo agl::TEX_INIT_FOR_FBO = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false};
+const TexInitInfo agl::TEX_INIT_FOR_FBO_MS = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true};
+
 agl::Texture::Texture(const char* fname, TexInitInfo info) {
 	int w, h;
 	if (fname == nullptr)
