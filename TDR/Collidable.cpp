@@ -280,10 +280,6 @@ void tdr::rectp(fix1616 c, fix1616 s, fix1616& r, fix1616& t) {
   int32_t vx = c.u;
   int32_t vy = s.u;
   for (int i = 0; i < CORDIC_ITERATIONS; ++i) {
-    printf("Iteration %d: angle = %f; vector: (%f, %f)\n",
-      i, (double) angle / (1 << 30),
-      (double) vx / (1 << 16), (double) vy / (1 << 16)
-    );
     int32_t nx, ny;
     if (vy <= 0) {
       nx = vx - (vy >> i);
