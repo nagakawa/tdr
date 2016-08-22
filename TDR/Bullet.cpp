@@ -30,16 +30,3 @@ bool tdr::Bullet::graze() {
 void tdr::Bullet::refreshGraze() {
 	if (timeToNextGraze != 0 && grazeFrequency != -1) --timeToNextGraze;
 }
-
-tdr::Bullet::Bullet(fix1616 x, fix1616 y, fix1616 speed, fix1616 angle, Graphic& graph, uint8_t delay) {
-	this->hitbox.c = (Circle) {x, y, graph.collisionRadius};
-	xs = 0;
-	ys = 0;
-	xa = 0;
-	ya = 0;
-	isLaser = 0;
-	this->speed = speed;
-	this->angle = angle;
-	visualWidth = visualLength = graph.visualRadius;
-	this->delay = delay;
-}

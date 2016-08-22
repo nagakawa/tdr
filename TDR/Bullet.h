@@ -55,9 +55,20 @@ namespace tdr {
 		// not yet grazeable but will be in the future".
 		void refreshGraze();
 		// Note: none of the constructors register the bullet.
-		Bullet(fix1616 x, fix1616 y, fix1616 speed, fix1616 angle, Graphic& graph, uint8_t delay); // CreateShotA1
+		Bullet(
+			fix1616 x, fix1616 y,
+			fix1616 speed, fix1616 angle,
+			Graphic& graph, uint8_t delay) : // CreateShotA1
+			xs(C_ZERO), ys(C_ZERO), xa(C_ZERO), ya(C_ZERO),
+			speed(speed), angle(angle), angularVelocity(C_ZERO),
+			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
+			delay(delay), isLaser(0), markedForDeletion(0),
+			useRadial(1), detachVisualAndMovementAngles(0) {}
 	};
 	class BulletList: public Collidable {
 		// TODO
+	public:
+	private:
+
 	};
 }

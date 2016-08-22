@@ -36,8 +36,8 @@ namespace tdr {
   fix1616 min(fix1616 a, fix1616 b);
   fix1616 clamp(fix1616 x, fix1616 a, fix1616 b);
   int32_t sqrti(int64_t n);
-	const fix1616 C_ZERO = { 0 };
-	const fix1616 C_ONE = { 0x10000 };
+	const fix1616 C_ZERO = ((fix1616) { 0 });
+	const fix1616 C_ONE = ((fix1616) { 0x10000 });
   struct Circle {
     fix1616 x, y, radius;
   };
