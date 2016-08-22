@@ -1,9 +1,20 @@
 #pragma once
 
+#include <assert.h>
 #include <stdint.h>
+#include <vector>
 
+#include <BlendMode.h>
+#include <FBO.h>
+#include <GLFWApplication.h>
 #include <rect.h>
+#include <Renderable.h>
+#include <Shader.h>
+#include <ShaderProgram.h>
+#include <VAO.h>
+#include <VBO.h>
 #include "Collidable.h"
+#include "Playfield.h"
 
 namespace tdr {
 	struct Graphic {
@@ -62,13 +73,40 @@ namespace tdr {
 			xs(C_ZERO), ys(C_ZERO), xa(C_ZERO), ya(C_ZERO),
 			speed(speed), angle(angle), angularVelocity(C_ZERO),
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
-			delay(delay), isLaser(0), markedForDeletion(0),
-			useRadial(1), detachVisualAndMovementAngles(0) {}
+			texcoords(graph.texcoords), delay(delay), isLaser(0),
+			markedForDeletion(0), useRadial(1), detachVisualAndMovementAngles(0) {}
 	};
+	static_assert(offsetof(Bullet, visualAngle) + 4 == offsetof(Bullet, visualWidth),
+		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
+	static_assert(offsetof(Bullet, visualWidth) + 4 == offsetof(Bullet, visualLength),
+		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
+	extern const char* BL_VERTEX_SOURCE;
+	extern const char* BL_FRAGMENT_SOURCE;
 	class BulletList: public Collidable {
-		// TODO
 	public:
+		BulletList(Playfield* p, agl::Texture shotsheet, int cc) :
+			p(p), shotsheet(shotsheet), cc(cc) {}
+		// TODO implement these
+		void setUp();
+		void tick();
+		void update();
+		void _tearDown();
+    int count();
+    int strength();
+    bool check(Circle& h);
+    bool check(Line& h);
+    int collisionClass() { return cc; }
 	private:
-
+		std::vector<Bullet> bullets;
+		Playfield* p;
+		agl::Texture shotsheet;
+		int cc;
+		agl::VBO vbo;
+		agl::VBO instanceVBO;
+		agl::VAO vao;
+		agl::ShaderProgram program;
+		bool hasSetUniforms;
+		bool hasInitializedProgram;
+		void setUniforms();
 	};
 }

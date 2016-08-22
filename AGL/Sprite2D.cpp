@@ -2,7 +2,6 @@
 
 using namespace agl;
 
-
 const char* agl::S2D_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 pos; \n\

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <assert.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <Renderable.h>
 
@@ -52,6 +54,9 @@ namespace tdr {
   bool doCircleAndLineIntersect(Circle& h1, Line& h2);
   bool doLinesIntersect(Line& h1, Line& h2);
   fix1616 clamp(fix1616 x, fix1616 a, fix1616 b);
+  static_assert(offsetof(Circle, x) == offsetof(Line, x) &&
+    offsetof(Circle, y) == offsetof(Line, y),
+    "Offsets of x and y must be the same in Circle and Line");
   class Collidable: public agl::Renderable {
   public:
     // How many objects there are to check collision for.
