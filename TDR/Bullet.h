@@ -56,6 +56,7 @@ namespace tdr {
 		// Otherwise, speed and angle depend on xs and ys.
 		int useRadial : 1;
 		int detachVisualAndMovementAngles : 1;
+		int deleteWhenOutOfBounds : 1;
 		// Simulates movement of the bullet.
 		void update();
 		// Self explanatory. Returns true if graze succeeded, or false if
@@ -74,7 +75,8 @@ namespace tdr {
 			speed(speed), angle(angle), angularVelocity(C_ZERO),
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
 			texcoords(graph.texcoords), delay(delay), isLaser(0),
-			markedForDeletion(0), useRadial(1), detachVisualAndMovementAngles(0) {}
+			markedForDeletion(0), useRadial(1), detachVisualAndMovementAngles(0),
+			deleteWhenOutOfBounds(1) {}
 	};
 	static_assert(offsetof(Bullet, visualAngle) + 4 == offsetof(Bullet, visualWidth),
 		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
@@ -86,13 +88,13 @@ namespace tdr {
 	public:
 		BulletList(Playfield* p, agl::Texture shotsheet, int cc) :
 			p(p), shotsheet(shotsheet), cc(cc) {}
-		// TODO implement these
 		void setUp();
 		void tick();
 		void update();
 		void _tearDown();
-    int count();
-    int strength();
+    int count() { return bullets.size(); }
+    int strength() { return bullets.size(); }
+	 // TODO implement these
     bool check(Circle& h);
     bool check(Line& h);
     int collisionClass() { return cc; }
@@ -101,6 +103,7 @@ namespace tdr {
 		Playfield* p;
 		agl::Texture shotsheet;
 		int cc;
+		uint64_t highestID = 0;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
 		agl::VAO vao;

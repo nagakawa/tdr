@@ -45,7 +45,7 @@ void main() { \n\
 	texCoord = vec2(mix(shottc.x, shottc.z, bounds.x), mix(shottc.y, shottc.w, bounds.y)) / texDimensions; \n\
 	float angle = awl.x * 2 * 3.14159265358979323; \n\
 	mat2 rm = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)); \n\
-	vec2 pos = position + rm * (bounds * awl.yz); \n\
+	vec2 pos = position + rm * (bounds * awl.zy); \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
 } \
 ";
@@ -107,6 +107,7 @@ void tdr::BulletList::setUniforms() {
 }
 
 void tdr::BulletList::tick() {
+	p->getFBO().setActive();
 	glEnable(GL_BLEND);
 	agl::BM_ALPHA.use();
 	glDisable(GL_CULL_FACE);
@@ -114,4 +115,11 @@ void tdr::BulletList::tick() {
 	setUniforms();
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, bullets.size());
 	agl::resetVAO();
+}
+
+void tdr::BulletList::update() {
+	instanceVBO.feedData(bullets.size() * sizeof(Bullet), bullets.data(), GL_DYNAMIC_DRAW);
+}
+
+void tdr::BulletList::_tearDown() {
 }

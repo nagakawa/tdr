@@ -106,6 +106,10 @@ bool tdr::fix1616::operator==(fix1616 b) {
 	return u == b.u;
 }
 
+bool tdr::fix1616::operator!=(fix1616 b) {
+	return u != b.u;
+}
+
 bool tdr::fix1616::operator<(fix1616 b) {
 	return u < b.u;
 }
@@ -121,6 +125,11 @@ bool tdr::fix1616::operator>=(fix1616 b) {
 bool tdr::fix1616::operator==(int b) {
 	if (b < -0x8000 || b >= 0x8000) return false;
   return (b << 16) == u;
+}
+
+bool tdr::fix1616::operator!=(int b) {
+	if (b < -0x8000 || b >= 0x8000) return true;
+  return (b << 16) != u;
 }
 
 bool tdr::fix1616::operator<(int b) {
@@ -190,19 +199,20 @@ fix1616 tdr::hypotx(fix1616 x, fix1616 y) {
   return { sqrti(distsq) };
 }
 
-fix1616 tdr::multiply1616By230(fix1616 a, uint32_t b) {
+fix1616 tdr::multiply1616By230(fix1616 a, int32_t b) {
 	int64_t res = ((int64_t) a.u) * b >> 30;
 	return { (int32_t) res };
 }
 
 #define TAU_TIMES_2TT28 0x6487ED51
 #define CORDIC_ITERATIONS 31
+// CORDIC K constant in 2.30 format.
 #define CORDIC_K 0x26DD3B6A
 
-inline uint32_t mul230(uint32_t a, uint32_t b) {
-  uint64_t aa = a;
+inline int32_t mul230(int32_t a, int32_t b) {
+  int64_t aa = a;
   aa *= b;
-  return (uint32_t) (aa >> 30);
+  return (int32_t) (aa >> 30);
 }
 
 
@@ -228,25 +238,31 @@ const int32_t arctangents[] = {
 void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 	bool inv = t.u > 0x40000000 || t.u < -((int32_t) 0x40000000);
 	if (inv) // Plus, minus, that doesn't even matter ~
-		t.u = (int32_t) (((uint32_t) t.u) + 0x80000000);
-	// Multiply by tau to convert turns into radians
-	// (in 32.32 format)
-	int64_t radians = (int32_t) ((((int64_t) t.u) * TAU_TIMES_2TT28) >> 28);
+		t.u = (int32_t) (((uint32_t) t.u) + 0x80000000); // avoid UB
+	// Multiply by tau to convert turns into radians (in 34.30 format)
+  // No idea why we need to shift right by THIRTY, though.
+	int64_t radians = ((((int64_t) t.u) * TAU_TIMES_2TT28) >> 30);
 	// vx and vy use 2.30 format
 	// (to be able to represent both 1 and -1)
 	int32_t vx = CORDIC_K;
 	int32_t vy = 0;
-	int32_t power = 0x40000000;
 	for (int i = 0; i < CORDIC_ITERATIONS; ++i) {
 		// new vector = [1, -factor; factor, 1] old vector
-		int factor = power;
-		if (radians < 0) factor = -factor;
-		int32_t nx = vx - mul230(factor, vy);
-		int32_t ny = mul230(factor, vx) + vy;
+    /*printf("Iteration %d: angle = %f; vector: (%f, %f)\n",
+      i, (double) radians / (1 << 30),
+      (double) vx / (1 << 30), (double) vy / (1 << 30)
+    );*/
+    int32_t nx, ny;
+		if (radians >= 0) {
+      nx = vx - (vy >> i);
+      ny = (vx >> i) + vy;
+    } else {
+      nx = vx + (vy >> i);
+      ny = -(vx >> i) + vy;
+    }
 		vx = nx;
 		vy = ny;
 		radians += (radians < 0) ? arctangents[i] : -arctangents[i];
-		power >>= 1;
 	}
 	c = inv ? -vx : vx;
 	s = inv ? -vy : vy;
@@ -256,24 +272,30 @@ void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 void tdr::rectp(fix1616 c, fix1616 s, fix1616& r, fix1616& t) {
   if (c < C_ZERO) {
     rectp(-c, -s, r, t);
-    t += { ABYSS };
+    t.u += ABYSS;
     return;
   }
   int64_t angle = 0;
 	// vx and vy use 16.16 format
   int32_t vx = c.u;
   int32_t vy = s.u;
-	int32_t power = 0x40000000;
   for (int i = 0; i < CORDIC_ITERATIONS; ++i) {
-    int factor = power;
-    if (vy > 0) factor = -factor;
-		int32_t nx = vx - mul230(factor, vy);
-		int32_t ny = mul230(factor, vx) + vy;
+    printf("Iteration %d: angle = %f; vector: (%f, %f)\n",
+      i, (double) angle / (1 << 30),
+      (double) vx / (1 << 16), (double) vy / (1 << 16)
+    );
+    int32_t nx, ny;
+    if (vy <= 0) {
+      nx = vx - (vy >> i);
+      ny = (vx >> i) + vy;
+    } else {
+      nx = vx + (vy >> i);
+      ny = -(vx >> i) + vy;
+    }
 		vx = nx;
     angle += (vy > 0) ? arctangents[i] : -arctangents[i];
 		vy = ny;
-    power >>= 1;
   }
-  t = (angle << 28) / TAU_TIMES_2TT28;
-  r = (((int64_t) vx) << 30) / CORDIC_K;
+  t.u = (angle << 30) / TAU_TIMES_2TT28;
+  r.u = (((int64_t) vx) * CORDIC_K) >> 30;
 }

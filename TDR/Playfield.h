@@ -15,6 +15,7 @@ namespace tdr {
     // ~Playfield();
     int width() const { return w; }
     int height() const { return h; }
+    agl::FBO getFBO() const { return *fbo; }
     agl::Texture getTexture() const { return *t; }
   private:
     int w, h;
