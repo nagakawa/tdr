@@ -6,7 +6,7 @@
 using namespace tdr;
 
 bool tdr::doCirclesIntersect(Circle& h1, Circle& h2) {
-  return hypotx(h1.x - h2.x, h1.y - h2.y) < (h1.radius + h2.radius);
+  return isWithin(h1.x - h2.x, h1.y - h2.y, h1.radius + h2.radius);=
 }
 
 // Thanks http://stackoverflow.com/a/1088058
@@ -248,10 +248,6 @@ void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 	int32_t vy = 0;
 	for (int i = 0; i < CORDIC_ITERATIONS; ++i) {
 		// new vector = [1, -factor; factor, 1] old vector
-    /*printf("Iteration %d: angle = %f; vector: (%f, %f)\n",
-      i, (double) radians / (1 << 30),
-      (double) vx / (1 << 30), (double) vy / (1 << 30)
-    );*/
     int32_t nx, ny;
 		if (radians >= 0) {
       nx = vx - (vy >> i);

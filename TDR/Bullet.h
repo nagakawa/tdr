@@ -94,9 +94,10 @@ namespace tdr {
 		void _tearDown();
     int count() { return bullets.size(); }
     int strength() { return bullets.size(); }
-	 // TODO implement these
     bool check(Circle& h);
     bool check(Line& h);
+	 // TODO implement these
+		void updatePositions(agl::IRect16& bounds);
     int collisionClass() { return cc; }
 	private:
 		std::vector<Bullet> bullets;

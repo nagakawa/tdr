@@ -45,6 +45,13 @@ int main(int argc, char** argv) {
 		sf.u = s >> 14;
 		tdr::rectp(cf, sf, r, t);
 		printf(" -> %8x < %8x\n", r.u, t.u);
+		/*
+			Setting the increment lower and disabling the printing functions,
+			it is estimated that 0x1000000 sincos and rectp calls take 2.538
+			seconds or 152 frames. As long as you don't spawn more than about
+			10,000 bullets, you probably shouldn't have much problem with this,
+			even when accounting for other things that are going on.
+		*/
 		i.u += 0x1000000;
 	} while (i != tdr::C_ZERO);
 }
