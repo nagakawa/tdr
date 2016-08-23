@@ -124,7 +124,7 @@ void tdr::BulletList::update() {
 void tdr::BulletList::_tearDown() {
 }
 
-bool tdr::Bullet::check(Circle& h) {
+bool tdr::BulletList::check(Circle& h) {
 	for (Bullet& b : bullets) {
 		if (b.isLaser ?
 				doCirclesIntersect(b.hitbox.c, h) :
@@ -134,7 +134,7 @@ bool tdr::Bullet::check(Circle& h) {
 	return false;
 }
 
-bool tdr::Bullet::check(Line& h) {
+bool tdr::BulletList::check(Line& h) {
 	for (Bullet& b : bullets) {
 		if (b.isLaser ?
 				doCircleAndLineIntersect(b.hitbox.c, h) :

@@ -3,6 +3,10 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
+#ifdef _WIN32
+#warning "Do not build on Windows. Build on another OS instead."
+#endif
+
 namespace agl {
 	struct Rect {
 		GLfloat left, top, right, bottom;

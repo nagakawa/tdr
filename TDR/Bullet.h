@@ -96,7 +96,7 @@ namespace tdr {
     int strength() { return bullets.size(); }
     bool check(Circle& h);
     bool check(Line& h);
-	 // TODO implement these
+		// TODO implement these
 		void updatePositions(agl::IRect16& bounds);
     int collisionClass() { return cc; }
 	private:
