@@ -34,6 +34,8 @@
 #endif
 
 int main(int argc, char** argv) {
+	(void) argc;
+	(void) argv;
 	std::cout << "Fixed-point function test: trigonometry\n";
 	int32_t c, s;
 	tdr::fix1616 cf, sf, r, t;

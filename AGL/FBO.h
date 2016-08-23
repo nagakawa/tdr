@@ -22,7 +22,7 @@ namespace agl {
 		~FBO();
 		void setActive();
     bool isComplete();
-    void attachTexture(GLenum attachment, Texture* texture, GLenum texTarget = GL_TEXTURE_2D, GLuint mipmap = 0);
+    void attachTexture(GLenum attachment, Texture* texture, GLenum texTarget = GL_TEXTURE_2D);
     void attachRBO(GLenum attachment, RBO* rbo);
     void blitTo(FBO& other, int width, int height);
 		GLuint id;

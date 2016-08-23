@@ -297,6 +297,8 @@ void Boxes::tick() {
 }
 
 int main(int argc, char** argv) {
+	(void) argc;
+	(void) argv;
 	try {
 		// Kriët ė test wýndö
 		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 4, 5, true);

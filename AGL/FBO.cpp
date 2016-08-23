@@ -10,6 +10,7 @@ FBO::FBO(bool def) {
 }
 
 FBO::FBO(bool def, GLint i) {
+  (void) def;
   id = i;
 }
 
@@ -36,7 +37,7 @@ bool FBO::isComplete() {
   return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 }
 
-void FBO::attachTexture(GLenum attachment, Texture* texture, GLenum texTarget, GLuint mipmap) {
+void FBO::attachTexture(GLenum attachment, Texture* texture, GLenum texTarget) {
   setActive();
   glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, texTarget, texture->id, 0);
 }

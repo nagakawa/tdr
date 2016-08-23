@@ -9,6 +9,7 @@ using namespace agl;
 
 GLFWApplication* agl::currentApp;
 
+#include "begincbackdecl.h"
 // Thanks learnopengl.com!
 void APIENTRY glDebugOutput(GLenum source,
                             GLenum type,
@@ -51,6 +52,7 @@ void APIENTRY glDebugOutput(GLenum source,
 	std::cout << std::endl;
   std::cout << std::endl;
 }
+#include "endcbackdecl.h"
 
 GLFWApplication::GLFWApplication(
 	int width,
