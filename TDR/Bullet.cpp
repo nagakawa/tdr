@@ -124,7 +124,7 @@ void tdr::BulletList::update() {
 void tdr::BulletList::_tearDown() {
 }
 
-bool tdr::BulletList::check(Circle& h) {
+bool tdr::BulletList::check(const Circle& h) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
@@ -135,7 +135,7 @@ bool tdr::BulletList::check(Circle& h) {
 	return false;
 }
 
-bool tdr::BulletList::check(Line& h) {
+bool tdr::BulletList::check(const Line& h) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
@@ -146,7 +146,7 @@ bool tdr::BulletList::check(Line& h) {
 	return false;
 }
 
-void tdr::BulletList::updatePositions(agl::IRect16& bounds) {
+void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 	for (Bullet& b : bullets) {
 		b.update();
 		if (b.deleteWhenOutOfBounds && (
@@ -182,5 +182,5 @@ Bullet* tdr::BulletList::query(uint64_t id) {
 		if (id < mid) upper = middle;
 		else lower = middle;
 	}
-	return bullets.data() + lower;
+	return bullets[lower].id == id ? bullets.data() + lower : nullptr;
 }

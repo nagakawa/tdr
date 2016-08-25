@@ -65,8 +65,8 @@ namespace tdr {
     virtual int count() = 0;
     // How much time it takes to check collisions against this collection.
     virtual int strength() = 0;
-    virtual bool check(Circle& h) = 0;
-    virtual bool check(Line& h) = 0;
+    virtual bool check(const Circle& h) = 0;
+    virtual bool check(const Line& h) = 0;
     virtual int collisionClass() { return -1; }
   };
 }

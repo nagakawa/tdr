@@ -101,9 +101,9 @@ namespace tdr {
 		void _tearDown();
     int count() { return bullets.size(); }
     int strength() { return bullets.size(); }
-    bool check(Circle& h);
-    bool check(Line& h);
-		void updatePositions(agl::IRect16& bounds);
+    bool check(const Circle& h);
+    bool check(const Line& h);
+		void updatePositions(const agl::IRect16& bounds);
 		void insert(Bullet& b);
 		/*
 			Returns a pointer to the Bullet object with the particular ID.
