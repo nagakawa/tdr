@@ -48,7 +48,7 @@ namespace tdr {
 		// 0 -> ready
 		// -1 -> can't graze anymore
 		int8_t timeToNextGraze;
-		uint8_t alpha;
+		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
 		unsigned int markedForDeletion : 1;
@@ -57,6 +57,7 @@ namespace tdr {
 		unsigned int useRadial : 1;
 		unsigned int detachVisualAndMovementAngles : 1;
 		unsigned int deleteWhenOutOfBounds : 1;
+		unsigned int collides : 1;
 		// Simulates movement of the bullet.
 		void update();
 		// Self explanatory. Returns true if graze succeeded, or false if
@@ -76,11 +77,13 @@ namespace tdr {
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
 			texcoords(graph.texcoords), delay(delay), isLaser(0),
 			markedForDeletion(0), useRadial(1), detachVisualAndMovementAngles(0),
-			deleteWhenOutOfBounds(1) {
+			deleteWhenOutOfBounds(1), collides(1) {
 				hitbox.c.x = x;
 				hitbox.c.y = y;
 				hitbox.c.radius = graph.collisionRadius;
 			}
+		// dummy constructor to allow resize() on vector<Bullet>
+		Bullet();
 	};
 	static_assert(offsetof(Bullet, visualAngle) + 4 == offsetof(Bullet, visualWidth),
 		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");

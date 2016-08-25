@@ -45,7 +45,7 @@ void main() { \n\
 	texCoord = vec2(mix(shottc.x, shottc.z, bounds.x), mix(shottc.y, shottc.w, bounds.y)) / texDimensions; \n\
 	float angle = awl.x * 2 * 3.14159265358979323; \n\
 	mat2 rm = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)); \n\
-	vec2 pos = position + rm * (bounds * awl.zy); \n\
+	vec2 pos = position / screenDimensions + rm * ((bounds * vec2(2.0f, 2.0f) - vec2(1.0f, 1.0f)) * awl.zy); \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
 } \
 ";
@@ -126,6 +126,7 @@ void tdr::BulletList::_tearDown() {
 
 bool tdr::BulletList::check(Circle& h) {
 	for (Bullet& b : bullets) {
+		if (!b.collides) continue;
 		if (b.isLaser ?
 				doCirclesIntersect(b.hitbox.c, h) :
 				doCircleAndLineIntersect(h, b.hitbox.l))
@@ -136,10 +137,33 @@ bool tdr::BulletList::check(Circle& h) {
 
 bool tdr::BulletList::check(Line& h) {
 	for (Bullet& b : bullets) {
+		if (!b.collides) continue;
 		if (b.isLaser ?
 				doCircleAndLineIntersect(b.hitbox.c, h) :
 				doLinesIntersect(h, b.hitbox.l))
 			return true;
 	}
 	return false;
+}
+
+void tdr::BulletList::updatePositions(agl::IRect16& bounds) {
+	for (Bullet& b : bullets) {
+		b.update();
+		if (b.deleteWhenOutOfBounds && (
+				b.hitbox.c.x < bounds.left ||
+				b.hitbox.c.x > bounds.right ||
+				b.hitbox.c.y < bounds.top ||
+				b.hitbox.c.y > bounds.bottom))
+			b.markedForDeletion = 1;
+	}
+	// Remove marked bullets from list
+	unsigned int ahead = 0;
+	unsigned int behind = 0;
+	for (ahead = 0; ahead < bullets.size(); ++ahead) {
+		if (!bullets[ahead].markedForDeletion) {
+			if (ahead != behind) bullets[behind] = bullets[ahead];
+			++behind;
+		}
+	}
+	bullets.resize(behind);
 }
