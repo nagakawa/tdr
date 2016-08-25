@@ -103,8 +103,14 @@ namespace tdr {
     int strength() { return bullets.size(); }
     bool check(Circle& h);
     bool check(Line& h);
-		// TODO implement these
 		void updatePositions(agl::IRect16& bounds);
+		void insert(Bullet& b);
+		/*
+			Returns a pointer to the Bullet object with the particular ID.
+			Since all IDs in bullets is ascending, we use binary search.
+			The pointer is valid until updatePositions is called again.
+		*/
+		Bullet* query(uint64_t id);
     int collisionClass() { return cc; }
 	private:
 		std::vector<Bullet> bullets;

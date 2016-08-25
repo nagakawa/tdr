@@ -167,3 +167,20 @@ void tdr::BulletList::updatePositions(agl::IRect16& bounds) {
 	}
 	bullets.resize(behind);
 }
+
+void tdr::BulletList::insert(Bullet& b) {
+	b.id = highestID++;
+	bullets.push_back(b);
+}
+
+Bullet* tdr::BulletList::query(uint64_t id) {
+	unsigned int lower = 0, upper = bullets.size();
+	while (upper > lower + 1) { // v this avoids overflow
+		unsigned int middle = lower + ((upper - lower) >> 1);
+		uint64_t mid = bullets[middle].id;
+		if (mid == id) return bullets.data() + middle;
+		if (id < mid) upper = middle;
+		else lower = middle;
+	}
+	return bullets.data() + lower;
+}
