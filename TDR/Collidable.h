@@ -8,23 +8,23 @@
 namespace tdr {
   struct fix1616 {
     int32_t u;
-  	fix1616 operator+(fix1616 b);
-  	fix1616 operator-(fix1616 b);
-    fix1616 operator-();
+  	fix1616 operator+(fix1616 b) const;
+  	fix1616 operator-(fix1616 b) const;
+    fix1616 operator-() const;
     fix1616 operator+=(fix1616 b);
   	fix1616 operator-=(fix1616 b);
-  	fix1616 operator*(fix1616 b);
-  	fix1616 operator/(fix1616 b);
+  	fix1616 operator*(fix1616 b) const;
+  	fix1616 operator/(fix1616 b) const;
     fix1616 operator=(int b);
-  	bool operator==(fix1616 b);
-    bool operator!=(fix1616 b);
-  	bool operator<(fix1616 b);
-    bool operator>(fix1616 b);
-    bool operator>=(fix1616 b);
-    bool operator==(int b);
-    bool operator!=(int b);
-  	bool operator<(int b);
-    bool operator>(int b);
+  	bool operator==(fix1616 b) const;
+    bool operator!=(fix1616 b) const;
+  	bool operator<(fix1616 b) const;
+    bool operator>(fix1616 b) const;
+    bool operator>=(fix1616 b) const;
+    bool operator==(int b) const;
+    bool operator!=(int b) const;
+  	bool operator<(int b) const;
+    bool operator>(int b) const;
   };
 	#define CELESTIAL 0x7FFFFFFF
 	#define ABYSS ((int32_t) 0x80000000)
@@ -52,9 +52,9 @@ namespace tdr {
     // i. e. the distance from the midpoint to one of the endpoints.
     fix1616 x, y, angle, width, length;
   };
-  bool doCirclesIntersect(Circle& h1, Circle& h2);
-  bool doCircleAndLineIntersect(Circle& h1, Line& h2);
-  bool doLinesIntersect(Line& h1, Line& h2);
+  bool doCirclesIntersect(const Circle& h1, const Circle& h2);
+  bool doCircleAndLineIntersect(const Circle& h1, const Line& h2);
+  bool doLinesIntersect(const Line& h1, const Line& h2);
   fix1616 clamp(fix1616 x, fix1616 a, fix1616 b);
   static_assert(offsetof(Circle, x) == offsetof(Line, x) &&
     offsetof(Circle, y) == offsetof(Line, y),

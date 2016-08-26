@@ -19,6 +19,7 @@ void tdr::Bullet::update() {
 	ys += ya;
 	if (delay != 0) --delay;
 	if (!detachVisualAndMovementAngles) visualAngle = angle;
+	refreshGraze();
 }
 
 bool tdr::Bullet::graze() {
@@ -183,4 +184,14 @@ Bullet* tdr::BulletList::query(uint64_t id) {
 		else lower = middle;
 	}
 	return bullets[lower].id == id ? bullets.data() + lower : nullptr;
+}
+
+void tdr::BulletList::graze(const Circle& h) {
+	for (Bullet& b : bullets) {
+		if (!b.collides) continue;
+		if (b.isLaser ?
+				doCirclesIntersect(b.hitbox.c, h) :
+				doCircleAndLineIntersect(h, b.hitbox.l))
+			b.graze();
+	}
 }

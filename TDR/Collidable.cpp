@@ -5,12 +5,12 @@
 
 using namespace tdr;
 
-bool tdr::doCirclesIntersect(Circle& h1, Circle& h2) {
+bool tdr::doCirclesIntersect(const Circle& h1, const Circle& h2) {
   return isWithin(h1.x - h2.x, h1.y - h2.y, h1.radius + h2.radius);
 }
 
 // Thanks http://stackoverflow.com/a/1088058
-bool tdr::doCircleAndLineIntersect(Circle& h1, Line& h2) {
+bool tdr::doCircleAndLineIntersect(const Circle& h1, const Line& h2) {
   fix1616 radius = h1.radius + h2.width;
   int32_t dx, dy;
   sincos(h2.angle, dx, dy);
@@ -27,25 +27,25 @@ bool tdr::doCircleAndLineIntersect(Circle& h1, Line& h2) {
 // checking their intersection is quite complicated.
 // Thanks http://www.gamedev.net/page/resources/_/technical/game-programming/2d-rotated-rectangle-collision-r2604
 // now if you don't mind, I need to go to sleep
-bool tdr::doLinesIntersect(Line& h1, Line& h2) {
+bool tdr::doLinesIntersect(const Line& h1, const Line& h2) {
   fix1616 dist = hypotx(h1.length, h1.width) + hypotx(h2.length, h2.width);
   if (hypotx(h1.x - h2.x, h1.y - h2.y) >= dist) return false;
   int dx1, dy1, dx2, dy2;
   sincos(h1.angle, dx1, dy1);
   sincos(h2.angle, dx2, dy2);
-  fix1616 d1ax = multiply1616By230(h1.length, dx1);
-  fix1616 d1ay = multiply1616By230(h1.length, dy1);
-  fix1616 d1bx = multiply1616By230(-h1.length, dy1);
-  fix1616 d1by = multiply1616By230(h1.length, dx1);
-  fix1616 d2ax = multiply1616By230(h2.length, dx2);
-  fix1616 d2ay = multiply1616By230(h2.length, dy2);
-  fix1616 d2bx = multiply1616By230(-h2.length, dy2);
-  fix1616 d2by = multiply1616By230(h2.length, dx2);
+  const fix1616 d1ax = multiply1616By230(h1.length, dx1);
+  const fix1616 d1ay = multiply1616By230(h1.length, dy1);
+  const fix1616 d1bx = multiply1616By230(-h1.length, dy1);
+  const fix1616 d1by = multiply1616By230(h1.length, dx1);
+  const fix1616 d2ax = multiply1616By230(h2.length, dx2);
+  const fix1616 d2ay = multiply1616By230(h2.length, dy2);
+  const fix1616 d2bx = multiply1616By230(-h2.length, dy2);
+  const fix1616 d2by = multiply1616By230(h2.length, dx2);
   // yet more preprocessor sorcery
 #define MKPROJ(corner, rect, axis) \
-    fix1616 corner##rect##axis##x = h##rect.x + d##axis##x; \
-    fix1616 corner##rect##axis##y = h##rect.y + d##axis##y; \
-    fix1616 proj##corner##axis##rect = \
+    const fix1616 corner##rect##axis##x = h##rect.x + d##axis##x; \
+    const fix1616 corner##rect##axis##y = h##rect.y + d##axis##y; \
+    const fix1616 proj##corner##axis##rect = \
       (corner##rect##axis##x * d##axis##x + corner##rect##axis##y * d##axis##y) / \
       (corner##rect##axis##x * corner##rect##axis##x + corner##rect##axis##y * corner##rect##axis##y);
 #define MKPROJS(rect, axis) \
@@ -53,8 +53,8 @@ bool tdr::doLinesIntersect(Line& h1, Line& h2) {
     MKPROJ(ul, rect, axis); \
     MKPROJ(lr, rect, axis); \
     MKPROJ(ll, rect, axis); \
-    fix1616 maxProj##axis##rect = max(proj##ur##axis##rect, max(proj##ul##axis##rect, max(proj##lr##axis##rect, proj##ll##axis##rect))); \
-    fix1616 minProj##axis##rect = min(proj##ur##axis##rect, min(proj##ul##axis##rect, min(proj##lr##axis##rect, proj##ll##axis##rect)));
+    const fix1616 maxProj##axis##rect = max(proj##ur##axis##rect, max(proj##ul##axis##rect, max(proj##lr##axis##rect, proj##ll##axis##rect))); \
+    const fix1616 minProj##axis##rect = min(proj##ur##axis##rect, min(proj##ul##axis##rect, min(proj##lr##axis##rect, proj##ll##axis##rect)));
 #define CHKPROJ(axis) \
     MKPROJS(1, axis); \
     MKPROJS(2, axis); \
@@ -70,31 +70,31 @@ fix1616 tdr::clamp(fix1616 x, fix1616 a, fix1616 b) {
   return max(a, min(b, x));
 }
 
-fix1616 tdr::fix1616::operator+(fix1616 b) {
+fix1616 tdr::fix1616::operator+(fix1616 b) const {
 	if (b.u > 0 && ((int32_t) CELESTIAL) - b.u < u)
 		return { (int32_t) CELESTIAL };
 	if (b.u < 0 && ((int32_t) ABYSS) - b.u > u)
 		return { ((int32_t) ABYSS) };
 	return { u + b.u };
 }
-fix1616 tdr::fix1616::operator-(fix1616 b) {
+fix1616 tdr::fix1616::operator-(fix1616 b) const {
 	if (b.u > 0 && -((int32_t) CELESTIAL) + b.u < u)
 		return { -(int32_t) CELESTIAL };
 	if (b.u < 0 && ((int32_t) ABYSS) + b.u > u)
 		return { ((int32_t) ABYSS) };
 	return { u - b.u };
 }
-fix1616 tdr::fix1616::operator-() {
+fix1616 tdr::fix1616::operator-() const {
 	if (u == ABYSS) return { CELESTIAL };
   else return { -u };
 }
-fix1616 tdr::fix1616::operator*(fix1616 b) {
+fix1616 tdr::fix1616::operator*(fix1616 b) const {
 	int64_t prod = (((int64_t) u) * b.u) >> 16;
 	if (prod >= 0x100000000) prod = CELESTIAL;
 	if (prod < -((int64_t) 0x100000000)) prod = ((int64_t) ABYSS);
 	return { (int32_t) prod };
 }
-fix1616 tdr::fix1616::operator/(fix1616 b) {
+fix1616 tdr::fix1616::operator/(fix1616 b) const {
 	int64_t aex = (((int64_t) u) << 16);
 	int64_t res = aex / b.u;
 	if (res > CELESTIAL) return { CELESTIAL };
@@ -102,43 +102,43 @@ fix1616 tdr::fix1616::operator/(fix1616 b) {
 	return { (int32_t) res };
 }
 
-bool tdr::fix1616::operator==(fix1616 b) {
+bool tdr::fix1616::operator==(fix1616 b) const {
 	return u == b.u;
 }
 
-bool tdr::fix1616::operator!=(fix1616 b) {
+bool tdr::fix1616::operator!=(fix1616 b) const {
 	return u != b.u;
 }
 
-bool tdr::fix1616::operator<(fix1616 b) {
+bool tdr::fix1616::operator<(fix1616 b) const {
 	return u < b.u;
 }
 
-bool tdr::fix1616::operator>(fix1616 b) {
+bool tdr::fix1616::operator>(fix1616 b) const {
 	return u > b.u;
 }
 
-bool tdr::fix1616::operator>=(fix1616 b) {
+bool tdr::fix1616::operator>=(fix1616 b) const {
 	return u >= b.u;
 }
 
-bool tdr::fix1616::operator==(int b) {
+bool tdr::fix1616::operator==(int b) const {
 	if (b < -0x8000 || b >= 0x8000) return false;
   return (b << 16) == u;
 }
 
-bool tdr::fix1616::operator!=(int b) {
+bool tdr::fix1616::operator!=(int b) const {
 	if (b < -0x8000 || b >= 0x8000) return true;
   return (b << 16) != u;
 }
 
-bool tdr::fix1616::operator<(int b) {
+bool tdr::fix1616::operator<(int b) const {
   if (b < -0x8000) return false;
   if (b >= 0x8000) return true;
   return (b << 16) < u;
 }
 
-bool tdr::fix1616::operator>(int b) {
+bool tdr::fix1616::operator>(int b) const {
   if (b < -0x8000) return true;
   if (b >= 0x8000) return false;
   return (b << 16) > u;

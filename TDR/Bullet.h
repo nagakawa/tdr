@@ -105,6 +105,7 @@ namespace tdr {
     bool check(const Line& h);
 		void updatePositions(const agl::IRect16& bounds);
 		void insert(Bullet& b);
+		void graze(const Circle& h);
 		/*
 			Returns a pointer to the Bullet object with the particular ID.
 			Since all IDs in bullets is ascending, we use binary search.
