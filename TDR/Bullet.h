@@ -68,6 +68,7 @@ namespace tdr {
 		// not yet grazeable but will be in the future".
 		void refreshGraze();
 		// Note: none of the constructors register the bullet.
+		// Use tdr::Bullet::insert for this.
 		Bullet(
 			fix1616 x, fix1616 y,
 			fix1616 speed, fix1616 angle,
