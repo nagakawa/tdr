@@ -21,22 +21,27 @@ agl::Texture::Texture(int w, int h, unsigned char* data, const TexInitInfo& info
 	setTexture(w, h, data, info);
 }
 
-#include <stdio.h>
+#include <debug.h>
 void agl::Texture::setTexture(int w, int h, unsigned char* data, const TexInitInfo& info) {
+	changeTexture(w, h, data, info, true);
+}
+
+void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info, bool genNew) {
 	width = w;
 	height = h;
 	ms = info.multisample;
 	GLenum mode = ms ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
 	if (info.checkForNullData && data == nullptr)
 		throw "Image could not be read!";
-	glGenTextures(1, &id);
-	//printf(u8"テクスチャは追加された。(%d)\n", id);
+	if (genNew) glGenTextures(1, &id);
 	glBindTexture(mode, id);
 	if (!info.genMipMap) {
 		glTexParameteri(mode, GL_TEXTURE_BASE_LEVEL, 0);
 		glTexParameteri(mode, GL_TEXTURE_MAX_LEVEL, 0);
 	}
-	if (ms) glTexImage2DMultisample(mode, 4, info.internalFormat, w, h, GL_TRUE);
+	if (ms) {
+		glTexImage2DMultisample(mode, 4, info.internalFormat, w, h, GL_TRUE);
+	}
 	else {
 		glTexImage2D(mode, 0, info.internalFormat, w, h, 0, info.texFormat, info.pixelType, data);
 		glTexParameteri(mode, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -46,28 +51,6 @@ void agl::Texture::setTexture(int w, int h, unsigned char* data, const TexInitIn
 	}
 	if (info.genMipMap) glGenerateMipmap(mode);
 	glBindTexture(mode, 0);
-}
-
-void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info) {
-	width = w;
-	height = h;
-	GLenum mode = ms ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D;
-	ms = info.multisample;
-	if (info.checkForNullData && data == nullptr)
-		throw "Image could not be read!";
-		glBindTexture(mode, id);
-		if (!info.genMipMap) {
-			glTexParameteri(mode, GL_TEXTURE_BASE_LEVEL, 0);
-			glTexParameteri(mode, GL_TEXTURE_MAX_LEVEL, 0);
-		}
-		if (ms) glTexImage2DMultisample(mode, 4, info.internalFormat, w, h, GL_TRUE);
-		else glTexImage2D(mode, 0, info.internalFormat, w, h, 0, info.texFormat, info.pixelType, data);
-		glTexParameteri(mode, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(mode, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(mode, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(mode, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		if (info.genMipMap) glGenerateMipmap(mode);
-		glBindTexture(mode, 0);
 }
 
 

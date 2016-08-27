@@ -301,7 +301,8 @@ int main(int argc, char** argv) {
 	(void) argv;
 	try {
 		// Kriët ė test wýndö
-		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 4, 5, true);
+		// AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 4, 5, true);
+		AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 3, 3, false);
 		a->start();
 	} catch (char const* s) {
 		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
