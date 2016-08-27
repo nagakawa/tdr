@@ -44,7 +44,7 @@ uniform vec2 screenDimensions; \n\
 \n\
 void main() { \n\
 	texCoord = vec2(mix(shottc.x, shottc.z, bounds.x), mix(shottc.y, shottc.w, bounds.y)) / texDimensions; \n\
-	float angle = awl.x * 2 * 3.14159265358979323; \n\
+	float angle = awl.x * 2 * 3.14159265358979323 / 16384; \n\
 	mat2 rm = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)); \n\
 	vec2 pos = position / screenDimensions + rm * ((bounds * vec2(2.0f, 2.0f) - vec2(1.0f, 1.0f)) * awl.zy); \n\
 	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
@@ -87,7 +87,7 @@ void tdr::BulletList::setUp() {
 	glVertexAttribPointer(1, 2, GL_FIXED, false, sizeof(Bullet), (GLvoid*) offsetof(Bullet, hitbox.c.x));
 	glVertexAttribDivisor(1, 1);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_UNSIGNED_INT, true, sizeof(Bullet), (GLvoid*) offsetof(Bullet, visualAngle));
+	glVertexAttribPointer(2, 3, GL_FIXED, true, sizeof(Bullet), (GLvoid*) offsetof(Bullet, visualAngle));
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 4, GL_SHORT, false, sizeof(Bullet), (GLvoid*) offsetof(Bullet, texcoords));
