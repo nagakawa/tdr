@@ -62,7 +62,8 @@ GLFWApplication::GLFWApplication(
 	const char* title,
 	int glMajor,
 	int glMinor,
-	bool debug
+	bool debug,
+  int maxFPS
 	) {
 	// Set actual width and height of window to whatever
 	// you're working on if not set
@@ -73,6 +74,7 @@ GLFWApplication::GLFWApplication(
 	cumulDelta = 0;
 	w = width;
 	h = height;
+  mfps = maxFPS;
 	projection = glm::scale(projection, glm::vec3(1.0f / width, 1.0f / height, 1));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
@@ -110,8 +112,26 @@ GLFWApplication::GLFWApplication(
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouseCallback);
-	setVSyncEnable(true);
+	setVSyncEnable(false);
 }
+
+#ifdef __WIN32
+#include <windows.h>
+inline void wait(double t) {
+  Sleep((int) (t * 1000));
+}
+#else
+#include <time.h>
+inline void wait(double t) {
+  struct timespec rqtp;
+  rqtp.tv_sec = (int) (t / 1000000000);
+  rqtp.tv_nsec = (int) (t * 1000000000) % 1000000000;
+  nanosleep(&rqtp, nullptr);
+}
+#endif
+
+#define WAITING_DISTANCE 0.5
+#define THRESH 0.001
 
 void GLFWApplication::start() {
 	currentTime = glfwGetTime();
@@ -119,6 +139,12 @@ void GLFWApplication::start() {
 	while (!glfwWindowShouldClose(window)) {
 		GLdouble prevTime = currentTime;
 		currentTime = glfwGetTime();
+    // Keep at slightly more than maxFPS so FPS doesn't dip below as often
+    while (currentTime < prevTime + 0.9999 / mfps) {
+      currentTime = glfwGetTime();
+      double diff = currentTime - prevTime;
+      if (diff < THRESH) wait(WAITING_DISTANCE * diff);
+    }
 		delta = currentTime - prevTime;
 		fps = 1.0 / delta;
 		cumulDelta += delta;
