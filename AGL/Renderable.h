@@ -4,7 +4,7 @@ namespace agl {
 	class Renderable {
 	public:
 		Renderable();
-		~Renderable();
+		virtual ~Renderable();
 		virtual void setUp();
 		void tearDown();
 		virtual void tick();

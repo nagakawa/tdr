@@ -32,10 +32,12 @@ namespace agl {
 			int actualHeight = 0,
 			const char* title = DEFAULT_TITLE,
 			int glMajor = 3,
-			int glMinor = 3
+			int glMinor = 3,
+			bool debug = false,
+			int maxFPS = 60
 			);
 		void start();
-		~GLFWApplication();
+		virtual ~GLFWApplication();
 		virtual void initialize();
 		virtual void tick();
 		virtual void readKeys();
@@ -65,6 +67,7 @@ namespace agl {
 		glm::mat4 projection;
 		GLint w;
 		GLint h;
+		GLint mfps;
 	};
 
 	extern GLFWApplication* currentApp;

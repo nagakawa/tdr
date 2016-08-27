@@ -1,0 +1,30 @@
+# ########## Project setup ##########
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+cmake_policy(SET CMP0048 NEW)
+PROJECT(tdr VERSION 0.0)
+
+# ######### General setup ##########
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+
+set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+
+include_directories("${PROJECT_INCLUDE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}")
+
+ADD_SUBDIRECTORY(FileUtil)
+ADD_SUBDIRECTORY(AGL)
+ADD_SUBDIRECTORY(AGLTest)
+ADD_SUBDIRECTORY(TDR)
+ADD_SUBDIRECTORY(TDRTest)
+
+# actual target:
+# ADD_LIBRARY(tdr ${tdr_library}_SCRS ${tdr_library_HDRS})
+# SET_TARGET_PROPERTIES(tdr PROPERTIES VERSION 0.0.0)
+
+# add install target:
+# INSTALL(TARGETS tdr DESTINATION lib)

@@ -1,0 +1,31 @@
+# ########## Project setup ##########
+PROJECT(TDRTest)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+
+# ######### General setup ##########
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR})
+
+INCLUDE(../dependencies.cmake)
+
+SET(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/../AGL ${PROJECT_SOURCE_DIR}/../FileUtil ${PROJECT_SOURCE_DIR}/../TDR)
+
+# ########## AGL executable ##########
+# Sources:
+SET(TDRTest_executable_SRCS
+  Test.cpp
+)
+
+# Headers:
+SET(TDRTest_executable_HDRS
+    Test.h
+)
+
+INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
+INCLUDE_DIRECTORIES("${PROJECT_INCLUDE_DIR}")
+
+ADD_EXECUTABLE(TDRTest ${TDRTest_executable_SRCS})
+
+TARGET_LINK_LIBRARIES(TDRTest ${PROJECT_SOURCE_DIR}/../build/libTDR.a ${PROJECT_SOURCE_DIR}/../build/libAGL.a ${PROJECT_SOURCE_DIR}/../build/libFileUtil.a ${PangoCairo_LIBRARIES} ${Pango_1_0_LIBRARY} ${CAIRO_LIBRARIES} ${GLFW_LIBRARY_RELEASE} ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${SOIL_LIBRARY} ${GOBJECT_LIBRARIES} ${GLIB_LIBRARIES} -lm)
+
+# add install target:
+INSTALL(TARGETS TDRTest DESTINATION lib)

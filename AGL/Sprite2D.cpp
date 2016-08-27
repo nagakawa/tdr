@@ -2,7 +2,6 @@
 
 using namespace agl;
 
-
 const char* agl::S2D_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 pos; \n\
@@ -38,7 +37,6 @@ Sprite2D::Sprite2D(std::shared_ptr<Texture> t) {
 }
 
 Sprite2D::~Sprite2D() {
-	Renderable::~Renderable();
 }
 
 void agl::Sprite2D::setUp() {
