@@ -12,7 +12,6 @@ INCLUDE(../dependencies.cmake)
 SET(AGL_library_SRCS
     LayeredPriorityRenderable.cpp
     ShaderProgram.cpp
-    AGL.rc
     Shader.cpp
     GLFWApplication.cpp
     BlendMode.cpp

@@ -23,7 +23,7 @@ ADD_SUBDIRECTORY(TDR)
 ADD_SUBDIRECTORY(TDRTest)
 
 # actual target:
-# ADD_LIBRARY(tdr ${tdr_library}_SCRS ${tdr_library_HDRS})
+# ADD_LIBRARY(tdr ${tdr_library}_SRCS ${tdr_library_HDRS})
 # SET_TARGET_PROPERTIES(tdr PROPERTIES VERSION 0.0.0)
 
 # add install target:
