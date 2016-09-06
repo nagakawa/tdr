@@ -186,12 +186,15 @@ Bullet* tdr::BulletList::query(uint64_t id) {
 	return bullets[lower].id == id ? bullets.data() + lower : nullptr;
 }
 
-void tdr::BulletList::graze(const Circle& h) {
+void tdr::BulletList::graze(
+	const Circle& h,
+	std::function<void(Bullet&)> callback) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
 				doCirclesIntersect(b.hitbox.c, h) :
 				doCircleAndLineIntersect(h, b.hitbox.l))
 			b.graze();
+			callback(b);
 	}
 }

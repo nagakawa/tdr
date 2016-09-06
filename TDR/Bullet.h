@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <stdint.h>
+#include <functional>
 #include <vector>
 
 #include <BlendMode.h>
@@ -107,7 +108,9 @@ namespace tdr {
     bool check(const Line& h);
 		void updatePositions(const agl::IRect16& bounds);
 		void insert(Bullet& b);
-		void graze(const Circle& h);
+		void graze(
+			const Circle& h,
+			std::function<void(Bullet&)> callback);
 		/*
 			Returns a pointer to the Bullet object with the particular ID.
 			Since all IDs in bullets is ascending, we use binary search.
