@@ -103,7 +103,7 @@ void tdr::BulletList::setUniforms() {
 	shotsheet.bindTo(0);
 	SETUNSP(program, 1i, "tex", 0);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) shotsheet.getWidth(), (GLfloat) shotsheet.getHeight());
-	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) p->width(), (GLfloat) p->height());
+	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) p->getWidth(), (GLfloat) p->getHeight());
 	hasSetUniforms = true;
 }
 
