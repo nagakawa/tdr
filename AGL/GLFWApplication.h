@@ -10,6 +10,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Dimensional.h"
+
 namespace agl {
 
 #define DEFAULT_WIDTH 800
@@ -23,7 +25,7 @@ namespace agl {
 		Users should create subclasses of GLFWApplication
 		for their own purposes.
 	*/
-	class GLFWApplication {
+	class GLFWApplication : public Dimensional {
 	public:
 		GLFWApplication(
 			int width = DEFAULT_WIDTH,
@@ -49,8 +51,10 @@ namespace agl {
 		double getFPS() { return fps; }
 		double getDelta() { return delta; }
 		double getRollingFPS() { return rollingFPS; }
-		GLint getWidth() { return w; }
-		GLint getHeight() { return h; }
+		int getWidth() { return w; }
+		int getHeight() { return h; }
+		int getActualWidth() { return aw; }
+		int getActualHeight() { return ah; }
 		GLFWwindow* underlying() { return window; }
 	protected:
 		bool testKey(int code);
@@ -67,6 +71,8 @@ namespace agl {
 		glm::mat4 projection;
 		GLint w;
 		GLint h;
+		GLint aw;
+		GLint ah;
 		GLint mfps;
 	};
 

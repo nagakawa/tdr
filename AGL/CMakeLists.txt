@@ -24,6 +24,7 @@ SET(AGL_library_SRCS
     VAO.cpp
     cairoutil.cpp
     FBO.cpp
+    Dimensional.cpp
 )
 
 # Headers:
@@ -47,6 +48,7 @@ SET(AGL_library_HDRS
     rect.h
     FBO.h
     debug.h
+    Dimensional.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

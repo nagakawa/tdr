@@ -61,7 +61,7 @@ namespace agl {
 		bool isRich() { return rich; }
 		void setRich(bool r) { rich = r; }
 		void setPosition(glm::vec2 pos) { position = pos; }
-		void setApp(GLFWApplication* a) { app = a; }
+		void setApp(Dimensional* a) { app = a; }
 	protected:
 		void _tearDown();
 	private:
@@ -71,7 +71,7 @@ namespace agl {
 		Texture* texture;
 		std::string text;
 		unsigned int width, height;
-		GLFWApplication* app;
+		Dimensional* app;
 		bool hasInitializedProgram;
 		glm::vec4 topColor;
 		glm::vec4 bottomColor;

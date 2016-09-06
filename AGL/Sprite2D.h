@@ -36,7 +36,7 @@ namespace agl {
 		void update();
 		int addSprite(Sprite2DInfo loc);
 		void setTexture(std::shared_ptr<Texture> tex);
-		void setApp(GLFWApplication* a) { app = a; }
+		void setApp(Dimensional* a) { app = a; }
 		Sprite2DInfo get(int index) { return sprites[index]; }
 		Sprite2DInfo* getLoc(int index) { return sprites.data() + index; }
 	protected:
@@ -48,7 +48,7 @@ namespace agl {
 		VAO vao;
 		ShaderProgram program;
 		std::vector<Sprite2DInfo> sprites;
-		GLFWApplication* app;
+		Dimensional* app;
 		bool hasSetUniforms;
 		bool hasInitializedProgram;
 	};

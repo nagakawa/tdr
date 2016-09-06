@@ -74,6 +74,8 @@ GLFWApplication::GLFWApplication(
 	cumulDelta = 0;
 	w = width;
 	h = height;
+  aw = actualWidth;
+  ah = actualHeight;
   mfps = maxFPS;
 	projection = glm::scale(projection, glm::vec3(1.0f / width, 1.0f / height, 1));
 	glfwInit();
