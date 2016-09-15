@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include "defset.h"
@@ -16,8 +16,8 @@ namespace tdr {
 		DEF_SET(Double, double, doubles)
 		DEF_SET(String, std::string, strings)
 	private:
-		std::map<std::string, uint64_t> integers;
-		std::map<std::string, double> doubles;
-		std::map<std::string, std::string> strings;
+		std::unordered_map<std::string, uint64_t> integers;
+		std::unordered_map<std::string, double> doubles;
+		std::unordered_map<std::string, std::string> strings;
 	};
 }

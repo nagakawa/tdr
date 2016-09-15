@@ -17,6 +17,8 @@ SET(TDR_library_SRCS
   Replay.cpp
   Collidable.cpp
   bitwise.cpp
+  fixedpoint.cpp
+  hitbox.cpp
 )
 
 # Headers:
@@ -27,6 +29,8 @@ SET(TDR_library_HDRS
     defset.h
     Collidable.h
     bitwise.h
+    fixedpoint.h
+    hitbox.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

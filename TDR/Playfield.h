@@ -28,6 +28,6 @@ namespace tdr {
     int w, h;
     int aw, ah;
     std::shared_ptr<agl::FBO> fbo;
-    std::shared_ptr<agl::Texture> t;
+    std::shared_ptr<agl::Texture> t; // Texture associated with FBO
   };
 }

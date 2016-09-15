@@ -29,5 +29,3 @@ namespace tdr {
 		std::map<int, ReplaySection> sections;
 	};
 }
-
-
