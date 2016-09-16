@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdint.h>
 #include <functional>
+#include <memory>
 #include <vector>
 
 #include <BlendMode.h>
@@ -94,6 +95,14 @@ namespace tdr {
 		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
 	extern const char* BL_VERTEX_SOURCE;
 	extern const char* BL_FRAGMENT_SOURCE;
+	class BulletListIterator : public ArrayCollisionIterator<Bullet> {
+	public:
+		BulletListIterator(const Bullet* things, int count) :
+      ArrayCollisionIterator(things, count) {}
+    bool isLine() const { return contents().isLaser; }
+    const Circle& getCircle() const { return contents().hitbox.c; }
+    const Line& getLine() const { return contents().hitbox.l; }
+	};
 	class BulletList: public Collidable {
 	public:
 		BulletList(Playfield* p, agl::Texture shotsheet, int cc) :
@@ -118,6 +127,7 @@ namespace tdr {
 		*/
 		Bullet* query(uint64_t id);
     int collisionClass() { return cc; }
+		std::unique_ptr<CollisionIterator> iterator() const;
 	private:
 		std::vector<Bullet> bullets;
 		Playfield* p;

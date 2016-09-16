@@ -198,3 +198,9 @@ void tdr::BulletList::graze(
 			callback(b);
 	}
 }
+
+std::unique_ptr<CollisionIterator> tdr::BulletList::iterator() const {
+	std::unique_ptr<CollisionIterator> itp(
+		new BulletListIterator(bullets.data(), bullets.size()));
+	return itp;
+}

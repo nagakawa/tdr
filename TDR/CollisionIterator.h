@@ -14,7 +14,7 @@ namespace tdr {
     virtual void next();
   };
   template <typename T>
-  class SingletonCollisionIterator : CollisionIterator {
+  class SingletonCollisionIterator : public CollisionIterator {
   public:
     SingletonCollisionIterator(T thing) : thing(thing) {}
     bool isEmpty() const { return !past; }
@@ -23,15 +23,15 @@ namespace tdr {
     virtual const Line& getLine() const = 0;
     void next() { past = true; }
   protected:
-    T contents() const { return thing; }
+    const T& contents() const { return thing; }
   private:
     bool past = false;
-    T thing;
+    const T thing;
   };
   template <typename T>
-  class ArrayCollisionIterator : CollisionIterator {
+  class ArrayCollisionIterator : public CollisionIterator {
   public:
-    ArrayCollisionIterator(T* things, int count) :
+    ArrayCollisionIterator(const T* things, int count) :
       count(count), things(things) {}
     bool isEmpty() const { return index >= count; }
     virtual bool isLine() const = 0;
@@ -39,10 +39,10 @@ namespace tdr {
     virtual const Line& getLine() const = 0;
     void next() { ++index; }
   protected:
-    T contents() const { return things[count]; }
+    const T& contents() const { return things[count]; }
   private:
     int index = 0;
     int count;
-    T* things;
+    const T* things;
   };
 }

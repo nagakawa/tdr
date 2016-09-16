@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <memory>
 #include <Renderable.h>
 #include "CollisionIterator.h"
 #include "fixedpoint.h"
@@ -17,7 +18,7 @@ namespace tdr {
     virtual int strength() = 0;
     virtual bool check(const Circle& h) = 0;
     virtual bool check(const Line& h) = 0;
-    virtual CollisionIterator& iterator() const = 0;
+    virtual std::unique_ptr<CollisionIterator> iterator() const = 0;
     virtual int collisionClass() { return -1; }
   };
 }
