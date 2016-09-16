@@ -1,5 +1,10 @@
 #pragma once
 
+namespace tdr {
+  // forward declare so Collidable.h doesn't get confused
+  class CollisionIterator;
+}
+
 #include "Collidable.h"
 #include "fixedpoint.h"
 #include "hitbox.h"
@@ -12,6 +17,7 @@ namespace tdr {
     virtual const Circle& getCircle() const = 0;
     virtual const Line& getLine() const = 0;
     virtual void next();
+    virtual ~CollisionIterator();
   };
   template <typename T>
   class SingletonCollisionIterator : public CollisionIterator {

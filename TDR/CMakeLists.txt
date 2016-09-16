@@ -19,6 +19,8 @@ SET(TDR_library_SRCS
   bitwise.cpp
   fixedpoint.cpp
   hitbox.cpp
+  CollisionRegistrar.cpp
+  CollisionIterator.cpp
 )
 
 # Headers:
@@ -31,6 +33,8 @@ SET(TDR_library_HDRS
     bitwise.h
     fixedpoint.h
     hitbox.h
+    CollisionIterator.h
+    CollisionRegistrar.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
