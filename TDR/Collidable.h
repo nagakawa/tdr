@@ -10,6 +10,7 @@
 #include "hitbox.h"
 
 namespace tdr {
+  class CollisionIterator;
   class Collidable: public agl::Renderable {
   public:
     // How many objects there are to check collision for.

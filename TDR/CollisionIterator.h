@@ -1,10 +1,5 @@
 #pragma once
 
-namespace tdr {
-  // forward declare so Collidable.h doesn't get confused
-  class CollisionIterator;
-}
-
 #include "Collidable.h"
 #include "fixedpoint.h"
 #include "hitbox.h"
@@ -17,21 +12,23 @@ namespace tdr {
     virtual const Circle& getCircle() const = 0;
     virtual const Line& getLine() const = 0;
     virtual void next();
+    int index() { return i; }
     virtual ~CollisionIterator();
+  protected:
+    int i = 0;
   };
   template <typename T>
   class SingletonCollisionIterator : public CollisionIterator {
   public:
     SingletonCollisionIterator(T thing) : thing(thing) {}
-    bool isEmpty() const { return !past; }
+    bool isEmpty() const { return i == 0; }
     virtual bool isLine() const = 0;
     virtual const Circle& getCircle() const = 0;
     virtual const Line& getLine() const = 0;
-    void next() { past = true; }
+    void next() { i = 1; }
   protected:
     const T& contents() const { return thing; }
   private:
-    bool past = false;
     const T thing;
   };
   template <typename T>
@@ -39,15 +36,14 @@ namespace tdr {
   public:
     ArrayCollisionIterator(const T* things, int count) :
       count(count), things(things) {}
-    bool isEmpty() const { return index >= count; }
+    bool isEmpty() const { return i >= count; }
     virtual bool isLine() const = 0;
     virtual const Circle& getCircle() const = 0;
     virtual const Line& getLine() const = 0;
-    void next() { ++index; }
+    void next() { ++i; }
   protected:
-    const T& contents() const { return things[count]; }
+    const T& contents() const { return things[i]; }
   private:
-    int index = 0;
     int count;
     const T* things;
   };
