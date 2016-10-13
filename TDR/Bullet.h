@@ -54,13 +54,13 @@ namespace tdr {
 		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
-		unsigned int markedForDeletion : 1;
+		uint8_t markedForDeletion : 1;
 		// If true, this bullet will base xs and ys from speed and angle.
 		// Otherwise, speed and angle depend on xs and ys.
-		unsigned int useRadial : 1;
-		unsigned int detachVisualAndMovementAngles : 1;
-		unsigned int deleteWhenOutOfBounds : 1;
-		unsigned int collides : 1;
+		uint8_t useRadial : 1;
+		uint8_t detachVisualAndMovementAngles : 1;
+		uint8_t deleteWhenOutOfBounds : 1;
+		uint8_t collides : 1;
 		// Simulates movement of the bullet.
 		void update();
 		// Self explanatory. Returns true if graze succeeded, or false if
