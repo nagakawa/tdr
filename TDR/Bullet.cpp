@@ -204,3 +204,13 @@ std::unique_ptr<CollisionIterator> tdr::BulletList::iterator() const {
 		new BulletListIterator(bullets.data(), bullets.size()));
 	return itp;
 }
+
+Bullet* tdr::BulletList::createShotA1(
+	fix1616 x, fix1616 y,
+	fix1616 speed, fix1616 angle,
+	Graphic& graph, uint8_t delay) {
+	bullets.emplace_back(x, y, speed, angle, graph, delay);
+	int size = bullets.size();
+	bullets[size - 1].id = highestID++;
+	return bullets.data() + (size - 1);
+}
