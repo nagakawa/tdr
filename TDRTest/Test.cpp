@@ -20,6 +20,7 @@
 #include <Shader.h>
 #include <ShaderProgram.h>
 
+#include "Bullet.h"
 #include "Collidable.h"
 
 // Others
@@ -56,4 +57,5 @@ int main(int argc, char** argv) {
 		*/
 		i.u += 0x1000000;
 	} while (i != tdr::C_ZERO);
+	printf("sizeof(tdr::Bullet) = %lu\n", sizeof(tdr::Bullet));
 }

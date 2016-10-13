@@ -25,6 +25,7 @@ namespace tdr {
       p.cback = cback;
       callbacks.push_back(p);
     }
+    void performAll();
   private:
     //std::unordered_multimap<int, Collidable*> collidables;
     std::vector<CollisionPair> callbacks;

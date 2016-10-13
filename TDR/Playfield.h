@@ -22,6 +22,7 @@ namespace tdr {
     int getHeight() const { return h; }
     int getActualWidth() const { return aw; }
     int getActualHeight() const { return ah; }
+    int getFBOID() const { return fbo->id; }
     agl::FBO getFBO() const { return *fbo; }
     agl::Texture getTexture() const { return *t; }
   private:

@@ -51,10 +51,11 @@ namespace agl {
 		double getFPS() { return fps; }
 		double getDelta() { return delta; }
 		double getRollingFPS() { return rollingFPS; }
-		int getWidth() { return w; }
-		int getHeight() { return h; }
-		int getActualWidth() { return aw; }
-		int getActualHeight() { return ah; }
+		int getWidth() const { return w; }
+		int getHeight() const { return h; }
+		int getActualWidth() const { return aw; }
+		int getActualHeight() const { return ah; }
+		int getFBOID() const { return 0; }
 		GLFWwindow* underlying() { return window; }
 	protected:
 		bool testKey(int code);

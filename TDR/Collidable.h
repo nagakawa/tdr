@@ -20,6 +20,5 @@ namespace tdr {
     virtual bool check(const Circle& h) = 0;
     virtual bool check(const Line& h) = 0;
     virtual std::unique_ptr<CollisionIterator> iterator() const = 0;
-    virtual int collisionClass() { return -1; }
   };
 }

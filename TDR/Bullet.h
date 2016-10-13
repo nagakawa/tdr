@@ -105,8 +105,8 @@ namespace tdr {
 	};
 	class BulletList: public Collidable {
 	public:
-		BulletList(Playfield* p, agl::Texture shotsheet, int cc) :
-			p(p), shotsheet(shotsheet), cc(cc) {}
+		BulletList(Playfield* p, agl::Texture shotsheet) :
+			p(p), shotsheet(shotsheet) {}
 		void setUp();
 		void tick();
 		void update();
@@ -126,13 +126,11 @@ namespace tdr {
 			The pointer is valid until updatePositions is called again.
 		*/
 		Bullet* query(uint64_t id);
-    int collisionClass() { return cc; }
 		std::unique_ptr<CollisionIterator> iterator() const;
 	private:
 		std::vector<Bullet> bullets;
 		Playfield* p;
 		agl::Texture shotsheet;
-		int cc;
 		uint64_t highestID = 0;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
