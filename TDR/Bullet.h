@@ -83,10 +83,10 @@ namespace tdr {
 			markedForDeletion(false), useRadial(true),
 			detachVisualAndMovementAngles(false),
 			deleteWhenOutOfBounds(true), collides(true) {
-				hitbox.c.x = x;
-				hitbox.c.y = y;
-				hitbox.c.radius = graph.collisionRadius;
-			}
+			hitbox.c.x = x;
+			hitbox.c.y = y;
+			hitbox.c.radius = graph.collisionRadius;
+		}
 		// dummy constructor to allow resize() on vector<Bullet>
 		Bullet();
 	};
@@ -118,6 +118,12 @@ namespace tdr {
     bool check(const Line& h);
 		void updatePositions(const agl::IRect16& bounds);
 		void insert(Bullet& b);
+		void createShotA1(
+			fix1616 x, fix1616 y,
+			fix1616 speed, fix1616 angle,
+			Graphic& graph, uint8_t delay) {
+			bullets.emplace_back(x, y, speed, angle, graph, delay);
+		}
 		void graze(
 			const Circle& h,
 			std::function<void(Bullet&)> callback);
