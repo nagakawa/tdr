@@ -54,13 +54,13 @@ namespace tdr {
 		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
-		uint8_t markedForDeletion : 1;
+		bool markedForDeletion;
 		// If true, this bullet will base xs and ys from speed and angle.
 		// Otherwise, speed and angle depend on xs and ys.
-		uint8_t useRadial : 1;
-		uint8_t detachVisualAndMovementAngles : 1;
-		uint8_t deleteWhenOutOfBounds : 1;
-		uint8_t collides : 1;
+		bool useRadial;
+		bool detachVisualAndMovementAngles;
+		bool deleteWhenOutOfBounds;
+		bool collides;
 		// Simulates movement of the bullet.
 		void update();
 		// Self explanatory. Returns true if graze succeeded, or false if
@@ -79,9 +79,10 @@ namespace tdr {
 			xs(C_ZERO), ys(C_ZERO), xa(C_ZERO), ya(C_ZERO),
 			speed(speed), angle(angle), angularVelocity(C_ZERO),
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
-			texcoords(graph.texcoords), delay(delay), isLaser(0),
-			markedForDeletion(0), useRadial(1), detachVisualAndMovementAngles(0),
-			deleteWhenOutOfBounds(1), collides(1) {
+			texcoords(graph.texcoords), delay(delay), isLaser(false),
+			markedForDeletion(false), useRadial(true),
+			detachVisualAndMovementAngles(false),
+			deleteWhenOutOfBounds(true), collides(true) {
 				hitbox.c.x = x;
 				hitbox.c.y = y;
 				hitbox.c.radius = graph.collisionRadius;

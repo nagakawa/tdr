@@ -155,7 +155,7 @@ void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 				b.hitbox.c.x > bounds.right ||
 				b.hitbox.c.y < bounds.top ||
 				b.hitbox.c.y > bounds.bottom))
-			b.markedForDeletion = 1;
+			b.markedForDeletion = true;
 	}
 	// Remove marked bullets from list
 	unsigned int ahead = 0;
