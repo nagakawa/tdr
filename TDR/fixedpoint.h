@@ -7,6 +7,8 @@ namespace tdr {
     int32_t u;
   	fix1616 operator+(fix1616 b) const;
   	fix1616 operator-(fix1616 b) const;
+    fix1616 addWrap(fix1616 b) const;
+  	fix1616 subWrap(fix1616 b) const;
     fix1616 operator-() const;
     fix1616 operator+=(fix1616 b);
   	fix1616 operator-=(fix1616 b);

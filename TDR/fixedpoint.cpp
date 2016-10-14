@@ -22,6 +22,12 @@ fix1616 tdr::fix1616::operator-(fix1616 b) const {
 		return { ((int32_t) ABYSS) };
 	return { u - b.u };
 }
+fix1616 tdr::fix1616::addWrap(fix1616 b) const {
+  return { (int64_t) ((uint64_t) u + (uint64_t) b.u) };
+}
+fix1616 tdr::fix1616::subWrap(fix1616 b) const {
+  return { (int64_t) ((uint64_t) u - (uint64_t) b.u) };
+}
 fix1616 tdr::fix1616::operator-() const {
 	if (u == ABYSS) return { CELESTIAL };
   else return { -u };
