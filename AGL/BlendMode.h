@@ -18,4 +18,5 @@ namespace agl {
 	extern const BlendMode BM_SUBTRACT;
 	extern const BlendMode BM_MULTIPLY;
 	extern const BlendMode BM_SCREEN;
+	extern const BlendMode BM_SHADOW;
 }
