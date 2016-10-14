@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 			10,000 bullets, you probably shouldn't have much problem with this,
 			even when accounting for other things that are going on.
 		*/
-		i.u += 0x1000000;
+		i = i.addWrap({0x1000000});
 	} while (i != tdr::C_ZERO);
 	printf("sizeof(tdr::Bullet) = %lu\n", sizeof(tdr::Bullet));
 }
