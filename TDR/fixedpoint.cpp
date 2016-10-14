@@ -8,19 +8,19 @@ fix1616 tdr::clamp(fix1616 x, fix1616 a, fix1616 b) {
   return max(a, min(b, x));
 }
 
-fix1616 tdr::fix1616::operator+(fix1616 b) const {
-	if (b.u > 0 && ((int32_t) CELESTIAL) - b.u < u)
+fix1616 tdr::operator+(fix1616 a,fix1616 b) {
+	if (b.u > 0 && ((int32_t) CELESTIAL) - b.u < a.u)
 		return { (int32_t) CELESTIAL };
-	if (b.u < 0 && ((int32_t) ABYSS) - b.u > u)
+	if (b.u < 0 && ((int32_t) ABYSS) - b.u > a.u)
 		return { ((int32_t) ABYSS) };
-	return { u + b.u };
+	return { a.u + b.u };
 }
-fix1616 tdr::fix1616::operator-(fix1616 b) const {
-	if (b.u > 0 && -((int32_t) CELESTIAL) + b.u < u)
+fix1616 tdr::operator-(fix1616 a,fix1616 b) {
+	if (b.u > 0 && -((int32_t) CELESTIAL) + b.u < a.u)
 		return { -(int32_t) CELESTIAL };
-	if (b.u < 0 && ((int32_t) ABYSS) + b.u > u)
+	if (b.u < 0 && ((int32_t) ABYSS) + b.u > a.u)
 		return { ((int32_t) ABYSS) };
-	return { u - b.u };
+	return { a.u - b.u };
 }
 fix1616 tdr::fix1616::addWrap(fix1616 b) const {
   return { (int32_t) ((uint32_t) u + (uint32_t) b.u) };
@@ -28,64 +28,80 @@ fix1616 tdr::fix1616::addWrap(fix1616 b) const {
 fix1616 tdr::fix1616::subWrap(fix1616 b) const {
   return { (int32_t) ((uint32_t) u - (uint32_t) b.u) };
 }
-fix1616 tdr::fix1616::operator-() const {
-	if (u == ABYSS) return { CELESTIAL };
-  else return { -u };
+fix1616 tdr::operator-(fix1616 a) {
+	if (a.u == ABYSS) return { CELESTIAL };
+  else return { -a.u };
 }
-fix1616 tdr::fix1616::operator*(fix1616 b) const {
-	int64_t prod = (((int64_t) u) * b.u) >> 16;
+fix1616 tdr::operator*(fix1616 a, fix1616 b) {
+	int64_t prod = (((int64_t) a.u) * b.u) >> 16;
 	if (prod >= 0x100000000) prod = CELESTIAL;
 	if (prod < -((int64_t) 0x100000000)) prod = ((int64_t) ABYSS);
 	return { (int32_t) prod };
 }
-fix1616 tdr::fix1616::operator/(fix1616 b) const {
-	int64_t aex = (((int64_t) u) << 16);
+fix1616 tdr::operator/(fix1616 a, fix1616 b) {
+	int64_t aex = (((int64_t) a.u) << 16);
 	int64_t res = aex / b.u;
 	if (res > CELESTIAL) return { CELESTIAL };
 	if (res < ABYSS) return { ABYSS };
 	return { (int32_t) res };
 }
 
-bool tdr::fix1616::operator==(fix1616 b) const {
-	return u == b.u;
+bool tdr::operator==(fix1616 a, fix1616 b) {
+	return a.u == b.u;
 }
 
-bool tdr::fix1616::operator!=(fix1616 b) const {
-	return u != b.u;
+bool tdr::operator!=(fix1616 a, fix1616 b) {
+	return a.u != b.u;
 }
 
-bool tdr::fix1616::operator<(fix1616 b) const {
-	return u < b.u;
+bool tdr::operator<(fix1616 a, fix1616 b) {
+	return a.u < b.u;
 }
 
-bool tdr::fix1616::operator>(fix1616 b) const {
-	return u > b.u;
+bool tdr::operator>(fix1616 a, fix1616 b) {
+	return a.u > b.u;
 }
 
-bool tdr::fix1616::operator>=(fix1616 b) const {
-	return u >= b.u;
+bool tdr::operator>=(fix1616 a, fix1616 b) {
+	return a.u >= b.u;
 }
 
-bool tdr::fix1616::operator==(int b) const {
+bool tdr::operator==(fix1616 a, int b) {
 	if (b < -0x8000 || b >= 0x8000) return false;
-  return (b << 16) == u;
+  return (b << 16) == a.u;
 }
 
-bool tdr::fix1616::operator!=(int b) const {
+bool tdr::operator!=(fix1616 a, int b) {
 	if (b < -0x8000 || b >= 0x8000) return true;
-  return (b << 16) != u;
+  return (b << 16) != a.u;
 }
 
-bool tdr::fix1616::operator<(int b) const {
+bool tdr::operator<(fix1616 a, int b) {
   if (b < -0x8000) return false;
   if (b >= 0x8000) return true;
-  return (b << 16) < u;
+  return (b << 16) < a.u;
 }
 
-bool tdr::fix1616::operator>(int b) const {
+bool tdr::operator>(fix1616 a, int b) {
   if (b < -0x8000) return true;
   if (b >= 0x8000) return false;
-  return (b << 16) > u;
+  return (b << 16) > a.u;
+}
+
+bool tdr::operator==(int a, fix1616 b) {
+  return b == a;
+}
+
+bool tdr::operator!=(int a, fix1616 b) {
+  return b != a;
+}
+
+bool tdr::operator<(int a, fix1616 b) {
+  return b > a;
+}
+
+bool tdr::operator>(int a, fix1616 b) {
+  return b < a;
 }
 
 fix1616 tdr::fix1616::operator+=(fix1616 b) {

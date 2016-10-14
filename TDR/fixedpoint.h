@@ -5,26 +5,30 @@
 namespace tdr {
   struct fix1616 {
     int32_t u;
-  	fix1616 operator+(fix1616 b) const;
-  	fix1616 operator-(fix1616 b) const;
     fix1616 addWrap(fix1616 b) const;
   	fix1616 subWrap(fix1616 b) const;
-    fix1616 operator-() const;
-    fix1616 operator+=(fix1616 b);
-  	fix1616 operator-=(fix1616 b);
-  	fix1616 operator*(fix1616 b) const;
-  	fix1616 operator/(fix1616 b) const;
     fix1616 operator=(int b);
-  	bool operator==(fix1616 b) const;
-    bool operator!=(fix1616 b) const;
-  	bool operator<(fix1616 b) const;
-    bool operator>(fix1616 b) const;
-    bool operator>=(fix1616 b) const;
-    bool operator==(int b) const;
-    bool operator!=(int b) const;
-  	bool operator<(int b) const;
-    bool operator>(int b) const;
+    fix1616 operator+=(fix1616 b);
+    fix1616 operator-=(fix1616 b);
   };
+  fix1616 operator+(fix1616 a, fix1616 b);
+  fix1616 operator-(fix1616 a, fix1616 b);
+  fix1616 operator-(fix1616 a);
+  fix1616 operator*(fix1616 a, fix1616 b);
+  fix1616 operator/(fix1616 a, fix1616 b);
+  bool operator==(fix1616 a, fix1616 b);
+  bool operator!=(fix1616 a, fix1616 b);
+  bool operator<(fix1616 a, fix1616 b);
+  bool operator>(fix1616 a, fix1616 b);
+  bool operator>=(fix1616 a, fix1616 b);
+  bool operator==(fix1616 a, int b);
+  bool operator!=(fix1616 a, int b);
+  bool operator<(fix1616 a, int b);
+  bool operator>(fix1616 a, int b);
+  bool operator==(int a, fix1616 b);
+  bool operator!=(int a, fix1616 b);
+  bool operator<(int a, fix1616 b);
+  bool operator>(int a, fix1616 b);
   #define CELESTIAL 0x7FFFFFFF
 	#define ABYSS ((int32_t) 0x80000000)
 	bool isWithin(fix1616 x, fix1616 y, fix1616 r);
