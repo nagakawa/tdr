@@ -236,10 +236,10 @@ void tdr::sincos(fix1616 t, int32_t& c, int32_t& s) {
 
 // Calculating atan2 using CORDIC
 void tdr::rectp(fix1616 c, fix1616 s, fix1616& r, fix1616& t) {
-  if (c < C_ZERO) {
-    rectp(-c, -s, r, t);
-    t.u += ABYSS;
-    return;
+  bool inv = c < C_ZERO;
+  if (inv) {
+    c = -c;
+    s = -s;
   }
   int64_t angle = 0;
 	// vx and vy use 16.16 format
@@ -264,4 +264,5 @@ void tdr::rectp(fix1616 c, fix1616 s, fix1616& r, fix1616& t) {
     r.u = (((int64_t) vx) * intermediateK[i]) >> 30;
   else
     r.u = (((int64_t) vx) * CORDIC_K) >> 30;
+  if (inv) t.u = (int32_t) (((uint32_t) t.u) + 0x80000000);
 }
