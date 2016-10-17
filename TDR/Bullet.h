@@ -106,7 +106,7 @@ namespace tdr {
 	};
 	class BulletList: public Collidable {
 	public:
-		BulletList(Playfield* p, agl::Texture shotsheet) :
+		BulletList(std::shared_ptr<Playfield> p, agl::Texture shotsheet) :
 			p(p), shotsheet(shotsheet) {}
 		void setUp();
 		void tick();
@@ -134,7 +134,7 @@ namespace tdr {
 		std::unique_ptr<CollisionIterator> iterator() const;
 	private:
 		std::vector<Bullet> bullets;
-		Playfield* p;
+		std::shared_ptr<Playfield> p;
 		agl::Texture shotsheet;
 		uint64_t highestID = 0;
 		agl::VBO vbo;

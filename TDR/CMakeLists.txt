@@ -21,6 +21,7 @@ SET(TDR_library_SRCS
   hitbox.cpp
   CollisionRegistrar.cpp
   CollisionIterator.cpp
+  Game.cpp
 )
 
 # Headers:
@@ -35,6 +36,7 @@ SET(TDR_library_HDRS
     hitbox.h
     CollisionIterator.h
     CollisionRegistrar.h
+    Game.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
