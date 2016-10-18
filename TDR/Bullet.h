@@ -104,6 +104,14 @@ namespace tdr {
     const Circle& getCircle() const { return contents().hitbox.c; }
     const Line& getLine() const { return contents().hitbox.l; }
 	};
+	// TODO: support multiple render passes for BulletList
+	// This will be useful not only for avoiding multiple BulletLists if
+	// we wish to have bullets of different blend modes, but also handle
+	// the case where a bullet must be rendered with different blend modes.
+	// These cases are seen in:
+	// * the TLB of Book of Star Mythology -- the first phase has black
+	//   bullets (ALPHA) with white auras around them (ADD)
+	// (any other examples?)
 	class BulletList: public Collidable {
 	public:
 		BulletList(std::shared_ptr<Playfield> p, agl::Texture shotsheet) :

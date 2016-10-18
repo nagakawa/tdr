@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 #include <functional>
 #include <vector>
 
@@ -7,27 +9,35 @@
 
 namespace tdr {
   typedef std::function<void(Collidable*, Collidable*)> CollisionCallback;
+  class CollisionRegistrar;
   struct CollisionPair {
-    Collidable* c1;
-    Collidable* c2;
     CollisionCallback cback;
-    void perform() {
-      cback(c1, c2);
-    }
+    uint16_t i1, i2;
+    friend void perform(CollisionPair& p, CollisionRegistrar& registrar);
   };
   class CollisionRegistrar {
   public:
+    template<typename C>
+    uint16_t registerCollidable(C* c) {
+      uint16_t size = (uint16_t) collidables.size();
+      if (size == 0xFFFF) throw "This registrar is full; no more elements can be registered";
+      collidables.push_back(static_cast<Collidable*>(c));
+      return size;
+    }
     template<typename C1, typename C2>
-    void registerCallback(C1* c1, C2* c2, std::function<void(C1, C2)> cback) {
+    void registerCallback(uint16_t i1, uint16_t i2, std::function<void(C1*, C2*)> cback) {
       CollisionPair p;
-      p.c1 = (Collidable) c1;
-      p.c2 = (Collidable) c2;
+      p.i1 = i1;
+      p.i2 = i2;
       p.cback = cback;
       callbacks.push_back(p);
     }
     void performAll();
+    friend void perform(CollisionPair& p, CollisionRegistrar& registrar);
   private:
     //std::unordered_multimap<int, Collidable*> collidables;
     std::vector<CollisionPair> callbacks;
+    std::vector<Collidable*> collidables;
   };
+  void perform(CollisionPair& p, CollisionRegistrar& registrar);
 }

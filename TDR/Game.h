@@ -12,10 +12,11 @@ namespace tdr {
   public:
     Game(int w, int h, int aw = 0, int ah = 0);
     ~Game();
-    void setTexture(std::shared_ptr<agl::Texture> texture);
+    void setTexture(std::shared_ptr<agl::Texture> shotsheet);
   private:
     std::shared_ptr<Playfield> p;
     std::unique_ptr<CollisionRegistrar> registrar;
     std::shared_ptr<agl::Texture> t;
   };
 }
+

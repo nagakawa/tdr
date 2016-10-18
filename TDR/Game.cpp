@@ -10,7 +10,7 @@ tdr::Game::Game(int w, int h, int aw, int ah) {
 tdr::Game::~Game() {
 }
 
-void tdr::Game::setTexture(std::shared_ptr<agl::Texture> texture) {
-  t = texture;
+void tdr::Game::setTexture(std::shared_ptr<agl::Texture> shotsheet) {
+  t = shotsheet;
 }
 
