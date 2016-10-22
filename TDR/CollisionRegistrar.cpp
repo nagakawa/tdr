@@ -7,5 +7,5 @@ void tdr::CollisionRegistrar::performAll() {
 }
 
 void tdr::perform(CollisionPair& p, CollisionRegistrar& registrar) {
-  p.cback(registrar.collidables[p.i1], registrar.collidables[p.i2]);
+  p.cback(*registrar.collidables[p.i1], *registrar.collidables[p.i2]);
 }

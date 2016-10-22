@@ -14,3 +14,7 @@ void tdr::Game::setTexture(std::shared_ptr<agl::Texture> shotsheet) {
   t = shotsheet;
 }
 
+CRHandle tdr::Game::registerBulletList() {
+  std::unique_ptr<BulletList> entry(new BulletList(p, t));
+  return registrar->registerCollidable(std::move(entry));
+}

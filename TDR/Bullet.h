@@ -114,7 +114,9 @@ namespace tdr {
 	// (any other examples?)
 	class BulletList: public Collidable {
 	public:
-		BulletList(std::shared_ptr<Playfield> p, agl::Texture shotsheet) :
+		BulletList(
+				std::shared_ptr<Playfield> p,
+				std::shared_ptr<agl::Texture> shotsheet) :
 			p(p), shotsheet(shotsheet) {}
 		void setUp();
 		void tick();
@@ -143,7 +145,7 @@ namespace tdr {
 	private:
 		std::vector<Bullet> bullets;
 		std::shared_ptr<Playfield> p;
-		agl::Texture shotsheet;
+		std::shared_ptr<agl::Texture> shotsheet;
 		uint64_t highestID = 0;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
