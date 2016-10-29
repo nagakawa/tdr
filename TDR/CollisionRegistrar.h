@@ -28,13 +28,13 @@ namespace tdr {
   class CollisionRegistrar {
   public:
     template<typename C>
-    CRHandle registerCollidable(std::unique_ptr<C> c) {
+    CRHandle registerCollidable(std::shared_ptr<C> c) {
       CRHandle size = (CRHandle) collidables.size();
       if (size == MAX_CR_ENTRIES) throw "This registrar is full; no more elements can be registered";
       // We use &* here to convert the unique_ptr to a raw pointer, so we can
       // convert it back to a type-erased unique_ptr without having the
       // compiler complain. And yes, we really want to do this.
-      collidables.push_back(std::unique_ptr<Collidable>(&*c));
+      collidables.push_back(std::shared_ptr<Collidable>(&*c));
       return size;
     }
     template<typename C1, typename C2>
@@ -50,7 +50,7 @@ namespace tdr {
   private:
     //std::unordered_multimap<int, Collidable*> collidables;
     std::vector<CollisionPair> callbacks;
-    std::vector<std::unique_ptr<Collidable>> collidables;
+    std::vector<std::shared_ptr<Collidable>> collidables;
   };
   void perform(CollisionPair& p, CollisionRegistrar& registrar);
 }
