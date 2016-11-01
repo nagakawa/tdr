@@ -9,3 +9,7 @@ void tdr::CollisionRegistrar::performAll() {
 void tdr::perform(CollisionPair& p, CollisionRegistrar& registrar) {
   p.cback(*registrar.collidables[p.i1], *registrar.collidables[p.i2]);
 }
+
+void tdr::CollisionRegistrar::updateAll() {
+  for (std::shared_ptr<Collidable> c : collidables) c->update();
+}

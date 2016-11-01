@@ -27,6 +27,8 @@ namespace tdr {
   };
   class CollisionRegistrar {
   public:
+    // Note that once the Collidable is registered, you should not explicitly
+    // update() it; instead, you should be using the updateAll() method.
     template<typename C>
     CRHandle registerCollidable(std::shared_ptr<C> c) {
       CRHandle size = (CRHandle) collidables.size();
@@ -46,6 +48,7 @@ namespace tdr {
       callbacks.push_back(p);
     }
     void performAll();
+    void updateAll();
     friend void perform(CollisionPair& p, CollisionRegistrar& registrar);
   private:
     //std::unordered_multimap<int, Collidable*> collidables;
