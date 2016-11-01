@@ -53,11 +53,11 @@ void main() { \n\
 const char* tdr::BL_FRAGMENT_SOURCE = "\
 #version 330 core \n\
 in vec2 texCoord; \n\
-out vec4 color; \n\
+out vec4 colour; \n\
 uniform sampler2D tex; \n\
 \n\
 void main() { \n\
-	color = texture(tex, texCoord); \n\
+	colour = texture(tex, texCoord); \n\
 } \
 ";
 

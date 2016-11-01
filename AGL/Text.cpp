@@ -22,10 +22,10 @@ const char* agl::TXT_FRAGMENT_SOURCE = "\
 #version 330 core \n\
 in vec2 texCoord; \n\
 in vec2 texSize; \n\
-out vec4 color; \n\
+out vec4 colour; \n\
 uniform sampler2D tex; \n\
-uniform vec4 topColor; \n\
-uniform vec4 bottomColor; \n\
+uniform vec4 topColour; \n\
+uniform vec4 bottomColour; \n\
 uniform float scale; \n\
 \n\
 void main() { \n\
@@ -41,7 +41,7 @@ void main() { \n\
 	a = a  + (av - 0.5) * (1 - a); \n"
 #endif
 "	a = clamp(a, 0, 1); \n\
-	color = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColor, topColor, texCoord.y); \n\
+	colour = vec4(texture(tex, texCoord).rgb, a) * mix(bottomColour, topColour, texCoord.y); \n\
 } \
 ";
 
@@ -53,7 +53,7 @@ Text::Text() {
 	size = 1;
 	app = nullptr;
 	hasInitializedProgram = false;
-	topColor = bottomColor = glm::vec4(0, 0, 0, 1);
+	topColour = bottomColour = glm::vec4(0, 0, 0, 1);
 	position = glm::vec2(0, 0);
 	font = "VL Gothic";
 	texture->bind();
@@ -109,8 +109,8 @@ void agl::Text::tick() {
 	SETUNSP2(program, 2f, "topLeft", position.x, position.y);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) width, (GLfloat) height);
 	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
-	SETUNSPV(program, 4fv, "topColor", (GLfloat*) &topColor);
-	SETUNSPV(program, 4fv, "bottomColor", (GLfloat*) &bottomColor);
+	SETUNSPV(program, 4fv, "topColour", (GLfloat*) &topColour);
+	SETUNSPV(program, 4fv, "bottomColour", (GLfloat*) &bottomColour);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	resetVAO();
 }

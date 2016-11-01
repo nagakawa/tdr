@@ -49,13 +49,13 @@ namespace agl {
 		void setUp();
 		void tick();
 		void update();
-		glm::vec4 getTopColor() { return topColor; }
-		void setTopColor(glm::vec4 col) { topColor = col; }
-		glm::vec4 getBottomColor() { return bottomColor; }
-		void setBottomColor(glm::vec4 col) { bottomColor = col; }
-		void setColor(glm::vec4 col) {
-			topColor = col;
-			bottomColor = col;
+		glm::vec4 getTopColour() { return topColour; }
+		void setTopColour(glm::vec4 col) { topColour = col; }
+		glm::vec4 getBottomColour() { return bottomColour; }
+		void setBottomColour(glm::vec4 col) { bottomColour = col; }
+		void setColour(glm::vec4 col) {
+			topColour = col;
+			bottomColour = col;
 		}
 		glm::vec2 getPosition() { return position; }
 		bool isRich() { return rich; }
@@ -73,8 +73,8 @@ namespace agl {
 		unsigned int width, height;
 		Dimensional* app;
 		bool hasInitializedProgram;
-		glm::vec4 topColor;
-		glm::vec4 bottomColor;
+		glm::vec4 topColour;
+		glm::vec4 bottomColour;
 		glm::vec2 position;
 		std::string font;
 		unsigned int margin;

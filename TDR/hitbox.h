@@ -12,6 +12,7 @@ namespace tdr {
     // Scratch that. It's a RECTANGLE.
     // Note: length is actually half the actual length;
     // i. e. the distance from the midpoint to one of the endpoints.
+    // (x, y) is the midpoint of the line segment.
     fix1616 x, y, angle, width, length;
   };
   bool doCirclesIntersect(const Circle& h1, const Circle& h2);
