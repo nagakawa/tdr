@@ -33,7 +33,7 @@ Sprite2D::Sprite2D(std::shared_ptr<Texture> t) {
 	texture = t;
 	app = nullptr;
 	hasSetUniforms = false;
-	hasInitializedProgram = false;
+	hasInitialisedProgram = false;
 }
 
 Sprite2D::~Sprite2D() {
@@ -47,7 +47,7 @@ void agl::Sprite2D::setUp() {
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link(); // There you go!
-	hasInitializedProgram = true;
+	hasInitialisedProgram = true;
 	vao.setActive();
 	// Vertex data
 	vbo.feedData(sizeof(rectangleVertices), (void*) rectangleVertices, GL_DYNAMIC_DRAW);
@@ -96,7 +96,7 @@ void agl::Sprite2D::update() {
 int agl::Sprite2D::addSprite(Sprite2DInfo loc) {
 	int size = sprites.size();
 	sprites.push_back(loc);
-	if (hasInitializedProgram) update();
+	if (hasInitialisedProgram) update();
 	return size;
 }
 

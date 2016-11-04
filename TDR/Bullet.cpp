@@ -69,7 +69,7 @@ void tdr::BulletList::setUp() {
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link();
-	hasInitializedProgram = true;
+	hasInitialisedProgram = true;
 	vao.setActive();
 	// Vertex data
 	vbo.feedData(sizeof(agl::rectangleVertices), (void*) agl::rectangleVertices, GL_DYNAMIC_DRAW);

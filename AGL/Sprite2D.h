@@ -50,6 +50,6 @@ namespace agl {
 		std::vector<Sprite2DInfo> sprites;
 		Dimensional* app;
 		bool hasSetUniforms;
-		bool hasInitializedProgram;
+		bool hasInitialisedProgram;
 	};
 }

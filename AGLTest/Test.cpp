@@ -71,7 +71,7 @@ private:
 class AGLTest : public agl::GLFWApplication {
 public:
 	using agl::GLFWApplication::GLFWApplication;
-	void initialize() {
+	void initialise() {
 		std::cout << "hi\n";
 		agl::FBOTexMS ft = agl::makeFBOForMeMS(800, 600);
 		fboTex = ft.ss.texture;

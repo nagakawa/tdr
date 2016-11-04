@@ -152,7 +152,7 @@ namespace tdr {
 		agl::VAO vao;
 		agl::ShaderProgram program;
 		bool hasSetUniforms;
-		bool hasInitializedProgram;
+		bool hasInitialisedProgram;
 		void setUniforms();
 	};
 }

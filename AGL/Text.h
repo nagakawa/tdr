@@ -72,7 +72,7 @@ namespace agl {
 		std::string text;
 		unsigned int width, height;
 		Dimensional* app;
-		bool hasInitializedProgram;
+		bool hasInitialisedProgram;
 		glm::vec4 topColour;
 		glm::vec4 bottomColour;
 		glm::vec2 position;

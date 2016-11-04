@@ -52,7 +52,7 @@ Text::Text() {
 	margin = 999;
 	size = 1;
 	app = nullptr;
-	hasInitializedProgram = false;
+	hasInitialisedProgram = false;
 	topColour = bottomColour = glm::vec4(0, 0, 0, 1);
 	position = glm::vec2(0, 0);
 	font = "VL Gothic";
@@ -85,7 +85,7 @@ void agl::Text::setUp() {
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link(); // There you go!
-	hasInitializedProgram = true;
+	hasInitialisedProgram = true;
 	vao.setActive();
 	// Vertex data
 	vbo.feedData(sizeof(rectangleVertices), (void*) rectangleVertices, GL_DYNAMIC_DRAW);

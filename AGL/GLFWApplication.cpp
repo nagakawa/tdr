@@ -92,7 +92,7 @@ GLFWApplication::GLFWApplication(
 	glfwMakeContextCurrent(window);
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK) {
-		throw u8"Failed to initialize GLEW";
+		throw u8"Failed to initialise GLEW";
 	}
 	glGetError();
 	if (debug) {
@@ -100,7 +100,7 @@ GLFWApplication::GLFWApplication(
 		GLint flags;
 		glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 		if (flags & GL_CONTEXT_FLAG_DEBUG_BIT || glMajor >= 5 || (glMajor == 4 && glMinor >= 3)) {
-		    // initialize debug output
+		    // initialise debug output
 				glEnable(GL_DEBUG_OUTPUT);
 		    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		    glDebugMessageCallback(glDebugOutput, nullptr);
@@ -137,7 +137,7 @@ inline void wait(double t) {
 
 void GLFWApplication::start() {
 	currentTime = glfwGetTime();
-	initialize();
+	initialise();
 	while (!glfwWindowShouldClose(window)) {
 		GLdouble prevTime = currentTime;
 		currentTime = glfwGetTime();
@@ -169,7 +169,7 @@ GLFWApplication::~GLFWApplication() {
 	glfwTerminate();
 }
 
-void GLFWApplication::initialize() {
+void GLFWApplication::initialise() {
 	return;
 }
 

@@ -40,7 +40,7 @@ namespace agl {
 			);
 		void start();
 		virtual ~GLFWApplication();
-		virtual void initialize();
+		virtual void initialise();
 		virtual void tick();
 		virtual void readKeys();
 		virtual void onMouse(double xpos, double ypos);
