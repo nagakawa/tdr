@@ -17,6 +17,7 @@ namespace tdr {
     ~Game();
     void setTexture(std::shared_ptr<agl::Texture> shotsheet);
     CRHandle registerBulletList(std::shared_ptr<BulletList>& bl);
+    void update();
   private:
     std::shared_ptr<Playfield> p;
     std::unique_ptr<CollisionRegistrar> registrar;

@@ -19,3 +19,7 @@ CRHandle tdr::Game::registerBulletList(std::shared_ptr<BulletList>& bl) {
   bl = entry;
   return registrar->registerCollidable(entry);
 }
+
+void tdr::Game::update() {
+  registrar->updateAll();
+}
