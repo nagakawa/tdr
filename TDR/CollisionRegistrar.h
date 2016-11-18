@@ -44,7 +44,7 @@ namespace tdr {
       CollisionPair p;
       p.i1 = i1;
       p.i2 = i2;
-      p.cback = static_cast<std::function<void(C1&, C2&)>> (cback);
+      p.cback = *((std::function<void(Collidable&, Collidable&)>*) &cback);
       callbacks.push_back(p);
     }
     void performAll();
