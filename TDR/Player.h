@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "Collidable.h"
 #include "CollisionIterator.h"
+#include "fixedpoint.h"
 #include "hitbox.h"
 
 namespace tdr {
@@ -24,6 +25,7 @@ namespace tdr {
   };
   class Player : public Collidable {
   public:
+    Player(fix1616 x, fix1616 y, fix1616 r = { 0x18000 });
     std::unique_ptr<CollisionIterator> iterator() const;
     // How many objects there are to check collision for.
     int count() { return 1; }
@@ -32,6 +34,7 @@ namespace tdr {
     bool check(const Circle& h) { return doCirclesIntersect(h, hitbox); }
     bool check(const Line& h) { return doCircleAndLineIntersect(hitbox, h); }
     const Circle& getHitbox() const { return hitbox; }
+    PlayerState& getState() { return state; }
   private:
     Circle hitbox;
     PlayerState state;
