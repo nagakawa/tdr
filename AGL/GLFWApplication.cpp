@@ -157,10 +157,11 @@ void GLFWApplication::start() {
 			cumulDelta = 0;
 		}
 		currentApp = this;
-		glfwPollEvents();
+		glfwWaitEvents();
 		readKeys();
 		tick();
 		glfwSwapBuffers(window);
+		glFinish();
 	}
 	delete this;
 }

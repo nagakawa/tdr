@@ -41,9 +41,7 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
   size_t size = 0;
   while (true) {
     long read = ov_read_float(&vf, &data, 4096, &currentSection);
-    std::cout << "Read " << read << " samples from section #" << currentSection << "\n";
     if (size + read > capacity) {
-      std::cout << "Resizing to " << (capacity << 1) << '\n';
       float* newSamples = new float[capacity << 1];
       memcpy(newSamples, samples, capacity * sizeof(float));
       delete[] samples;
