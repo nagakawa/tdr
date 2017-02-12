@@ -25,6 +25,8 @@ SET(AGL_library_SRCS
     cairoutil.cpp
     FBO.cpp
     Dimensional.cpp
+    sound/Sound.cpp
+    sound/Mixer.cpp
 )
 
 # Headers:
@@ -49,6 +51,8 @@ SET(AGL_library_HDRS
     FBO.h
     debug.h
     Dimensional.h
+    sound/Sound.h
+    sound/Mixer.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

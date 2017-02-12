@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for word in I will shank your fuck king mom; do
+	espeak $word -w $word.wav
+	ffmpeg -y -i $word.wav -c:a libvorbis -qscale:a 5 $word.ogg 2> /dev/null
+done
