@@ -2,13 +2,15 @@
 
 using namespace agl;
 
-void agl::Mixer::addSound(int index, const Sound&& s) {
+const size_t defaultRate = 44100;
+
+void agl::Mixer::addSound(int index, Sound&& s) {
   if (sounds.count(index) != 0) throw "Already a sound at index";
   sounds[index] = std::move(s);
 }
 
 int agl::Mixer::playSound(int index, float volume) {
-  MixerEntry m = { index, volume, 0 };
+  MixerEntry m = { index, volume, 0, 0.0f };
   entries[handleCount] = m;
   return handleCount++;
 }
@@ -19,11 +21,20 @@ void agl::Mixer::advance(unsigned long n, float* output) {
   for (auto it = entries.begin(); it != entries.end();) {
     MixerEntry& me = it->second;
     const Sound& s = sounds[me.key];
+    float ratio = ((float) s.samplesPerSecond) / defaultRate;
     for (unsigned long i = 0; i < n; ++i) {
-      if (me.curr + i >= s.sampleCount) break;
-      output[i] += s.samples[me.curr + i] * me.volume;
+      float prog = i * ratio;
+      size_t iprog = (size_t) prog;
+      float frac = prog - iprog;
+      if (iprog > s.sampleCount - me.curr - 1) break;
+      float curr = s.samples[me.curr + iprog];
+      float next = s.samples[me.curr + iprog + 1];
+      output[i] += (curr * frac + next * (1 - frac)) * me.volume;
     }
-    me.curr += n;
+    me.interm += ((float) n) * ratio;
+    size_t adv = (size_t) me.interm;
+    me.interm -= adv;
+    me.curr += adv;
     if (me.curr >= s.sampleCount)
       it = entries.erase(it);
     else ++it;
@@ -43,23 +54,23 @@ int agl::mixerCallback(
   mixer->advance(frameCount, out);
   return 0;
 }
-
+#include <iostream>
 void agl::Mixer::regist() {
     PaError err;
     /* Open an audio I/O stream. */
     err = Pa_OpenDefaultStream(
       &stream,
       0,
-      2,
+      1,
       paFloat32,
-      48000,
+      defaultRate,
       paFramesPerBufferUnspecified,
       mixerCallback,
       (void*) this
     );
-    if (err != paNoError) throw "Couldn't register mixer to PortAudio.";
+    if (err != paNoError) throw "Couldn't open PortAudio stream.";
     err = Pa_StartStream(stream);
-    if (err != paNoError) throw "Couldn't register mixer to PortAudio.";
+    if (err != paNoError) throw "Couldn't start stream.";
 }
 
 void agl::Mixer::stop() {

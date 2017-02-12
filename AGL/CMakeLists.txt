@@ -27,6 +27,7 @@ SET(AGL_library_SRCS
     Dimensional.cpp
     sound/Sound.cpp
     sound/Mixer.cpp
+    sound/Reader.cpp
 )
 
 # Headers:
@@ -53,6 +54,7 @@ SET(AGL_library_HDRS
     Dimensional.h
     sound/Sound.h
     sound/Mixer.h
+    sound/Reader.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

@@ -11,10 +11,11 @@ namespace agl {
     int key;
     float volume;
     size_t curr;
+    float interm;
   };
   class Mixer {
   public:
-    void addSound(int index, const Sound&& s);
+    void addSound(int index, Sound&& s);
     int playSound(int index, float volume = 1.0);
     void advance(unsigned long n, float* output);
     void regist();

@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+// PA
+#include <portaudio.h>
 
 #include "Test.h"
 #include "GLFWApplication.h"
@@ -23,6 +25,9 @@
 #include "Text.h"
 #include "FBO.h"
 #include "debug.h"
+#include "sound/Mixer.h"
+#include "sound/Reader.h"
+#include "sound/Sound.h"
 
 // Others
 #include <iostream>
@@ -67,6 +72,12 @@ private:
 #define DIGIT_HEIGHT 18
 #define DIGIT_BASEX 16
 #define DIGIT_BASEY 230
+
+#define NUM_WORDS 7
+const char* fnames[NUM_WORDS] = {
+	"sounds/I.ogg", "sounds/will.ogg", "sounds/shank.ogg", "sounds/your.ogg",
+	"sounds/fuck.ogg", "sounds/king.ogg", "sounds/mom.ogg"
+};
 
 class AGLTest : public agl::GLFWApplication {
 public:
@@ -127,6 +138,13 @@ public:
 			{640, 0, 800, 120}
 		});
 		view->setUp();
+		for (int i = 0; i < NUM_WORDS; ++i) {
+			mixer.addSound(i, std::move(agl::Sound(fnames[i])));
+			wasPressed[i] = false;
+		}
+		PaError stat = Pa_Initialize();
+		if (stat != paNoError) throw "Failed to initialise PortAudio.";
+		mixer.regist();
 		//setVSyncEnable(false);
 	}
 	bool ff = true;
@@ -174,6 +192,13 @@ public:
 		// Slider controls
 		if (testKey(GLFW_KEY_UP)) mix += 0.005f;
 		if (testKey(GLFW_KEY_DOWN)) mix -= 0.005f;
+		for (int i = 0; i < NUM_WORDS; ++i) {
+			bool t = testKey(GLFW_KEY_1 + i);
+			if (t && !wasPressed[i]) {
+				mixer.playSound(i, 1);
+				wasPressed[i] = true;
+			} else if (!t) wasPressed[i] = false;
+		}
 	}
 	void onMouse(double xpos, double ypos) {
 		if (firstMouse) {
@@ -206,6 +231,8 @@ public:
 		delete sprites;
 		delete fy;
 		delete view;
+		mixer.stop();
+		Pa_Terminate();
 	}
 	GLfloat getMix() { return mix; }
 	GLfloat mix = 0.0f;
@@ -235,6 +262,8 @@ public:
 		spr->source.left = DIGIT_BASEX + (4 + v) * DIGIT_WIDTH;
 		spr->source.right = DIGIT_BASEX + (5 + v) * DIGIT_WIDTH;
 	}
+	agl::Mixer mixer;
+	bool wasPressed[NUM_WORDS];
 };
 
 Boxes::Boxes(AGLTest* a) {

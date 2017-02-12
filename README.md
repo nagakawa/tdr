@@ -20,7 +20,10 @@ For other compilers / IDEs, you're unfortunately on your own. Note that your C++
 To get the dependencies with `apt-get`:
 
     sudo apt-get install libglfw3-dev libglew-dev libsoil-dev libglm-dev \
-      libcairo2-dev libpango1.0-dev libglib2.0-dev portaudio19-dev cmake
+      libcairo2-dev libpango1.0-dev libglib2.0-dev libasound2-dev \
+      libogg-dev libvorbis-dev cmake
+
+and build PortAudio yourself.
 
 ### Looking Around
 
