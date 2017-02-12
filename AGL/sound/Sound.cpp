@@ -41,7 +41,6 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
   size_t size = 0;
   while (true) {
     long read = ov_read_float(&vf, &data, 4096, &currentSection);
-    //long read = ov_read(&vf, (char*) buffer, 8192, 0, 2, 1, &currentSection);
     std::cout << "Read " << read << " samples from section #" << currentSection << "\n";
     if (size + read > capacity) {
       std::cout << "Resizing to " << (capacity << 1) << '\n';
@@ -58,18 +57,13 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
         float avg = 0.0f;
         for (int j = 0; j < channels; ++j) {
           avg += data[j][i];
-          //avg += buffer[i * channels + j] / 32768.0;
         }
         samples[size + i] = avg / channels;
       }
       std::cout << '\n';
       size += read;
-      //size += read / (2 * channels);
     }
   }
-  for (size_t i = 0; i < size; ++i)
-    std::cout << samples[i] << " ";
-  std::cout << "\n";
   this->samples = samples;
   this->sampleCount = size;
   this->samplesPerSecond = rate;
