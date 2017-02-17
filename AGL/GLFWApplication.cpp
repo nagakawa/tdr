@@ -157,7 +157,7 @@ void GLFWApplication::start() {
 			cumulDelta = 0;
 		}
 		currentApp = this;
-		glfwWaitEvents();
+		glfwPollEvents();
 		readKeys();
 		tick();
 		glfwSwapBuffers(window);
