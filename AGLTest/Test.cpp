@@ -328,6 +328,7 @@ void Boxes::tick() {
 int main(int argc, char** argv) {
 	(void) argc;
 	(void) argv;
+	glfwInit();
 	try {
 		// Kriët ė test wýndö
 		// AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 4, 5, true);
@@ -340,4 +341,5 @@ int main(int argc, char** argv) {
 		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		getchar();
 	}
+	glfwTerminate();
 }
