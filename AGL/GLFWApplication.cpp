@@ -113,6 +113,7 @@ GLFWApplication::GLFWApplication(
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(window, mouseCallback);
+	memset(keys, 0, sizeof(uint64_t) * 16);
 	setVSyncEnable(false);
 }
 
