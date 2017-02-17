@@ -133,7 +133,7 @@ inline void wait(double t) {
 #endif
 
 #define WAITING_DISTANCE 0.5
-#define THRESH 0.001
+#define THRESH 0.002
 
 void GLFWApplication::start() {
 	currentTime = glfwGetTime();
@@ -141,12 +141,13 @@ void GLFWApplication::start() {
 	while (!glfwWindowShouldClose(window)) {
 		GLdouble prevTime = currentTime;
 		currentTime = glfwGetTime();
-    // Keep at slightly more than maxFPS so FPS doesn't dip below as often
-    while (currentTime < prevTime + 0.9999 / mfps) {
-      currentTime = glfwGetTime();
-      double diff = currentTime - prevTime;
-      if (diff < THRESH) wait(WAITING_DISTANCE * diff);
-    }
+		// Keep at slightly more than maxFPS so FPS doesn't dip below as often
+		double goal = prevTime + 0.999 / mfps;
+    		  while (currentTime < goal) {
+    		  currentTime = glfwGetTime();
+    		  double diff = goal - currentTime;
+    		  if (diff < THRESH) wait(WAITING_DISTANCE * diff);
+    		}
 		delta = currentTime - prevTime;
 		fps = 1.0 / delta;
 		cumulDelta += delta;
