@@ -193,9 +193,10 @@ void tdr::BulletList::graze(
 		if (!b.collides) continue;
 		if (b.isLaser ?
 				doCirclesIntersect(b.hitbox.c, h) :
-				doCircleAndLineIntersect(h, b.hitbox.l))
+				doCircleAndLineIntersect(h, b.hitbox.l)) {
 			b.graze();
 			callback(b);
+		}
 	}
 }
 
