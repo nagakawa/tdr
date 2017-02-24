@@ -32,7 +32,7 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
   vorbis_info* info = ov_info(&vf, -1);
   int channels = info->channels;
   int rate = info->rate;
-  std::cout << channels << " " << rate << "\n";
+  // std::cout << channels << " " << rate << "\n";
   float** data;
   //uint16_t buffer[4096];
   int currentSection = -1;
@@ -58,7 +58,7 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
         }
         samples[size + i] = avg / channels;
       }
-      std::cout << '\n';
+      // std::cout << '\n';
       size += read;
     }
   }
