@@ -164,10 +164,10 @@ void GLFWApplication::start() {
 		glfwSwapBuffers(window);
 		glFinish();
 	}
-	delete this;
 }
 
 GLFWApplication::~GLFWApplication() {
+	glfwSetWindowShouldClose(underlying(), true);
 }
 
 void GLFWApplication::initialise() {
