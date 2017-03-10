@@ -7,7 +7,7 @@ using namespace agl;
 const TexInitInfo agl::DEFAULT_TEX_INIT = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, true, true, false};
 const TexInitInfo agl::TEX_INIT_FOR_FBO = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, false};
 const TexInitInfo agl::TEX_INIT_FOR_FBO_MS = {GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, false, false, true};
-
+#include <iostream>
 agl::Texture::Texture(const char* fname, const TexInitInfo& info) {
 	int w, h;
 	if (fname == nullptr)
@@ -15,6 +15,7 @@ agl::Texture::Texture(const char* fname, const TexInitInfo& info) {
 	unsigned char* image = SOIL_load_image(fname, &w, &h, 0, SOIL_LOAD_RGBA);
 	setTexture(w, h, image, info);
 	SOIL_free_image_data(image);
+	//std::cerr << fname << " ~> " << id << '\n';
 }
 
 agl::Texture::Texture(int w, int h, unsigned char* data, const TexInitInfo& info) {
@@ -34,7 +35,9 @@ void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexIni
 	if (info.checkForNullData && data == nullptr)
 		throw "Image could not be read!";
 	if (genNew) glGenTextures(1, &id);
+	//std::cerr << id << " " << ms << "\n";
 	glBindTexture(mode, id);
+	//std::cerr << "done.\n";
 	if (!info.genMipMap) {
 		glTexParameteri(mode, GL_TEXTURE_BASE_LEVEL, 0);
 		glTexParameteri(mode, GL_TEXTURE_MAX_LEVEL, 0);

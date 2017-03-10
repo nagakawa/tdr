@@ -81,7 +81,7 @@ void agl::Sprite2D::setTexture(std::shared_ptr<Texture> tex) {
 	program.use();
 	tex->bindTo(0);
 	if (app == nullptr) throw "App must be set first";
-	if (texture == tex && hasSetUniforms) return;
+	if (texture->id == tex->id && hasSetUniforms) return;
 	texture = tex;
 	SETUNSP(program, 1i, "tex", 0);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());

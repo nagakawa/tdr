@@ -31,7 +31,7 @@ namespace agl {
 	private:
 		GLint width;
 		GLint height;
-		bool ms;
+		bool ms = false;
 		void setTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 	};
 }
