@@ -19,7 +19,8 @@ namespace agl {
 	public:
 		Texture(const char* fname, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		Texture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
-		Texture(const Texture& t);
+		// Texture(const Texture& t);
+		Texture(Texture&& t);
 		Texture();
 		~Texture();
 		void bind();

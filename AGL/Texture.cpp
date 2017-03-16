@@ -57,10 +57,17 @@ void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexIni
 }
 
 
-agl::Texture::Texture(const Texture& t) {
+/*agl::Texture::Texture(const Texture& t) {
 	id = t.id;
 	width = t.width;
 	height = t.height;
+}*/
+
+agl::Texture::Texture(Texture&& t) {
+	id = t.id;
+	width = t.width;
+	height = t.height;
+	t.id = 0;
 }
 
 agl::Texture::Texture() {
