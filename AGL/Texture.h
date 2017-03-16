@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
 
@@ -18,6 +19,9 @@ namespace agl {
 	class Texture {
 	public:
 		Texture(const char* fname, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		// Using int instead of size_t for the buffer size here, because SOIL uses
+		// that type in SOIL_load_image_from_memory. Uugghh.
+		Texture(const uint8_t* buffer, int bufferLength, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		Texture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		// Texture(const Texture& t);
 		Texture(Texture&& t);
