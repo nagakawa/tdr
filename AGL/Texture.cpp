@@ -12,7 +12,15 @@ agl::Texture::Texture(const char* fname, const TexInitInfo& info) {
 	int w, h;
 	if (fname == nullptr)
 		throw "File name is null!";
-	unsigned char* image = SOIL_load_image(fname, &w, &h, 0, SOIL_LOAD_RGBA);
+	unsigned char* image = SOIL_load_image(fname, &w, &h, nullptr, SOIL_LOAD_RGBA);
+	setTexture(w, h, image, info);
+	SOIL_free_image_data(image);
+	//std::cerr << fname << " ~> " << id << '\n';
+}
+
+agl::Texture::Texture(const uint8_t* buffer, int bufferLength, const TexInitInfo& info) {
+	int w, h;
+	unsigned char* image = SOIL_load_image_from_memory(buffer, bufferLength, &w, &h, nullptr, SOIL_LOAD_RGBA);
 	setTexture(w, h, image, info);
 	SOIL_free_image_data(image);
 	//std::cerr << fname << " ~> " << id << '\n';
