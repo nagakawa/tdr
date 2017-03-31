@@ -21,7 +21,7 @@ void APIENTRY glDebugOutput(GLenum source,
   // ignore non-significant error/warning codes
   if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
   std::cout << "---------------" << std::endl;
-  std::cout << "Debug message (" << id << "): " <<  message << std::endl;
+  std::cout << "Debug message " << id << " (" << gluErrorString(id) << "): " <<  message << std::endl;
   switch (source) {
     case GL_DEBUG_SOURCE_API:             std::cout << "Source: API"; break;
     case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   std::cout << "Source: Window System"; break;
