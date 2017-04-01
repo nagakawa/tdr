@@ -1,5 +1,7 @@
 #include "Shader.h"
 
+#include <string>
+
 #include "cross.h"
 
 using namespace agl;
@@ -17,7 +19,7 @@ void Shader::init(const char* source, GLenum type) {
 	if (!success) {
 		GLchar infoLog[512];
 		glGetShaderInfoLog(id, 512, NULL, infoLog);
-		throw infoLog;
+		throw std::string(infoLog);
 	}
 	shaderType = type;
 }
