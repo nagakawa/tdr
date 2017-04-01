@@ -10,6 +10,7 @@ namespace agl {
   class RBO {
 	public:
 		RBO();
+    RBO(RBO&& that);
 		~RBO();
 		void setActive();
     void allocateStorage(GLenum format, GLint width, GLint height, bool multisample = false);
@@ -19,6 +20,7 @@ namespace agl {
 	public:
 		FBO(bool def = false);
     FBO(bool def, GLint i);
+    FBO(FBO&& that);
 		~FBO();
 		void setActive();
     bool isComplete();
