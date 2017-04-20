@@ -17,7 +17,7 @@ void Shader::init(const char* source, GLenum type) {
 	GLint success;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		GLchar infoLog[512];
+		GLchar infoLog[512] = "shader compile failed";
 		glGetShaderInfoLog(id, 512, NULL, infoLog);
 		throw std::string(infoLog);
 	}

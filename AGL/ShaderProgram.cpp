@@ -1,5 +1,7 @@
 #include "ShaderProgram.h"
 
+#include <string>
+
 using namespace agl;
 
 ShaderProgram::ShaderProgram() {
@@ -18,11 +20,11 @@ void ShaderProgram::attach(Shader& shader) {
 void ShaderProgram::link() {
 	glLinkProgram(id);
 	GLint success;
-	GLchar infoLog[512];
 	glGetProgramiv(id, GL_LINK_STATUS, &success);
 	if (!success) {
+		GLchar infoLog[512] = "shader link failed";
 		glGetProgramInfoLog(id, 512, NULL, infoLog);
-		throw infoLog;
+		throw std::string(infoLog);
 	}
 }
 
