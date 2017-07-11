@@ -29,20 +29,20 @@ namespace agl {
 	};
 	class Sprite2D: public Renderable {
 	public:
-		Sprite2D(std::shared_ptr<Texture> t);
+		Sprite2D(Texture* t);
 		~Sprite2D();
 		void setUp();
 		void tick();
 		void update();
 		int addSprite(Sprite2DInfo loc);
-		void setTexture(std::shared_ptr<Texture> tex);
+		void setTexture(Texture* tex);
 		void setApp(Dimensional* a) { app = a; }
 		Sprite2DInfo get(int index) { return sprites[index]; }
 		Sprite2DInfo* getLoc(int index) { return sprites.data() + index; }
 	protected:
 		void _tearDown();
 	private:
-		std::shared_ptr<Texture> texture;
+		Texture* texture;
 		VBO vbo;
 		VBO instanceVBO;
 		VAO vao;

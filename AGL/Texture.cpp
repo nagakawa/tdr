@@ -75,7 +75,17 @@ agl::Texture::Texture(Texture&& t) {
 	id = t.id;
 	width = t.width;
 	height = t.height;
+	ms = t.ms;
 	t.id = 0;
+}
+
+Texture& agl::Texture::operator=(Texture&& t) {
+	id = t.id;
+	width = t.width;
+	height = t.height;
+	ms = t.ms;
+	t.id = 0;
+	return *this;
 }
 
 agl::Texture::Texture() {

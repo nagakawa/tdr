@@ -91,7 +91,7 @@ public:
 		fboMS = ft.ms.fbo;
 		boxes = new Boxes(this);
 		stex = std::make_shared<agl::Texture>(std::move(agl::Texture("textures/fuckyou.png")));
-		sprites = new agl::Sprite2D(stex);
+		sprites = new agl::Sprite2D(&*stex);
 		sprites->setApp(this);
 		sprites->addSprite({
 			{0, 448, 512, 512},
@@ -126,7 +126,7 @@ public:
 		fy->setPosition(glm::vec2(530, 20));
 		fy->setUp();
 		vtex = std::make_shared<agl::Texture>(std::move(*fboTex));
-		view = new agl::Sprite2D(vtex);
+		view = new agl::Sprite2D(&*vtex);
 		view->setApp(this);
 		view->addSprite({
 			{0, 600, 800, 0},

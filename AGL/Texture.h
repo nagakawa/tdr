@@ -25,6 +25,7 @@ namespace agl {
 		Texture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		// Texture(const Texture& t);
 		Texture(Texture&& t);
+		Texture& operator=(Texture&& t);
 		Texture();
 		~Texture();
 		void bind();
