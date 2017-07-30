@@ -1,5 +1,7 @@
 #include "Mixer.h"
 
+#include <limits>
+
 using namespace agl;
 
 const size_t defaultRate = 44100;
@@ -27,8 +29,9 @@ void agl::Mixer::advance(unsigned long n, float* output) {
       size_t iprog = (size_t) prog;
       float frac = prog - iprog;
       if (iprog > s.sampleCount - me.curr - 1) break;
-      float curr = s.samples[me.curr + iprog];
-      float next = s.samples[me.curr + iprog + 1];
+      float divisor = std::numeric_limits<SType>::max();
+      float curr = s.samples[me.curr + iprog] / divisor;
+      float next = s.samples[me.curr + iprog + 1] / divisor;
       output[i] += (curr * frac + next * (1 - frac)) * me.volume;
     }
     me.interm += ((float) n) * ratio;

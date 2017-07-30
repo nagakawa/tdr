@@ -1,16 +1,19 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdint.h>
 #include <vorbis/vorbisfile.h>
 #include <iostream>
 
 namespace agl {
+  typedef int8_t SType;
+  // typedef int16_t SType;
   class Sound {
   public:
     Sound() : sampleCount(0), samplesPerSecond(0), samples(nullptr) {}
     Sound(size_t sampleCount, size_t samplesPerSecond) :
         sampleCount(sampleCount), samplesPerSecond(samplesPerSecond),
-        samples(new float[sampleCount]) {}
+        samples(new SType[sampleCount]) {}
     Sound(Sound&& sound) :
         sampleCount(sound.sampleCount),
         samplesPerSecond(sound.samplesPerSecond),
@@ -29,6 +32,6 @@ namespace agl {
     ~Sound();
     size_t sampleCount;
     size_t samplesPerSecond;
-    float* samples;
+    SType* samples;
   };
 }
