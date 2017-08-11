@@ -28,8 +28,8 @@ namespace agl {
 		Texture& operator=(Texture&& t);
 		Texture();
 		~Texture();
-		void bind();
-		void bindTo(GLint slot);
+		void bind() const;
+		void bindTo(GLint slot) const;
 		GLint getWidth() const { return width; }
 		GLint getHeight() const { return height; }
 		void changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT, bool genNew = false);

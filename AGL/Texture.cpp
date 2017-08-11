@@ -97,11 +97,11 @@ Texture::~Texture() {
 	//printf(u8"テクスチャは削除された。(%d)\n", id);
 }
 
-void Texture::bind() {
+void Texture::bind() const {
 	glBindTexture(ms ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, id);
 }
 
-void Texture::bindTo(GLint slot) {
+void Texture::bindTo(GLint slot) const {
 	glActiveTexture(GL_TEXTURE0 + slot);
 	bind();
 }

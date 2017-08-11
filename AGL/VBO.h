@@ -10,7 +10,7 @@ namespace agl {
 		VBO();
 		~VBO();
 		void setActive();
-		void feedData(GLint size, void* data, GLenum usage);
+		void feedData(GLint size, const void* data, GLenum usage);
 		GLuint id;
 	};
 }

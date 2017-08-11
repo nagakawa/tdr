@@ -14,7 +14,7 @@ void VBO::setActive() {
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void VBO::feedData(GLint size, void * data, GLenum usage) {
+void VBO::feedData(GLint size, const void* data, GLenum usage) {
 	setActive(); // automagically set as active to make life easier
 	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 }
