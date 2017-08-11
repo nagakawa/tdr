@@ -93,7 +93,7 @@ FBOTex agl::makeFBOForMe(GLint width, GLint height) {
   rbo->allocateStorage(GL_DEPTH24_STENCIL8, width, height);
   fbo->attachRBO(GL_DEPTH_STENCIL_ATTACHMENT, rbo);
   if (!fbo->isComplete()) throw "FBO is not complete";
-  return {fbo, tex};
+  return FBOTex(fbo, tex);
 }
 
 FBOTexMS agl::makeFBOForMeMS(GLint width, GLint height) {
@@ -109,7 +109,7 @@ FBOTexMS agl::makeFBOForMeMS(GLint width, GLint height) {
   fbo->attachRBO(GL_DEPTH_STENCIL_ATTACHMENT, rbo);
   if (!fbo->isComplete()) throw "FBO is not complete";
   FBOTex ftss = makeFBOForMe(width, height);
-  return {{fbo, tex}, ftss};
+  return FBOTexMS(FBOTex(fbo, tex), std::move(ftss));
 }
 
 void agl::setDefaultFBOAsActive() {

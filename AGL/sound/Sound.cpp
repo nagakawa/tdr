@@ -45,7 +45,6 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
       &vf, (char*) data, BUFFER_SIZE * channels * sizeof(SType),
       0, sizeof(SType), std::is_signed<SType>::value, &currentSection
     );
-    std::cout << read << ' ';
     long sampleCount = read / sizeof(SType) / channels;
     while (size + sampleCount >= capacity) {
       SType* newSamples = new SType[capacity << 1];
@@ -70,11 +69,6 @@ void agl::Sound::initialiseFromOVFile(OggVorbis_File& vf) {
       size += sampleCount;
     }
   }
-  std::cout << '\n';
-  for (size_t i = 0; i < size; ++i) {
-    std::cout << samples[i] << ' ';
-  }
-  std::cout << '\n';
   this->samples = samples;
   this->sampleCount = size;
   this->samplesPerSecond = rate;

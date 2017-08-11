@@ -32,10 +32,30 @@ namespace agl {
   struct FBOTex {
     std::shared_ptr<FBO> fbo;
     std::shared_ptr<Texture> texture;
+    FBOTex() : fbo(nullptr), texture(nullptr) {}
+    FBOTex(std::shared_ptr<FBO> fbo, std::shared_ptr<Texture> texture) :
+      fbo(fbo), texture(texture) {}
+    FBOTex(FBOTex&& other) :
+      fbo(std::move(other.fbo)), texture(std::move(other.texture)) {}
+    FBOTex& operator=(FBOTex&& other) {
+      fbo = std::move(other.fbo);
+      texture = std::move(other.texture);
+      return *this;
+    }
   };
   struct FBOTexMS {
     FBOTex ms;
     FBOTex ss;
+    FBOTexMS() {}
+    FBOTexMS(FBOTex ms, FBOTex ss) :
+      ms(std::move(ms)), ss(std::move(ss)) {}
+    FBOTexMS(FBOTexMS&& other) :
+      ms(std::move(other.ms)), ss(std::move(other.ss)) {}
+    FBOTexMS& operator=(FBOTexMS&& other) {
+      ms = std::move(other.ms);
+      ss = std::move(other.ss);
+      return *this;
+    }
   };
   FBO* getActiveFBO();
   GLuint getActiveFBOID();
