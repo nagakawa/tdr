@@ -1,42 +1,28 @@
-# - Locate SOIL library
-# This module defines
-# SOIL_LIBRARY, the name of the library to link against
-# SOIL_FOUND
-# SOIL_INCLUDE_DIR, where to find SOIL.h
-# To Adding search path, set SOIL_ROOT_DIR as follows
-# set(SOIL_ROOT_DIR "path/to/soil")
-# or launch cmake with -DSOIL_ROOT_DIR="/path/to/SOIL_ROOT_DIR".
+# Find SOIL
+# Find the SOIL includes and library
 #
-# author: Kazunori Kimura
-# email : kazunori.abu@gmail.com
+#  SOIL_INCLUDE_DIRS - where to find SOIL.h, etc.
+#  SOIL_LIBRARIES    - List of libraries when using SOIL.
+#  SOIL_FOUND        - True if SOIL found.
 #
-# revisions: github.com/zwookie
+# Based on the FindZLIB.cmake module.
 
-find_path(SOIL_INCLUDE_DIR SOIL.h
-	/usr/include
-	/usr/local/include
-	/opt/local/include
-	${CMAKE_SOURCE_DIR}/includes
-)
+IF (SOIL_INCLUDE_DIR)
+# Already in cache, be silent
+SET(SOIL_FIND_QUIETLY TRUE)
+ENDIF (SOIL_INCLUDE_DIR)
 
-find_library(SOIL_LIBRARY SOIL
-	/usr/lib64
-	/usr/lib
-	/usr/local/lib
-	/opt/local/lib
-	${CMAKE_SOURCE_DIR}/lib
-)
+FIND_PATH(SOIL_INCLUDE_DIR SOIL.h PATH_SUFFIXES include/SOIL include)
 
-IF(SOIL_INCLUDE_DIR AND SOIL_LIBRARY)
-	SET( SOIL_FOUND TRUE )
-	SET( SOIL_LIBRARIES ${SOIL_LIBRARY} )
-ENDIF(SOIL_INCLUDE_DIR AND SOIL_LIBRARY)
-IF(SOIL_FOUND)
-	IF(NOT SOIL_FIND_QUIETLY)
-	MESSAGE(STATUS "Found SOIL: ${SOIL_LIBRARY}")
-	ENDIF(NOT SOIL_FIND_QUIETLY)
-ELSE(SOIL_FOUND)
-	IF(SOIL_FIND_REQUIRED)
-	MESSAGE(FATAL_ERROR "Could not find libSOIL")
-	ENDIF(SOIL_FIND_REQUIRED)
-ENDIF(SOIL_FOUND)
+SET(SOIL_NAMES SOIL Soil soil)
+FIND_LIBRARY(SOIL_LIBRARY NAMES ${SOIL_NAMES} )
+MARK_AS_ADVANCED( SOIL_LIBRARY SOIL_INCLUDE_DIR )
+
+# Per-recommendation
+SET(SOIL_INCLUDE_DIRS "${SOIL_INCLUDE_DIR}")
+SET(SOIL_LIBRARIES    "${SOIL_LIBRARY}")
+
+# handle the QUIETLY and REQUIRED arguments and set SOIL_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(SOIL DEFAULT_MSG SOIL_LIBRARIES SOIL_INCLUDE_DIRS)
