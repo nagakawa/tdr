@@ -1,0 +1,9 @@
+[submodule "3rdparty/agc/kozet_fixed_point"]
+	path = 3rdparty/agc/kozet_fixed_point
+	url = https://github.com/nagakawa/kozet_fixed_point
+[submodule "3rdparty/plf_colony"]
+	path = 3rdparty/plf_colony
+	url = https://github.com/mattreecebentley/plf_colony
+[submodule "3rdparty/agc/zekku"]
+	path = 3rdparty/agc/zekku
+	url = https://github.com/nagakawa/zekku

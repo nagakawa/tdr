@@ -1,10 +1,10 @@
 ## TDR
 
-Tsubakura's Danmaku Recombobulator
+TDR Dodges Rain.
 
 ### Installation
 
-For other compilers / IDEs, you're unfortunately on your own. Note that your C++ compiler must support `#pragma once`.
+For other compilers / IDEs, you're unfortunately on your own. Note that your C++ compiler must support `#pragma once`, which it probably does.
 
 #### CMake
 

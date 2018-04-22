@@ -15,12 +15,7 @@ SET(TDR_library_SRCS
   Bullet.cpp
   CommonData.cpp
   Replay.cpp
-  Collidable.cpp
   bitwise.cpp
-  fixedpoint.cpp
-  hitbox.cpp
-  CollisionRegistrar.cpp
-  CollisionIterator.cpp
   Game.cpp
   Player.cpp
 )
@@ -31,12 +26,7 @@ SET(TDR_library_HDRS
     CommonData.h
     Replay.h
     defset.h
-    Collidable.h
     bitwise.h
-    fixedpoint.h
-    hitbox.h
-    CollisionIterator.h
-    CollisionRegistrar.h
     Game.h
     Player.h
 )

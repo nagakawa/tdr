@@ -1,20 +1,23 @@
 #include "Bullet.h"
 
 #include <math.h>
+#include <algorithm>
+#include <kozet_fixed_point/kfp.h>
+#include <kozet_fixed_point/kfp_extra.h>
 
 using namespace tdr;
 
 void tdr::Bullet::update() {
 	if (useRadial) {
-		int32_t nxs, nxy;
-		sincos(angle, nxs, nxy);
-		xs = multiply1616By230(speed, nxs);
-		ys = multiply1616By230(speed, nxs);
+		kfp::s2_30 ac, as;
+		kfp::sincos(angle, ac, as);
+		xs = speed * ac;
+		ys = speed * as;
 	} else {
-		rectp(xs, ys, speed, angle);
+		kfp::rectp(xs, ys, speed, angle);
 	}
-	hitbox.c.x += xs;
-	hitbox.c.y += ys;
+	hitbox.c.c.x += xs;
+	hitbox.c.c.y += ys;
 	xs += xa;
 	ys += ya;
 	if (delay != 0) --delay;
@@ -129,8 +132,8 @@ bool tdr::BulletList::check(const Circle& h) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
-				doCirclesIntersect(b.hitbox.c, h) :
-				doCircleAndLineIntersect(h, b.hitbox.l))
+				b.hitbox.l.intersects(h) :
+				b.hitbox.c.intersects(h))
 			return true;
 	}
 	return false;
@@ -140,8 +143,8 @@ bool tdr::BulletList::check(const Line& h) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
-				doCircleAndLineIntersect(b.hitbox.c, h) :
-				doLinesIntersect(h, b.hitbox.l))
+				b.hitbox.l.intersects(h) :
+				b.hitbox.c.intersects(h))
 			return true;
 	}
 	return false;
@@ -150,68 +153,43 @@ bool tdr::BulletList::check(const Line& h) {
 void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 	for (Bullet& b : bullets) {
 		b.update();
-		if (b.deleteWhenOutOfBounds && (
-				b.hitbox.c.x < bounds.left ||
-				b.hitbox.c.x > bounds.right ||
-				b.hitbox.c.y < bounds.top ||
-				b.hitbox.c.y > bounds.bottom))
+		if (b.deleteWhenOutOfBounds && 
+				b.hitbox.c.isWithin({
+					{
+						kfp::s16_16(bounds.left + bounds.right) / 2,
+						kfp::s16_16(bounds.top + bounds.bottom) / 2,
+					},
+					{
+						kfp::s16_16(bounds.right - bounds.left) / 2,
+						kfp::s16_16(bounds.bottom - bounds.top) / 2,
+					}
+				}))
 			b.markedForDeletion = true;
 	}
-	// Remove marked bullets from list
-	unsigned int ahead = 0;
-	unsigned int behind = 0;
-	for (ahead = 0; ahead < bullets.size(); ++ahead) {
-		if (!bullets[ahead].markedForDeletion) {
-			if (ahead != behind) bullets[behind] = bullets[ahead];
-			++behind;
-		}
-	}
-	bullets.resize(behind);
-}
-
-void tdr::BulletList::insert(Bullet& b) {
-	b.id = highestID++;
-	bullets.push_back(b);
-}
-
-Bullet* tdr::BulletList::query(uint64_t id) {
-	unsigned int lower = 0, upper = bullets.size();
-	while (upper > lower + 1) { // v this avoids overflow
-		unsigned int middle = lower + ((upper - lower) >> 1);
-		uint64_t mid = bullets[middle].id;
-		if (mid == id) return bullets.data() + middle;
-		if (id < mid) upper = middle;
-		else lower = middle;
-	}
-	return bullets[lower].id == id ? bullets.data() + lower : nullptr;
+	// Remove marked bullets with no references
+	std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b) {
+		return b.markedForDeletion && b.refcount == 0;
+	});
 }
 
 void tdr::BulletList::graze(
-	const Circle& h,
-	std::function<void(Bullet&)> callback) {
+		const Circle& h,
+		std::function<void(Bullet&)> callback) {
 	for (Bullet& b : bullets) {
 		if (!b.collides) continue;
 		if (b.isLaser ?
-				doCirclesIntersect(b.hitbox.c, h) :
-				doCircleAndLineIntersect(h, b.hitbox.l)) {
+				b.hitbox.l.intersects(h) :
+				b.hitbox.c.intersects(h)) {
 			b.graze();
 			callback(b);
 		}
 	}
 }
 
-std::unique_ptr<CollisionIterator> tdr::BulletList::iterator() const {
-	std::unique_ptr<CollisionIterator> itp(
-		new BulletListIterator(bullets.data(), bullets.size()));
-	return itp;
-}
-
-Bullet* tdr::BulletList::createShotA1(
-	fix1616 x, fix1616 y,
-	fix1616 speed, fix1616 angle,
-	Graphic& graph, uint8_t delay) {
-	bullets.emplace_back(x, y, speed, angle, graph, delay);
-	int size = bullets.size();
-	bullets[size - 1].id = highestID++;
-	return bullets.data() + (size - 1);
+BulletHandle tdr::BulletList::createShotA1(
+		kfp::s16_16 x, kfp::s16_16 y,
+		kfp::s16_16 speed, kfp::frac32 angle,
+		Graphic& graph, uint8_t delay) {
+	auto it = bullets.emplace(x, y, speed, angle, graph, delay);
+	return BulletHandle(it);
 }

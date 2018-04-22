@@ -16,30 +16,35 @@
 #include <ShaderProgram.h>
 #include <VAO.h>
 #include <VBO.h>
-#include "Collidable.h"
+#include <kozet_fixed_point/kfp.h>
+#include <zekku/BoxQuadTree.h>
+#include <zekku/kfp_interop/timath.h>
+#include <plf_colony.h>
 #include "Playfield.h"
 
 namespace tdr {
+	using Circle = zekku::Circle<kfp::s16_16>;
+	using Line = zekku::Line<kfp::s16_16>;
 	struct Graphic {
 		agl::UIRect16 texcoords;
-		fix1616 visualRadius;
-		fix1616 collisionRadius;
+		kfp::s16_16 visualRadius;
+		kfp::s16_16 collisionRadius;
 	};
 	class Bullet {
 	public:
-		uint64_t id;
 		union {
 			Circle c;
 			Line l;
 		} hitbox;
-		fix1616 xs, ys;
-		fix1616 xa, ya;
-		fix1616 speed, angle, angularVelocity;
-		fix1616 visualAngle;
+		kfp::s16_16 xs, ys;
+		kfp::s16_16 xa, ya;
+		kfp::s16_16 speed;
+		kfp::frac32 angle, angularVelocity, visualAngle;
 		// Width and length would be the same for ordinary bullets,
 		// but different for lasers.
-		fix1616 visualWidth, visualLength;
+		kfp::s16_16 visualWidth, visualLength;
 		agl::UIRect16 texcoords;
+		uint16_t refcount = 0;
 		// Hopefully no one wants to graze anything less often than
 		// 128 frames.
 		//
@@ -54,6 +59,7 @@ namespace tdr {
 		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
+		uint8_t bmIndex;
 		bool markedForDeletion;
 		// If true, this bullet will base xs and ys from speed and angle.
 		// Otherwise, speed and angle depend on xs and ys.
@@ -73,22 +79,54 @@ namespace tdr {
 		// Note: none of the constructors register the bullet.
 		// Use tdr::Bullet::insert for this.
 		Bullet(
-			fix1616 x, fix1616 y,
-			fix1616 speed, fix1616 angle,
-			Graphic& graph, uint8_t delay) : // CreateShotA1
-			xs(C_ZERO), ys(C_ZERO), xa(C_ZERO), ya(C_ZERO),
-			speed(speed), angle(angle), angularVelocity(C_ZERO),
+				kfp::s16_16 x, kfp::s16_16 y,
+				kfp::s16_16 speed, kfp::frac32 angle,
+				Graphic& graph, uint8_t delay) : // CreateShotA1,
+			hitbox{zekku::Circle<kfp::s16_16>()},
+			xs(0), ys(0), xa(0), ya(0),
+			speed(speed), angle(angle), angularVelocity(0),
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
 			texcoords(graph.texcoords), delay(delay), isLaser(false),
 			markedForDeletion(false), useRadial(true),
 			detachVisualAndMovementAngles(false),
 			deleteWhenOutOfBounds(true), collides(true) {
-			hitbox.c.x = x;
-			hitbox.c.y = y;
-			hitbox.c.radius = graph.collisionRadius;
+			hitbox.c.c.x = x;
+			hitbox.c.c.y = y;
+			hitbox.c.r = graph.collisionRadius;
 		}
 		// dummy constructor to allow resize() on vector<Bullet>
 		Bullet();
+	};
+	class BulletRenderInfo {
+		union {
+			Circle c;
+			Line l;
+		} hitbox;
+		kfp::frac32 viualAngle;
+		agl::UIRect16 texcoords;
+		kfp::s16_16 visualRadius;
+		bool isLaser;
+	};
+	class BulletHandle {
+	public:
+		BulletHandle(plf::colony<Bullet>::iterator it) : info(it) {
+			++info->refcount;
+		}
+		BulletHandle(const BulletHandle& h) : info(h.info) {
+			++info->refcount;
+		}
+		BulletHandle(BulletHandle&& h) {
+			std::swap(info, h.info);
+		}
+		~BulletHandle() {
+			--info->refcount; // Leave BulletList to clean defunct bullets
+		}
+		Bullet& operator*() { return *info; }
+		const Bullet& operator*() const { return *info; }
+		Bullet& operator->() { return *info; }
+		const Bullet& operator->() const { return *info; }
+	private:
+		plf::colony<Bullet>::iterator info;
 	};
 	static_assert(offsetof(Bullet, visualAngle) + 4 == offsetof(Bullet, visualWidth),
 		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
@@ -96,14 +134,6 @@ namespace tdr {
 		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
 	extern const char* BL_VERTEX_SOURCE;
 	extern const char* BL_FRAGMENT_SOURCE;
-	class BulletListIterator : public ArrayCollisionIterator<Bullet> {
-	public:
-		BulletListIterator(const Bullet* things, int count) :
-      ArrayCollisionIterator(things, count) {}
-    bool isLine() const { return contents().isLaser; }
-    const Circle& getCircle() const { return contents().hitbox.c; }
-    const Line& getLine() const { return contents().hitbox.l; }
-	};
 	// TODO: support multiple render passes for BulletList
 	// This will be useful not only for avoiding multiple BulletLists if
 	// we wish to have bullets of different blend modes, but also handle
@@ -112,7 +142,7 @@ namespace tdr {
 	// * the TLB of Book of Star Mythology -- the first phase has black
 	//   bullets (ALPHA) with white auras around them (ADD)
 	// (any other examples?)
-	class BulletList: public Collidable {
+	class BulletList {
 	public:
 		BulletList(
 				std::shared_ptr<Playfield> p,
@@ -122,31 +152,22 @@ namespace tdr {
 		void tick();
 		void update();
 		void _tearDown();
-    int count() { return bullets.size(); }
-    int strength() { return bullets.size(); }
     bool check(const Circle& h);
     bool check(const Line& h);
 		void updatePositions(const agl::IRect16& bounds);
 		void insert(Bullet& b);
-		Bullet* createShotA1(
-			fix1616 x, fix1616 y,
-			fix1616 speed, fix1616 angle,
+		BulletHandle createShotA1(
+			kfp::s16_16 x, kfp::s16_16 y,
+			kfp::s16_16 speed, kfp::frac32 angle,
 			Graphic& graph, uint8_t delay);
 		void graze(
 			const Circle& h,
 			std::function<void(Bullet&)> callback);
-		/*
-			Returns a pointer to the Bullet object with the particular ID.
-			Since all IDs in bullets is ascending, we use binary search.
-			The pointer is valid until updatePositions is called again.
-		*/
-		Bullet* query(uint64_t id);
-		std::unique_ptr<CollisionIterator> iterator() const;
 	private:
-		std::vector<Bullet> bullets;
+		plf::colony<Bullet> bullets;
+		std::vector<BulletRenderInfo> rinfo;
 		std::shared_ptr<Playfield> p;
 		std::shared_ptr<agl::Texture> shotsheet;
-		uint64_t highestID = 0;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
 		agl::VAO vao;
