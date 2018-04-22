@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <kozet_fixed_point/kfp.h>
 #include <kozet_fixed_point/kfp_extra.h>
+#include <BlendMode.h>
 
 using namespace tdr;
 
@@ -38,7 +39,7 @@ void tdr::Bullet::refreshGraze() {
 const char* tdr::BL_VERTEX_SOURCE = "\
 #version 330 core \n\
 layout (location = 0) in vec2 bounds; \n\
-layout (location = 1) in vec2 position; \n\
+layout (location = 1) in vec4 hitbox; \n\
 layout (location = 2) in vec3 awl; \n\
 layout (location = 3) in vec4 shottc; \n\
 out vec2 texCoord; \n\
@@ -67,6 +68,7 @@ void main() { \n\
 void tdr::BulletList::setUp() {
 	if (p == nullptr)
 		throw "What, are you crazy?!";
+	rinfo.resize(agl::BMIDX_COUNT);
 	agl::Shader vertex(BL_VERTEX_SOURCE, GL_VERTEX_SHADER);
 	agl::Shader fragment(BL_FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
 	program.attach(vertex);
@@ -79,21 +81,32 @@ void tdr::BulletList::setUp() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
 	// InstanceData
-	instanceVBO.setActive();
-	instanceVBO.feedData(bullets.size() * sizeof(Bullet), bullets.data(), GL_DYNAMIC_DRAW);
+	update();
 	// The shader needs to know about the following fields:
-	// hitbox.c.x hitbox.c.y
+	// hitbox.c.c.x hitbox.c.c.y
+	// or all four fields of hitbox.l if isLaser is set
 	// visualAngle visualWidth visualLength
 	// texcoords
 	// So, without further ado:
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FIXED, false, sizeof(Bullet), (GLvoid*) offsetof(Bullet, hitbox.c.x));
+	// Would've loved to use GL_FIXED for this and be done with that,
+	// but sadly, it's GL4.2+.
+	glVertexAttribIPointer(
+		1, 4, GL_INT, sizeof(BulletRenderInfo),
+		(GLvoid*) (offsetof(BulletRenderInfo, hitbox))
+	);
 	glVertexAttribDivisor(1, 1);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 3, GL_FIXED, true, sizeof(Bullet), (GLvoid*) offsetof(Bullet, visualAngle));
+	glVertexAttribIPointer(
+		2, 2, GL_INT, sizeof(BulletRenderInfo),
+		(GLvoid*) (offsetof(BulletRenderInfo, visualAngle))
+	);
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 4, GL_SHORT, false, sizeof(Bullet), (GLvoid*) offsetof(Bullet, texcoords));
+	glVertexAttribIPointer(
+		3, 4, GL_SHORT, sizeof(Bullet),
+		(GLvoid*) (offsetof(BulletRenderInfo, texcoords))
+	);
 	glVertexAttribDivisor(3, 1);
 	agl::resetVBO();
 	agl::resetVAO();
@@ -122,7 +135,20 @@ void tdr::BulletList::tick() {
 }
 
 void tdr::BulletList::update() {
-	instanceVBO.feedData(bullets.size() * sizeof(Bullet), bullets.data(), GL_DYNAMIC_DRAW);
+	// Set data area
+	spurt();
+	instanceVBO.feedData(
+		offsets.back() * sizeof(BulletRenderInfo),
+		nullptr,
+		GL_DYNAMIC_DRAW);
+	// Set individual chunks
+	for (size_t i = 0; i < rinfo.size(); ++i) {
+		instanceVBO.feedSubdata(
+			offsets[i] * sizeof(BulletRenderInfo),
+			(offsets[i + 1] - offsets[i]) * sizeof(BulletRenderInfo),
+			rinfo[i].data()
+		);
+	}
 }
 
 void tdr::BulletList::_tearDown() {
@@ -192,4 +218,31 @@ BulletHandle tdr::BulletList::createShotA1(
 		Graphic& graph, uint8_t delay) {
 	auto it = bullets.emplace(x, y, speed, angle, graph, delay);
 	return BulletHandle(it);
+}
+
+void tdr::BulletList::spurt() {
+	// Spurts the render-related data from the `bullets` colony
+	// to the `rinfo` vector. This vector will then be used by
+	// the render code to draw the bullets.
+	for (auto& ri : rinfo) ri.clear();
+	for (const Bullet& b : bullets) {
+		// Don't render bullets that are marked for deletion
+		if (b.markedForDeletion) continue;
+		// Where should we push?
+		size_t bmidx = b.bmIndex;
+		auto& toPush = rinfo[bmidx];
+		toPush.emplace_back();
+		BulletRenderInfo& entry = toPush.back();
+		entry.isLaser = b.isLaser;
+		if (b.isLaser) entry.hitbox.l = b.hitbox.l;
+		else entry.hitbox.c = b.hitbox.c;
+		entry.visualAngle = b.visualAngle;
+		entry.texcoords = b.texcoords;
+		entry.visualRadius = b.visualWidth;
+	}
+	// Update offsets vector
+	offsets.resize(rinfo.size() + 1);
+	offsets[0] = 0;
+	for (size_t i = 0; i < rinfo.size(); ++i)
+		offsets[1 + i] = offsets[i] + rinfo[i].size();
 }

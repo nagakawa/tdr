@@ -11,6 +11,7 @@ namespace agl {
 		~VBO();
 		void setActive();
 		void feedData(GLint size, void* data, GLenum usage);
+		void feedSubdata(GLintptr offset, GLint size, void* data);
 		GLuint id;
 	};
 }

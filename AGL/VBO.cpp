@@ -2,21 +2,27 @@
 
 using namespace agl;
 
-VBO::VBO() {
+agl::VBO::VBO() {
 	glGenBuffers(1, &id);
 }
 
-VBO::~VBO() {
+agl::VBO::~VBO() {
 	glDeleteBuffers(1, &id);
 }
 
-void VBO::setActive() {
+void agl::VBO::setActive() {
 	glBindBuffer(GL_ARRAY_BUFFER, id);
 }
 
-void VBO::feedData(GLint size, void * data, GLenum usage) {
+void agl::VBO::feedData(GLint size, void * data, GLenum usage) {
 	setActive(); // automagically set as active to make life easier
 	glBufferData(GL_ARRAY_BUFFER, size, data, usage);
+}
+
+void agl::VBO::feedSubdata(
+		GLintptr offset,GLint size, void * data) {
+	setActive(); // automagically set as active to make life easier
+	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 }
 
 void agl::resetVBO() {

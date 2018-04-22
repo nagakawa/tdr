@@ -19,4 +19,15 @@ namespace agl {
 	extern const BlendMode BM_MULTIPLY;
 	extern const BlendMode BM_SCREEN;
 	extern const BlendMode BM_SHADOW;
+	extern const BlendMode blendModes[];
+	enum BMIndex {
+		BMIDX_ALPHA = 0,
+		BMIDX_ADD,
+		BMIDX_SUBTRACT,
+		BMIDX_MULTIPLY,
+		BMIDX_SCREEN,
+		BMIDX_SHADOW,
+		// Add new blend mode indices before the following line
+		BMIDX_COUNT,
+	};
 }

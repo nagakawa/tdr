@@ -59,7 +59,7 @@ namespace tdr {
 		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
-		uint8_t bmIndex;
+		uint8_t bmIndex = agl::BMIDX_ALPHA;
 		bool markedForDeletion;
 		// If true, this bullet will base xs and ys from speed and angle.
 		// Otherwise, speed and angle depend on xs and ys.
@@ -97,13 +97,14 @@ namespace tdr {
 		// dummy constructor to allow resize() on vector<Bullet>
 		Bullet();
 	};
-	class BulletRenderInfo {
+	struct BulletRenderInfo {
+		BulletRenderInfo() : hitbox{Circle()} {}
 		union {
 			Circle c;
 			Line l;
 		} hitbox;
-		kfp::frac32 viualAngle;
 		agl::UIRect16 texcoords;
+		kfp::frac32 visualAngle;
 		kfp::s16_16 visualRadius;
 		bool isLaser;
 	};
@@ -165,7 +166,8 @@ namespace tdr {
 			std::function<void(Bullet&)> callback);
 	private:
 		plf::colony<Bullet> bullets;
-		std::vector<BulletRenderInfo> rinfo;
+		std::vector<std::vector<BulletRenderInfo>> rinfo;
+		std::vector<size_t> offsets;
 		std::shared_ptr<Playfield> p;
 		std::shared_ptr<agl::Texture> shotsheet;
 		agl::VBO vbo;
@@ -175,5 +177,6 @@ namespace tdr {
 		bool hasSetUniforms;
 		bool hasInitialisedProgram;
 		void setUniforms();
+		void spurt();
 	};
 }

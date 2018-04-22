@@ -43,3 +43,12 @@ const BlendMode agl::BM_SHADOW = {
 	GL_DST_COLOR, GL_ONE,
 	GL_ONE, GL_ONE
 };
+
+const BlendMode agl::blendModes[] = {
+	BM_ALPHA,
+	BM_ADD,
+	BM_SUBTRACT,
+	BM_MULTIPLY,
+	BM_SCREEN,
+	BM_SHADOW,
+};
