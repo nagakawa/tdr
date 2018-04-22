@@ -27,6 +27,7 @@ namespace agl {
 		Texture(Texture&& t);
 		Texture();
 		~Texture();
+		Texture& operator=(Texture&& t);
 		void bind();
 		void bindTo(GLint slot);
 		GLint getWidth() const { return width; }

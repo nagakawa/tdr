@@ -85,10 +85,10 @@ public:
 	void initialise() {
 		std::cout << "hi\n";
 		agl::FBOTexMS ft = agl::makeFBOForMeMS(800, 600);
-		fboTex = ft.ss.texture;
-		fboTexMS = ft.ms.texture;
-		fboSS = ft.ss.fbo;
-		fboMS = ft.ms.fbo;
+		fboTex = std::move(ft.ss.texture);
+		fboTexMS = std::move(ft.ms.texture);
+		fboSS = std::move(ft.ss.fbo);
+		fboMS = std::move(ft.ms.fbo);
 		boxes = new Boxes(this);
 		stex = std::make_shared<agl::Texture>(std::move(agl::Texture("textures/fuckyou.png")));
 		sprites = new agl::Sprite2D(stex);
@@ -125,7 +125,7 @@ public:
 		fy->setText(u8"<i>Bad</i> translation\n<u>Κακή μετάφραση</u>\nMala traducción\nплохой перевод\n下手な翻訳\n잘못된 번역\nתרגום גרוע\nترجمة سيئة\nD́ȉa͟c̈r̆ȉt̂ics\nThe Touhou Project (東方Project Tōhō Purojekuto, lit. Eastern Project), also known as Toho Project or Project Shrine Maiden, is a series of Japanese bullet hell shooter video games developed by the single-person Team Shanghai Alice. Team Shanghai Alice's sole member, <b>ZUN</b>, independently produces the games' graphics, music, and programming.\n東方Project（とうほうプロジェクト）とは、同人サークルの上海アリス幻樂団によって製作されている著作物である。弾幕系シューティングを中心としたゲーム、書籍、音楽CDなどから成る。東方Projectの作品を一括して東方、東方Projectシリーズなどと称することもある。狭義には、上海アリス幻樂団のメンバー「<b>ZUN</b>」が制作している同人作品の一連の作品をあらわす。");
 		fy->setPosition(glm::vec2(530, 20));
 		fy->setUp();
-		vtex = std::make_shared<agl::Texture>(std::move(*fboTex));
+		vtex = std::make_shared<agl::Texture>(std::move(fboTex));
 		view = new agl::Sprite2D(vtex);
 		view->setApp(this);
 		view->addSprite({
@@ -148,7 +148,7 @@ public:
 	}
 	bool ff = true;
 	void tick() {
-		fboMS->setActive();
+		fboMS.setActive();
 		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		++frame;
@@ -165,7 +165,7 @@ public:
 		sprites->tick();
 		//for (int i = 0; i < 1; ++i) fy->relayout();
 		fy->tick();
-		fboMS->blitTo(*fboSS, 800, 600);
+		fboMS.blitTo(fboSS, 800, 600);
 		agl::setDefaultFBOAsActive();
 		glClearColor(1.0f, 0.5f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -249,10 +249,10 @@ public:
 	std::shared_ptr<agl::Texture> vtex;
 	agl::Sprite2D* sprites;
 	agl::Text* fy;
-	std::shared_ptr<agl::FBO> fboMS;
-	std::shared_ptr<agl::FBO> fboSS;
-	std::shared_ptr<agl::Texture> fboTex;
-	std::shared_ptr<agl::Texture> fboTexMS;
+	agl::FBO fboMS;
+	agl::FBO fboSS;
+	agl::Texture fboTex;
+	agl::Texture fboTexMS;
 	agl::Sprite2D* view;
 	int frame = 0;
 	void setDigit(int i, int v) {
@@ -323,9 +323,15 @@ void Boxes::tick() {
 	}
 }
 
+static void glfwError(int id, const char* description) {
+	(void) id;
+  std::cerr << description << std::endl;
+}
+
 int main(int argc, char** argv) {
 	(void) argc;
 	(void) argv;
+	glfwSetErrorCallback(glfwError);
 	glfwInit();
 	try {
 		// Kriët ė test wýndö
@@ -333,10 +339,10 @@ int main(int argc, char** argv) {
 		// AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 3, 3, false);
 		a->start();
 	} catch (char const* s) {
-		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
+		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		getchar();
 	} catch (char* s) {
-		std::cout << u8"An error has Okuued!\n\n" << s << u8"\n\n";
+		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		getchar();
 	}
 	glfwTerminate();

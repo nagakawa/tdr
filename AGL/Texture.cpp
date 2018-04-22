@@ -78,13 +78,18 @@ agl::Texture::Texture(Texture&& t) {
 	t.id = 0;
 }
 
-agl::Texture::Texture() {
-	glGenTextures(1, &id);
-}
+agl::Texture::Texture() : id(0) {}
 
 Texture::~Texture() {
 	glDeleteTextures(1, &id);
 	//printf(u8"テクスチャは削除された。(%d)\n", id);
+}
+
+Texture& agl::Texture::operator=(Texture&& t) {
+	std::swap(id, t.id);
+	width = t.width;
+	height = t.height;
+	return *this;
 }
 
 void Texture::bind() {
