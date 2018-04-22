@@ -2,11 +2,11 @@
 
 #include <memory>
 
+#include <kozet_fixed_point/kfp.h>
+
 #include "Bullet.h"
-#include "Collidable.h"
-#include "CollisionIterator.h"
-#include "fixedpoint.h"
-#include "hitbox.h"
+
+using namespace kfp::literals;
 
 namespace tdr {
   typedef enum { ST_NORMAL, ST_HIT, ST_DOWN, ST_END } PlayerStateFlag;
@@ -23,29 +23,18 @@ namespace tdr {
         deathbombTime(15), respawnTime(60), respawnInvincibilityTime(120) {}
     void evolve();
   };
-  class Player : public Collidable {
+  class Player {
   public:
-    Player(fix1616 x, fix1616 y, fix1616 r = { 0x18000 });
-    std::unique_ptr<CollisionIterator> iterator() const;
-    // How many objects there are to check collision for.
-    int count() { return 1; }
-    // How much time it takes to check collisions against this collection.
-    int strength() { return 1; }
-    bool check(const Circle& h) { return doCirclesIntersect(h, hitbox); }
-    bool check(const Line& h) { return doCircleAndLineIntersect(hitbox, h); }
+    Player(
+      kfp::s16_16 x, kfp::s16_16 y,
+      kfp::s16_16 r = "1.5"_s16_16);
+    bool check(const Circle& h) { return h.intersects(hitbox); }
+    bool check(const Line& h) { return h.intersects(hitbox); }
     const Circle& getHitbox() const { return hitbox; }
     PlayerState& getState() { return state; }
   private:
     Circle hitbox;
     PlayerState state;
   };
-  class PlayerIterator : public SingletonCollisionIterator<const Player&> {
-	public:
-		PlayerIterator(const Player& p) :
-      SingletonCollisionIterator(p) {}
-    bool isLine() const { return false; }
-    const Circle& getCircle() const { return contents().getHitbox(); }
-    const Line& getLine() const { return *(Line*) &(contents().getHitbox()); }
-	};
   void hit(Player& p, BulletList& bl);
 }

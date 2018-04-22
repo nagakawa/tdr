@@ -8,11 +8,8 @@
 namespace tdr {
   class Playfield : public agl::Dimensional {
   public:
-    Playfield(int w, int h, int aw = 0, int ah = 0) : w(w), h(h) {
-      if (aw == 0) aw = w;
-      if (ah == 0) ah = h;
-      this->aw = aw;
-      this->ah = ah;
+    Playfield(int w, int h, int aw = 0, int ah = 0) :
+        w(w), h(h), aw((aw == 0) ? w : aw), ah((ah == 0) ? h : ah) {
       agl::FBOTexMS ft = agl::makeFBOForMeMS(aw, ah);
       fbo = std::move(ft.ss.fbo);
       tex = std::move(ft.ss.texture);

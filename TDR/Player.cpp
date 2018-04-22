@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#include <kozet_fixed_point/kfp.h>
+
 using namespace tdr;
 
 void tdr::PlayerState::evolve() {
@@ -14,14 +16,8 @@ void tdr::PlayerState::evolve() {
   if (timeLeft != 0) --timeLeft;
 }
 
-tdr::Player::Player(fix1616 x, fix1616 y, fix1616 r) {
-  hitbox = { x, y, r };
-}
-
-std::unique_ptr<CollisionIterator> tdr::Player::iterator() const {
-	std::unique_ptr<CollisionIterator> itp(
-		new PlayerIterator(*this));
-	return itp;
+tdr::Player::Player(kfp::s16_16 x, kfp::s16_16 y, kfp::s16_16 r) {
+  hitbox = { { x, y }, r };
 }
 
 void tdr::hit(Player& p, BulletList& bl) {

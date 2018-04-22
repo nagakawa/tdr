@@ -6,7 +6,7 @@
 
 #include <Texture.h>
 
-#include <Bullet.h>
+#include "Bullet.h"
 #include "Player.h"
 #include "Playfield.h"
 
@@ -18,8 +18,8 @@ namespace tdr {
     void setTexture(std::shared_ptr<agl::Texture> shotsheet);
     void update();
   private:
-    std::shared_ptr<Playfield> p;
+    Playfield p;
     std::shared_ptr<agl::Texture> t;
-    std::shared_ptr<Player> gp;
+    Player gp;
   };
 }
