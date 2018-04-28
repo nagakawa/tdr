@@ -36,7 +36,7 @@ namespace agl {
       );
     }, &myud);
     std::vector<GlyphInfo> res(glyphs->num_glyphs);
-    for (size_t i = 0; i < glyphs->num_glyphs; ++i) {
+    for (size_t i = 0; i < (size_t) glyphs->num_glyphs; ++i) {
       PangoGlyphInfo& g = glyphs->glyphs[i];
       GlyphInfo& out = res[i];
       out.index = g.glyph;

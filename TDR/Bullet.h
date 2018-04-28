@@ -146,11 +146,11 @@ namespace tdr {
 	class BulletList {
 	public:
 		BulletList(
-				std::shared_ptr<Playfield> p,
-				std::shared_ptr<agl::Texture> shotsheet) :
+				Playfield* p,
+				agl::Texture* shotsheet) :
 			p(p), shotsheet(shotsheet) {}
 		void setUp();
-		void tick();
+		void render();
 		void update();
 		void _tearDown();
     bool check(const Circle& h);
@@ -168,8 +168,8 @@ namespace tdr {
 		plf::colony<Bullet> bullets;
 		std::vector<std::vector<BulletRenderInfo>> rinfo;
 		std::vector<size_t> offsets;
-		std::shared_ptr<Playfield> p;
-		std::shared_ptr<agl::Texture> shotsheet;
+		Playfield* p;
+		agl::Texture* shotsheet;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
 		agl::VAO vao;

@@ -123,7 +123,7 @@ void tdr::BulletList::setUniforms() {
 	hasSetUniforms = true;
 }
 
-void tdr::BulletList::tick() {
+void tdr::BulletList::render() {
 	p->getFBO().setActive();
 	glEnable(GL_BLEND);
 	agl::BM_ALPHA.use();

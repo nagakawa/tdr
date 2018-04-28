@@ -15,11 +15,13 @@ namespace tdr {
   public:
     Game(int w, int h, int aw = 0, int ah = 0);
     ~Game();
-    void setTexture(std::shared_ptr<agl::Texture> shotsheet);
+    void setTexture(agl::Texture&& shotsheet);
     void update();
+    void render();
   private:
     Playfield p;
-    std::shared_ptr<agl::Texture> t;
+    agl::Texture t;
     Player gp;
+    BulletList bullets;
   };
 }

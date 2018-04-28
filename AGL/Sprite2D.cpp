@@ -29,7 +29,7 @@ void main() { \n\
 } \
 ";
 
-Sprite2D::Sprite2D(std::shared_ptr<Texture> t) {
+Sprite2D::Sprite2D(Texture* t) {
 	texture = t;
 	app = nullptr;
 	hasSetUniforms = false;
@@ -76,7 +76,7 @@ void agl::Sprite2D::tick() {
 	resetVAO();
 }
 
-void agl::Sprite2D::setTexture(std::shared_ptr<Texture> tex) {
+void agl::Sprite2D::setTexture(Texture* tex) {
 	vao.setActive();
 	program.use();
 	tex->bindTo(0);
