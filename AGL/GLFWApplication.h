@@ -19,6 +19,13 @@ namespace agl {
 #define DEFAULT_TITLE "GLFWApplication"
 #define FPS_UPDATE_PERIOD 0.5
 
+	enum class KeyStatus {
+		away = 0,
+		enter = 1,
+		leave = 2,
+		hold = 3,
+	};
+
 	/*
 		GLFWApplication: a class for applications.
 
@@ -57,11 +64,14 @@ namespace agl {
 		int getActualHeight() const { return ah; }
 		int getFBOID() const { return 0; }
 		GLFWwindow* underlying() { return window; }
+		void stashCurrentKeys();
 	protected:
 		bool testKey(int code);
+		KeyStatus testKey2(int code);
 		void setVSyncEnable(bool enable);
 	private:
 		uint64_t keys[16];
+		uint64_t keysPrev[16];
 		GLFWwindow* window;
 		GLdouble fps;
 		GLdouble rollingFPS;

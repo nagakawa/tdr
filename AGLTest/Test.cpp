@@ -163,7 +163,7 @@ public:
 		sprites->update();
 		boxes->tick();
 		sprites->tick();
-		//for (int i = 0; i < 1; ++i) fy->relayout();
+		if (relayoutText) fy->relayout();
 		fy->tick();
 		fboMS.blitTo(fboSS, 800, 600);
 		agl::setDefaultFBOAsActive();
@@ -171,7 +171,11 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		view->tick();
 		char ctitle[256];
-		snprintf(ctitle, 255, "TestApp @ GL %s | FPS: %lf", glGetString(GL_VERSION), getRollingFPS());
+		snprintf(
+			ctitle, 255, 
+			"TestApp @ GL %s | FPS: %lf | per-frame relayout %s",
+			glGetString(GL_VERSION), getRollingFPS(),
+			(relayoutText ? "on" : "off"));
 		glfwSetWindowTitle(underlying(), ctitle);
 	}
 	void readKeys() {
@@ -197,6 +201,9 @@ public:
 				mixer.playSound(i, 1);
 				wasPressed[i] = true;
 			} else if (!t) wasPressed[i] = false;
+		}
+		if (testKey2(GLFW_KEY_R) == agl::KeyStatus::enter) {
+			relayoutText = !relayoutText;
 		}
 	}
 	void onMouse(double xpos, double ypos) {
@@ -262,6 +269,7 @@ public:
 	}
 	agl::Mixer mixer;
 	bool wasPressed[NUM_WORDS];
+	bool relayoutText = false;
 };
 
 Boxes::Boxes(AGLTest* a) {
