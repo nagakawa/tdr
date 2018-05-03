@@ -27,5 +27,7 @@ void main() {
   pos /= screenDimensions;
   // Normalise to [-1, 1]
   pos = pos * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f);
+  // Flip vertically
+  pos.y *= -1;
 	gl_Position = vec4(pos, 1.0f, 1.0f);
 }

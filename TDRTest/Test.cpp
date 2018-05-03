@@ -39,10 +39,30 @@ public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialise() {
 		std::cout << "Starting TDRTest...\n";
-		g = std::make_unique<tdr::Game>(this, getWidth(), getHeight());
+		tdr::Shotsheet s;
+		s.t = agl::Texture("textures-tdr/shotsheet.png");
+		s.rectsByID[0] = {
+			/*.texCoords = */ {0, 0, 16, 16},
+			/* .visualRadius = */ 16,
+			/* .collisionRadius = */ 8,
+		};
+		s.rectsByID[1] = {
+			/*.texCoords = */ {16, 0, 32, 16},
+			/* .visualRadius = */ 16,
+			/* .collisionRadius = */ 8,
+		};
+		g = std::make_unique<tdr::Game>(
+			this, std::move(s), getWidth(), getHeight());
+		glfwSetWindowTitle(underlying(), "TDRTest");
 	}
 	void tick() {
+		// Work
 		g->update();
+		tdr::BulletList& bl = g->getBulletList();
+		bl.createShotA1(50, 50, 1, kfp::frac32::raw(0x94828459u), bl.shotsheet.getRectByID(0), 0);
+		// Render
+		glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		g->render();
 	}
 	void readKeys() {

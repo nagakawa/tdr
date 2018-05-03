@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <functional>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include <BlendMode.h>
@@ -81,7 +82,7 @@ namespace tdr {
 		Bullet(
 				kfp::s16_16 x, kfp::s16_16 y,
 				kfp::s16_16 speed, kfp::frac32 angle,
-				Graphic& graph, uint8_t delay) : // CreateShotA1,
+				const Graphic& graph, uint8_t delay) : // CreateShotA1,
 			hitbox{zekku::Circle<kfp::s16_16>()},
 			xs(0), ys(0), xa(0), ya(0),
 			speed(speed), angle(angle), angularVelocity(0),
@@ -133,6 +134,14 @@ namespace tdr {
 		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
 	static_assert(offsetof(Bullet, visualWidth) + 4 == offsetof(Bullet, visualLength),
 		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
+	class Shotsheet {
+	public:
+		const Graphic& getRectByID(size_t id) const {
+			return rectsByID.at(id);
+		}
+		agl::Texture t;
+		std::unordered_map<size_t, Graphic> rectsByID;
+	};
 	// TODO: support multiple render passes for BulletList
 	// This will be useful not only for avoiding multiple BulletLists if
 	// we wish to have bullets of different blend modes, but also handle
@@ -145,11 +154,10 @@ namespace tdr {
 	public:
 		BulletList(
 				Playfield* p,
-				agl::Texture* shotsheet) :
-			p(p), shotsheet(shotsheet) {}
+				Shotsheet&& shotsheet) :
+			shotsheet(std::move(shotsheet)), p(p) {}
 		void setUp();
 		void render();
-		void update();
 		void _tearDown();
     bool check(const Circle& h);
     bool check(const Line& h);
@@ -158,16 +166,16 @@ namespace tdr {
 		BulletHandle createShotA1(
 			kfp::s16_16 x, kfp::s16_16 y,
 			kfp::s16_16 speed, kfp::frac32 angle,
-			Graphic& graph, uint8_t delay);
+			const Graphic& graph, uint8_t delay);
 		void graze(
 			const Circle& h,
 			std::function<void(Bullet&)> callback);
+		Shotsheet shotsheet;
 	private:
 		plf::colony<Bullet> bullets;
 		std::vector<std::vector<BulletRenderInfo>> rinfo;
 		std::vector<size_t> offsets;
 		Playfield* p;
-		agl::Texture* shotsheet;
 		agl::VBO vbo;
 		agl::VBO instanceVBO;
 		agl::VAO vao;
@@ -176,5 +184,6 @@ namespace tdr {
 		bool hasInitialisedProgram = false;
 		void setUniforms();
 		void spurt();
+		void update();
 	};
 }

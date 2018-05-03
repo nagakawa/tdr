@@ -16,6 +16,9 @@ namespace tdr {
       fboMS = std::move(ft.ms.fbo);
       texMS = std::move(ft.ms.texture);
     }
+    void blit() {
+      fboMS.blitTo(fbo, aw, ah);
+    }
     // ~Playfield();
     int getWidth() const { return w; }
     int getHeight() const { return h; }
@@ -23,6 +26,7 @@ namespace tdr {
     int getActualHeight() const { return ah; }
     int getFBOID() const { return fbo.id; }
     agl::FBO& getFBO() { return fbo; }
+    agl::FBO& getFBOMS() { return fboMS; }
     agl::Texture& getTexture() { return tex; }
     const agl::FBO& getFBO() const { return fbo; }
     const agl::Texture& getTexture() const { return tex; }

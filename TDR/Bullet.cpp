@@ -46,9 +46,9 @@ void tdr::BulletList::setUp() {
 		throw "What, are you crazy?!";
 	rinfo.resize(agl::BMIDX_COUNT);
 	agl::Shader vertex(
-		vertexSource, vertexSourceSize, GL_VERTEX_SHADER);
+		vertexSource, vertexSourceSize - 1, GL_VERTEX_SHADER);
 	agl::Shader fragment(
-		fragmentSource, fragmentSourceSize, GL_FRAGMENT_SHADER);
+		fragmentSource, fragmentSourceSize - 1, GL_FRAGMENT_SHADER);
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link();
@@ -105,16 +105,20 @@ void tdr::BulletList::setUniforms() {
 	if (hasSetUniforms) return;
 	vao.setActive();
 	program.use();
-	shotsheet->bindTo(0);
+	shotsheet.t.bindTo(0);
 	SETUNSP(program, 1i, "tex", 0);
-	SETUNSP2(program, 2f, "texDimensions", (GLfloat) shotsheet->getWidth(), (GLfloat) shotsheet->getHeight());
-	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) p->getWidth(), (GLfloat) p->getHeight());
+	SETUNSP2(program, 2f, "texDimensions",
+		(GLfloat) shotsheet.t.getWidth(), (GLfloat) shotsheet.t.getHeight());
+	SETUNSP2(program, 2f, "screenDimensions",
+		(GLfloat) p->getWidth(), (GLfloat) p->getHeight());
 	hasSetUniforms = true;
 }
 
 void tdr::BulletList::render() {
 	if (!hasInitialisedProgram) setUp();
-	p->getFBO().setActive();
+	update();
+	p->getFBOMS().setActive();
+	vao.setActive();
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -179,7 +183,7 @@ void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 	for (Bullet& b : bullets) {
 		b.update();
 		if (b.deleteWhenOutOfBounds && 
-				b.hitbox.c.isWithin({
+				!b.hitbox.c.isWithin({
 					{
 						kfp::s16_16(bounds.left + bounds.right) / 2,
 						kfp::s16_16(bounds.top + bounds.bottom) / 2,
@@ -192,9 +196,12 @@ void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 			b.markedForDeletion = true;
 	}
 	// Remove marked bullets with no references
-	std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b) {
-		return b.markedForDeletion && b.refcount == 0;
-	});
+	for (auto it = bullets.begin(); it != bullets.end(); ) {
+		if (it->markedForDeletion && it->refcount == 0)
+			it = bullets.erase(it);
+		else
+			++it;
+	}
 }
 
 void tdr::BulletList::graze(
@@ -214,7 +221,7 @@ void tdr::BulletList::graze(
 BulletHandle tdr::BulletList::createShotA1(
 		kfp::s16_16 x, kfp::s16_16 y,
 		kfp::s16_16 speed, kfp::frac32 angle,
-		Graphic& graph, uint8_t delay) {
+		const Graphic& graph, uint8_t delay) {
 	auto it = bullets.emplace(x, y, speed, angle, graph, delay);
 	return BulletHandle(it);
 }
