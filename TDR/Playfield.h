@@ -10,7 +10,7 @@ namespace tdr {
   public:
     Playfield(int w, int h, int aw = 0, int ah = 0) :
         w(w), h(h), aw((aw == 0) ? w : aw), ah((ah == 0) ? h : ah) {
-      agl::FBOTexMS ft = agl::makeFBOForMeMS(aw, ah);
+      agl::FBOTexMS ft = agl::makeFBOForMeMS(this->aw, this->ah);
       fbo = std::move(ft.ss.fbo);
       tex = std::move(ft.ss.texture);
       fboMS = std::move(ft.ms.fbo);

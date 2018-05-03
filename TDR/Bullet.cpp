@@ -88,6 +88,7 @@ void tdr::BulletList::setUp() {
 	// visualAngle visualWidth visualLength
 	// texcoords
 	// So, without further ado:
+	instanceVBO.setActive();
 	glEnableVertexAttribArray(1);
 	// Would've loved to use GL_FIXED for this and be done with that,
 	// but sadly, it's GL4.2+.
@@ -126,11 +127,20 @@ void tdr::BulletList::setUniforms() {
 void tdr::BulletList::render() {
 	p->getFBO().setActive();
 	glEnable(GL_BLEND);
-	agl::BM_ALPHA.use();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	setUniforms();
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, bullets.size());
+	for (size_t i = 0; i < rinfo.size(); ++i) {
+		agl::blendModes[i].use();
+		// XXX: 4.2-ism here, will have to fix later
+		glDrawArraysInstancedBaseInstance(
+			GL_TRIANGLE_STRIP,
+			0,
+			4,
+			offsets[i + 1] - offsets[i],
+			offsets[i]
+		);
+	}
 	agl::resetVAO();
 }
 

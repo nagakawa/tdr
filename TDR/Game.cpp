@@ -6,22 +6,34 @@
 
 using namespace tdr;
 
-tdr::Game::Game(int w, int h, int aw, int ah) :
+tdr::Game::Game(agl::GLFWApplication* app,
+  int w, int h, int aw, int ah) :
     p(w, h, aw, ah), gp(kfp::s16_16(w) / 2, kfp::s16_16(h) * 3 / 4),
-    bullets(&p, &t) {}
+    bullets(&p, &t), pfSprite(&(p.getTexture())) {
+  pfSprite.setApp(app);
+  pfSprite.setUp();
+  pfSprite.addSprite(agl::Sprite2DInfo{{
+    0, 0, (float) aw, (float) ah
+  }, {
+    0, 0, (float) aw, (float) ah
+  }});
+}
 
 tdr::Game::~Game() {
 }
 
-void tdr::Game::setTexture(agl::Texture&& shotsheet) {
+void tdr::Game::setShotsheet(agl::Texture&& shotsheet) {
   t = std::move(shotsheet);
 }
 
 void tdr::Game::update() {
-  // Nothing here yet
+  bullets.updatePositions(
+    { 0, 0, (int16_t) p.getWidth(), (int16_t) p.getHeight() });
 }
 
 void tdr::Game::render() {
-  p.getFBO().setActive();
+  //p.getFBO().setActive();
   bullets.render();
+  agl::setDefaultFBOAsActive();
+  pfSprite.tick();
 }

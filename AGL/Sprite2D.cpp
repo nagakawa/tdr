@@ -40,8 +40,6 @@ Sprite2D::~Sprite2D() {
 }
 
 void agl::Sprite2D::setUp() {
-	if (app == nullptr)
-		throw "Current app must be set first";
 	Shader vertex(S2D_VERTEX_SOURCE, GL_VERTEX_SHADER);
 	Shader fragment(S2D_FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
 	program.attach(vertex);
@@ -77,15 +75,23 @@ void agl::Sprite2D::tick() {
 }
 
 void agl::Sprite2D::setTexture(Texture* tex) {
+	if (texture->id == tex->id && hasSetUniforms) return;
 	vao.setActive();
 	program.use();
 	tex->bindTo(0);
-	if (app == nullptr) throw "App must be set first";
-	if (texture->id == tex->id && hasSetUniforms) return;
 	texture = tex;
 	SETUNSP(program, 1i, "tex", 0);
 	SETUNSP2(program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
-	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
+	if (!hasDeducedScreenDimensions) {
+		hasDeducedScreenDimensions = true;
+		if (app == nullptr) {
+			glGetIntegerv(GL_VIEWPORT, vp);
+		} else {
+			vp[2] = app->getWidth();
+			vp[3] = app->getHeight();
+		}
+	}
+	SETUNSP2(program, 2f, "screenDimensions", (GLfloat) vp[2], (GLfloat) vp[3]);
 	hasSetUniforms = true;
 }
 

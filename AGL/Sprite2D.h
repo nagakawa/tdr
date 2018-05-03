@@ -51,5 +51,7 @@ namespace agl {
 		Dimensional* app;
 		bool hasSetUniforms;
 		bool hasInitialisedProgram;
+		bool hasDeducedScreenDimensions = false;
+		GLint vp[4];
 	};
 }
