@@ -36,34 +36,10 @@ void tdr::Bullet::refreshGraze() {
 	if (timeToNextGraze != 0 && grazeFrequency != -1) --timeToNextGraze;
 }
 
-const char* tdr::BL_VERTEX_SOURCE = "\
-#version 330 core \n\
-layout (location = 0) in vec2 bounds; \n\
-layout (location = 1) in vec4 hitbox; \n\
-layout (location = 2) in vec3 awl; \n\
-layout (location = 3) in vec4 shottc; \n\
-out vec2 texCoord; \n\
-uniform vec2 texDimensions; \n\
-uniform vec2 screenDimensions; \n\
-\n\
-void main() { \n\
-	texCoord = vec2(mix(shottc.x, shottc.z, bounds.x), mix(shottc.y, shottc.w, bounds.y)) / texDimensions; \n\
-	float angle = awl.x * 2 * 3.14159265358979323 / 16384; \n\
-	mat2 rm = mat2(cos(angle), -sin(angle), sin(angle), cos(angle)); \n\
-	vec2 pos = position / screenDimensions + rm * ((bounds * vec2(2.0f, 2.0f) - vec2(1.0f, 1.0f)) * awl.zy); \n\
-	gl_Position = vec4(position * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f), 1.0f, 1.0f); \n\
-} \
-";
-const char* tdr::BL_FRAGMENT_SOURCE = "\
-#version 330 core \n\
-in vec2 texCoord; \n\
-out vec4 colour; \n\
-uniform sampler2D tex; \n\
-\n\
-void main() { \n\
-	colour = texture(tex, texCoord); \n\
-} \
-";
+extern "C" const char _binary_bl_vertex_source_glsl_start[];
+extern "C" const char _binary_bl_fragment_source_glsl_start[];
+const char* tdr::BL_VERTEX_SOURCE = _binary_bl_vertex_source_glsl_start;
+const char* tdr::BL_FRAGMENT_SOURCE = _binary_bl_fragment_source_glsl_start;
 
 void tdr::BulletList::setUp() {
 	if (p == nullptr)
@@ -109,6 +85,12 @@ void tdr::BulletList::setUp() {
 		(GLvoid*) (offsetof(BulletRenderInfo, texcoords))
 	);
 	glVertexAttribDivisor(3, 1);
+	glEnableVertexAttribArray(4);
+	glVertexAttribIPointer(
+		4, 1, GL_INT, sizeof(Bullet),
+		(GLvoid*) (offsetof(BulletRenderInfo, isLaser))
+	);
+	glVertexAttribDivisor(4, 1);
 	agl::resetVBO();
 	agl::resetVAO();
 }
@@ -125,6 +107,7 @@ void tdr::BulletList::setUniforms() {
 }
 
 void tdr::BulletList::render() {
+	if (!hasInitialisedProgram) setUp();
 	p->getFBO().setActive();
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);

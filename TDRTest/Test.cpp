@@ -79,6 +79,9 @@ int main(int argc, char** argv) {
 	} catch (char* s) {
 		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		return -1;
+	} catch (const std::string& s) {
+		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
+		return -1;
 	}
 	glfwTerminate();
 	return 0;

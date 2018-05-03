@@ -106,7 +106,7 @@ namespace tdr {
 		agl::UIRect16 texcoords;
 		kfp::frac32 visualAngle;
 		kfp::s16_16 visualRadius;
-		bool isLaser;
+		uint32_t isLaser;
 	};
 	class BulletHandle {
 	public:
@@ -174,8 +174,8 @@ namespace tdr {
 		agl::VBO instanceVBO;
 		agl::VAO vao;
 		agl::ShaderProgram program;
-		bool hasSetUniforms;
-		bool hasInitialisedProgram;
+		bool hasSetUniforms = false;
+		bool hasInitialisedProgram = false;
 		void setUniforms();
 		void spurt();
 	};

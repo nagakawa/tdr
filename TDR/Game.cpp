@@ -17,6 +17,7 @@ tdr::Game::Game(agl::GLFWApplication* app,
   }, {
     0, 0, (float) aw, (float) ah
   }});
+  bullets.setUp();
 }
 
 tdr::Game::~Game() {
