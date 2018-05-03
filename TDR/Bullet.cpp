@@ -6,6 +6,8 @@
 #include <kozet_fixed_point/kfp_extra.h>
 #include <BlendMode.h>
 
+#include "embedShader.h"
+
 using namespace tdr;
 
 void tdr::Bullet::update() {
@@ -36,26 +38,30 @@ void tdr::Bullet::refreshGraze() {
 	if (timeToNextGraze != 0 && grazeFrequency != -1) --timeToNextGraze;
 }
 
-extern "C" const char _binary_bl_vertex_source_glsl_start[];
-extern "C" const char _binary_bl_fragment_source_glsl_start[];
-const char* tdr::BL_VERTEX_SOURCE = _binary_bl_vertex_source_glsl_start;
-const char* tdr::BL_FRAGMENT_SOURCE = _binary_bl_fragment_source_glsl_start;
+EMBED_SHADER(bl_vertex_source, vertex, static)
+EMBED_SHADER(bl_fragment_source, fragment, static)
 
 void tdr::BulletList::setUp() {
 	if (p == nullptr)
 		throw "What, are you crazy?!";
 	rinfo.resize(agl::BMIDX_COUNT);
-	agl::Shader vertex(BL_VERTEX_SOURCE, GL_VERTEX_SHADER);
-	agl::Shader fragment(BL_FRAGMENT_SOURCE, GL_FRAGMENT_SHADER);
+	agl::Shader vertex(
+		vertexSource, vertexSourceSize, GL_VERTEX_SHADER);
+	agl::Shader fragment(
+		fragmentSource, fragmentSourceSize, GL_FRAGMENT_SHADER);
 	program.attach(vertex);
 	program.attach(fragment);
 	program.link();
 	hasInitialisedProgram = true;
 	vao.setActive();
 	// Vertex data
-	vbo.feedData(sizeof(agl::rectangleVertices), (void*) agl::rectangleVertices, GL_DYNAMIC_DRAW);
+	vbo.feedData(
+		sizeof(agl::rectangleVertices),
+		(void*) agl::rectangleVertices,
+		GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
+	glVertexAttribPointer(
+		0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),(GLvoid*) 0);
 	// InstanceData
 	update();
 	// The shader needs to know about the following fields:

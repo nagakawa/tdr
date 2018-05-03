@@ -133,8 +133,6 @@ namespace tdr {
 		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
 	static_assert(offsetof(Bullet, visualWidth) + 4 == offsetof(Bullet, visualLength),
 		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
-	extern const char* BL_VERTEX_SOURCE;
-	extern const char* BL_FRAGMENT_SOURCE;
 	// TODO: support multiple render passes for BulletList
 	// This will be useful not only for avoiding multiple BulletLists if
 	// we wish to have bullets of different blend modes, but also handle

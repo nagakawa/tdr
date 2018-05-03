@@ -7,12 +7,17 @@
 using namespace agl;
 
 Shader::Shader(const char* source, GLenum type) {
-	init(source, type);
+	init(source, strlen(source), type);
 }
 
-void Shader::init(const char* source, GLenum type) {
+Shader::Shader(const char* source, size_t len, GLenum type) {
+	init(source, len, type);
+}
+
+void Shader::init(const char* source, size_t len, GLenum type) {
 	id = glCreateShader(type);
-	glShaderSource(id, 1, &source, NULL);
+	GLint l = len;
+	glShaderSource(id, 1, &source, &l);
 	glCompileShader(id);
 	GLint success;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &success);
@@ -38,7 +43,7 @@ Shader::Shader(FILE* f, GLenum type) {
 	fclose(f);
 	if (br < 1) throw u8"fread did not read as much as it should have";
 	string[fsize] = 0;
-	init(string, type);
+	init(string, fsize, type);
 	free(string);
 }
 

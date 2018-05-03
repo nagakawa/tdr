@@ -84,7 +84,7 @@ public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialise() {
 		std::cout << "hi\n";
-		glfwSetInputMode(underlying(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		//glfwSetInputMode(underlying(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		agl::FBOTexMS ft = agl::makeFBOForMeMS(800, 600);
 		fboTex = std::move(ft.ss.texture);
 		fboTexMS = std::move(ft.ms.texture);
@@ -330,6 +330,7 @@ void Boxes::tick() {
 		SETUNSPM(*program, 4fv, "projection", glm::value_ptr(projection));
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	}
+	agl::resetVAO();
 }
 
 static void glfwError(int id, const char* description) {

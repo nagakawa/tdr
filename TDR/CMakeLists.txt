@@ -47,6 +47,7 @@ ADD_CUSTOM_COMMAND(OUTPUT CMakeFiles/TDR.dir/shader-contents.o
   COMMAND ld -r -b binary -o ${SHADER_CONTENTS_LOCATION}/shader-contents.o *.glsl
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders
   COMMAND objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents ${SHADER_CONTENTS_LOCATION}/shader-contents.o ${SHADER_CONTENTS_LOCATION}/shader-contents.o
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.glsl
 )
 
 # actual target:

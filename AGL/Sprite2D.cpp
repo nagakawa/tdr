@@ -65,6 +65,9 @@ void agl::Sprite2D::setUp() {
 }
 
 void agl::Sprite2D::tick() {
+	vao.setActive();
+	program.use();
+	texture->bindTo(0);
 	glEnable(GL_BLEND);
 	BM_ALPHA.use();
 	glDisable(GL_CULL_FACE);
