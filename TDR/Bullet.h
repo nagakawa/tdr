@@ -52,11 +52,11 @@ namespace tdr {
 		// n > 0 -> every n frames
 		// 0 -> only once
 		// -1 -> never
-		int8_t grazeFrequency;
+		int8_t grazeFrequency = 0;
 		// n > 0 -> in n frames
 		// 0 -> ready
 		// -1 -> can't graze anymore
-		int8_t timeToNextGraze;
+		int8_t timeToNextGraze = 0;
 		uint8_t alpha = 255; // TODO this should be reflected in drawing code
 		uint8_t delay;
 		uint8_t isLaser;
@@ -86,6 +86,7 @@ namespace tdr {
 			hitbox{zekku::Circle<kfp::s16_16>()},
 			xs(0), ys(0), xa(0), ya(0),
 			speed(speed), angle(angle), angularVelocity(0),
+			visualAngle(angle),
 			visualWidth(graph.visualRadius), visualLength(graph.visualRadius),
 			texcoords(graph.texcoords), delay(delay), isLaser(false),
 			markedForDeletion(false), useRadial(true),
@@ -109,6 +110,10 @@ namespace tdr {
 		kfp::s16_16 visualRadius;
 		uint32_t isLaser;
 	};
+	static_assert(
+		offsetof(BulletRenderInfo, visualAngle) + 4 ==
+			offsetof(BulletRenderInfo, visualRadius),
+		"Offset of visualRadius in BulletRenderInfo must be exactly 4 more than that of visualAngle");
 	class BulletHandle {
 	public:
 		BulletHandle(plf::colony<Bullet>::iterator it) : info(it) {
@@ -125,15 +130,11 @@ namespace tdr {
 		}
 		Bullet& operator*() { return *info; }
 		const Bullet& operator*() const { return *info; }
-		Bullet& operator->() { return *info; }
-		const Bullet& operator->() const { return *info; }
+		Bullet* operator->() { return &(*info); }
+		const Bullet* operator->() const { return &(*info); }
 	private:
 		plf::colony<Bullet>::iterator info;
 	};
-	static_assert(offsetof(Bullet, visualAngle) + 4 == offsetof(Bullet, visualWidth),
-		"Offset of visualWidth in Bullet must be exactly 4 more than that of visualAngle");
-	static_assert(offsetof(Bullet, visualWidth) + 4 == offsetof(Bullet, visualLength),
-		"Offset of visualHeight in Bullet must be exactly 4 more than that of visualWidth");
 	class Shotsheet {
 	public:
 		const Graphic& getRectByID(size_t id) const {

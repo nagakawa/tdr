@@ -61,7 +61,7 @@ void tdr::BulletList::setUp() {
 		GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(
-		0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),(GLvoid*) 0);
+		0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
 	// InstanceData
 	update();
 	// The shader needs to know about the following fields:
@@ -87,13 +87,13 @@ void tdr::BulletList::setUp() {
 	glVertexAttribDivisor(2, 1);
 	glEnableVertexAttribArray(3);
 	glVertexAttribIPointer(
-		3, 4, GL_SHORT, sizeof(Bullet),
+		3, 4, GL_SHORT, sizeof(BulletRenderInfo),
 		(GLvoid*) (offsetof(BulletRenderInfo, texcoords))
 	);
 	glVertexAttribDivisor(3, 1);
 	glEnableVertexAttribArray(4);
 	glVertexAttribIPointer(
-		4, 1, GL_INT, sizeof(Bullet),
+		4, 1, GL_INT, sizeof(BulletRenderInfo),
 		(GLvoid*) (offsetof(BulletRenderInfo, isLaser))
 	);
 	glVertexAttribDivisor(4, 1);
@@ -102,11 +102,11 @@ void tdr::BulletList::setUp() {
 }
 
 void tdr::BulletList::setUniforms() {
-	if (hasSetUniforms) return;
 	vao.setActive();
 	program.use();
 	shotsheet.t.bindTo(0);
 	SETUNSP(program, 1i, "tex", 0);
+	if (hasSetUniforms) return;
 	SETUNSP2(program, 2f, "texDimensions",
 		(GLfloat) shotsheet.t.getWidth(), (GLfloat) shotsheet.t.getHeight());
 	SETUNSP2(program, 2f, "screenDimensions",
@@ -116,9 +116,9 @@ void tdr::BulletList::setUniforms() {
 
 void tdr::BulletList::render() {
 	if (!hasInitialisedProgram) setUp();
+	vao.setActive();
 	update();
 	p->getFBOMS().setActive();
-	vao.setActive();
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
@@ -143,7 +143,7 @@ void tdr::BulletList::update() {
 	instanceVBO.feedData(
 		offsets.back() * sizeof(BulletRenderInfo),
 		nullptr,
-		GL_DYNAMIC_DRAW);
+		GL_STREAM_DRAW);
 	// Set individual chunks
 	for (size_t i = 0; i < rinfo.size(); ++i) {
 		instanceVBO.feedSubdata(

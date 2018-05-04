@@ -10,7 +10,7 @@ void agl::BlendMode::use() const {
 const BlendMode agl::BM_ALPHA = {
 	GL_FUNC_ADD, GL_FUNC_ADD,
 	GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
-	GL_ONE, GL_ONE_MINUS_SRC_ALPHA
+	GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
 };
 
 const BlendMode agl::BM_ADD = {
