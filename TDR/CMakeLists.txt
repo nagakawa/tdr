@@ -17,17 +17,20 @@ SET(TDR_library_SRCS
   bitwise.cpp
   Game.cpp
   Player.cpp
+  GameScene.cpp
 )
 
 # Headers:
 SET(TDR_library_HDRS
-    Bullet.h
-    CommonData.h
-    Replay.h
-    defset.h
-    bitwise.h
-    Game.h
-    Player.h
+  Bullet.h
+  CommonData.h
+  Replay.h
+  defset.h
+  bitwise.h
+  Game.h
+  Player.h
+  embed.h
+  GameScene.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

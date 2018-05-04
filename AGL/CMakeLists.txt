@@ -24,6 +24,8 @@ SET(AGL_library_SRCS
     VAO.cpp
     cairoutil.cpp
     FBO.cpp
+    Scene.cpp
+    ScenedGLFWApplication.cpp
     Dimensional.cpp
     sound/Sound.cpp
     sound/Mixer.cpp
@@ -53,6 +55,8 @@ SET(AGL_library_HDRS
     FBO.h
     debug.h
     Dimensional.h
+    Scene.h
+    ScenedGLFWApplication.h
     sound/Sound.h
     sound/Mixer.h
     sound/Reader.h

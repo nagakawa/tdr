@@ -20,8 +20,8 @@
 #include <Shader.h>
 #include <ShaderProgram.h>
 
-#include "Bullet.h"
-#include "Game.h"
+#include <Bullet.h>
+#include <Game.h>
 
 // Others
 #include <iostream>

@@ -91,5 +91,4 @@ namespace agl {
 
 	void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 	void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-
 }
