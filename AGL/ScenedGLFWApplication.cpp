@@ -4,8 +4,8 @@ namespace agl {
   Scene* ScenedGLFWApplication::insertScene(
       std::string nm, std::unique_ptr<Scene>&& sc) {
     Scene* scp = sc.get();
-    sc->initialise();
     sc->setApp(this);
+    sc->initialise();
     sc->setDimensions(
       getWidth(), getHeight(), getActualWidth(), getActualHeight());
     scenes[std::move(nm)] = std::move(sc);

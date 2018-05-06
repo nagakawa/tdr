@@ -1,22 +1,28 @@
 #include "FBO.h"
 #include "debug.h"
 
+#include <assert.h>
+
 using namespace agl;
 
-#include <assert.h>
+static thread_local GLuint currentFBO = 0;
+static thread_local GLint vp[4];
+
 agl::FBO::FBO(bool def) {
   if (def) id = 0;
   else glGenFramebuffers(1, &id);
 }
 
-agl::FBO::FBO(bool def, GLint i) {
+/*agl::FBO::FBO(bool def, GLint i) {
   (void) def;
   id = i;
-}
+}*/
 
 agl::FBO::FBO(FBO&& that) {
   id = that.id;
   that.id = 0;
+  width = that.width;
+  height = that.height;
 }
 
 agl::FBO::~FBO() {
@@ -25,14 +31,32 @@ agl::FBO::~FBO() {
 
 FBO& agl::FBO::operator=(FBO&& that) {
   std::swap(id, that.id);
+  width = that.width;
+  height = that.height;
   return *this;
 }
 
 void agl::FBO::setActive() {
+  if (currentFBO == id) return;
+  if (currentFBO == 0) glGetIntegerv(GL_VIEWPORT, vp);
   glBindFramebuffer(GL_FRAMEBUFFER, id);
+  currentFBO = id;
+  if (id != 0) {
+    assert(width != 0 && height != 0);
+    glViewport(0, 0, width, height);
+  } else {
+    glViewport(vp[0], vp[1], vp[2], vp[3]);
+  }
 }
 
-GLuint agl::getActiveFBOID() {
+void agl::FBO::setActiveNoViewport() {
+  if (currentFBO == id) return;
+  if (currentFBO == 0) glGetIntegerv(GL_VIEWPORT, vp);
+  glBindFramebuffer(GL_FRAMEBUFFER, id);
+  currentFBO = id;
+}
+
+/*GLuint agl::getActiveFBOID() {
   GLint result;
   glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &result);
   return result;
@@ -40,22 +64,24 @@ GLuint agl::getActiveFBOID() {
 
 FBO* agl::getActiveFBO() {
   return new FBO(false, getActiveFBOID());
-}
+}*/
 
 bool agl::FBO::isComplete() {
-  setActive();
+  setActiveNoViewport();
   return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 }
 
 void agl::FBO::attachTexture(
     GLenum attachment, Texture& texture, GLenum texTarget) {
-  setActive();
+  setActiveNoViewport();
   glFramebufferTexture2D(
     GL_FRAMEBUFFER, attachment, texTarget, texture.id, 0);
+  width = texture.getWidth();
+  height = texture.getHeight();
 }
 
 void agl::FBO::attachRBO(GLenum attachment, RBO&& rbo) {
-  setActive();
+  setActiveNoViewport();
   glFramebufferRenderbuffer(
     GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, rbo.id);
   rbo.id = 0;
@@ -120,5 +146,5 @@ FBOTexMS agl::makeFBOForMeMS(GLint width, GLint height) {
 }
 
 void agl::setDefaultFBOAsActive() {
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  FBO(true).setActive();
 }

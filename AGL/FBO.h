@@ -20,16 +20,18 @@ namespace agl {
   class FBO {
 	public:
 		FBO(bool def = true);
-    FBO(bool def, GLint i);
+    //FBO(bool def, GLint i);
     FBO(FBO&& that);
 		~FBO();
     FBO& operator=(FBO&& that);
 		void setActive();
+    void setActiveNoViewport();
     bool isComplete();
     void attachTexture(GLenum attachment, Texture& texture, GLenum texTarget = GL_TEXTURE_2D);
     void attachRBO(GLenum attachment, RBO&& rbo);
     void blitTo(FBO& other, int width, int height);
 		GLuint id = 0;
+    int width = 0, height = 0;
 	};
   struct FBOTex {
     FBO fbo;
@@ -47,8 +49,8 @@ namespace agl {
     FBOTexMS(FBOTexMS&& that) :
       ms(std::move(that.ms)), ss(std::move(that.ss)) {}
   };
-  FBO* getActiveFBO();
-  GLuint getActiveFBOID();
+  //FBO* getActiveFBO();
+  //GLuint getActiveFBOID();
   FBOTex makeFBOForMe(GLint width, GLint height);
   FBOTexMS makeFBOForMeMS(GLint width, GLint height);
   void setDefaultFBOAsActive();

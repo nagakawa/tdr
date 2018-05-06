@@ -67,12 +67,12 @@ void agl::Sprite2D::setUp() {
 void agl::Sprite2D::tick() {
 	vao.setActive();
 	program.use();
+	setTexture(texture);
 	texture->bindTo(0);
 	glEnable(GL_BLEND);
 	BM_ALPHA.use();
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
-	setTexture(texture);
 	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, sprites.size());
 	resetVAO();
 }
@@ -84,7 +84,9 @@ void agl::Sprite2D::setTexture(Texture* tex) {
 	tex->bindTo(0);
 	texture = tex;
 	SETUNSP(program, 1i, "tex", 0);
-	SETUNSP2(program, 2f, "texDimensions", (GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
+	SETUNSP2(
+		program, 2f, "texDimensions",
+		(GLfloat) tex->getWidth(), (GLfloat) tex->getHeight());
 	if (!hasDeducedScreenDimensions) {
 		hasDeducedScreenDimensions = true;
 		if (app == nullptr) {

@@ -48,7 +48,7 @@ namespace agl {
 		VAO vao;
 		ShaderProgram program;
 		std::vector<Sprite2DInfo> sprites;
-		Dimensional* app;
+		Dimensional* app = nullptr;
 		bool hasSetUniforms;
 		bool hasInitialisedProgram;
 		bool hasDeducedScreenDimensions = false;

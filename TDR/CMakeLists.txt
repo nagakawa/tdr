@@ -17,7 +17,6 @@ SET(TDR_library_SRCS
   bitwise.cpp
   Game.cpp
   Player.cpp
-  GameScene.cpp
 )
 
 # Headers:
@@ -30,7 +29,6 @@ SET(TDR_library_HDRS
   Game.h
   Player.h
   embed.h
-  GameScene.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

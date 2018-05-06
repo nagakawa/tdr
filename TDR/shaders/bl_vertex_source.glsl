@@ -18,7 +18,7 @@ void main() {
 		mix(shottc.y, shottc.w, bounds.y)) / texDimensions;
 	float angle = visualAngleAndRadius.x * fixedTurnsToRadians;
 	mat2 rm = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
-  vec2 nbounds = bounds * vec2(2.0f, 2.0f) - vec2(1.0f, 1.0f);
+  vec2 nbounds = bounds * 2.0f - 1.0f;
   vec2 position = hitbox.xy;
 	vec2 pos =
     position + rm * (nbounds * visualAngleAndRadius.y);
@@ -26,8 +26,6 @@ void main() {
   pos /= 65536;
   pos /= screenDimensions;
   // Normalise to [-1, 1]
-  pos = pos * vec2(2.0f, -2.0f) + vec2(-1.0f, 1.0f);
-  // Flip vertically
-  pos.y *= -1;
+  pos = pos * 2.0f - 1.0f;
 	gl_Position = vec4(pos, 1.0f, 1.0f);
 }

@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include <Scene.h>
 #include <Sprite2D.h>
 #include <Texture.h>
 
@@ -13,17 +14,19 @@
 #include "Replay.h"
 
 namespace tdr {
-  class Game {
+  class Game : public agl::Scene {
   public:
-    Game(agl::GLFWApplication* app,
-      Shotsheet&& ss,
-      int w, int h, int aw = 0, int ah = 0);
+    Game(Shotsheet&& ss,
+      int w, int h,
+      int offw = 0, int offh = 0, int aw = 0, int ah = 0);
     ~Game();
     void setShotsheet(Shotsheet&& shotsheet);
-    void update();
-    void render();
+    void initialise() override;
+    void update() override;
+    void render() override;
     BulletList& getBulletList() { return bullets; }
     bool isReplay() const { return reading; }
+    virtual void mainLoop() = 0;
   private:
     Playfield p;
     Player gp;

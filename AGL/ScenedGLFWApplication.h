@@ -25,10 +25,11 @@ namespace agl {
 		void tick() override;
 		void readKeys() override;
 		void onMouse(double xpos, double ypos) override;
-    Scene* insertScene(std::string nm, std::unique_ptr<Scene>&& sc);
-    void changeScene(std::string nm);
+		Scene* insertScene(std::string nm, std::unique_ptr<Scene>&& sc);
+		void changeScene(std::string nm);
 	private:
-    std::unordered_map<std::string, std::unique_ptr<Scene>> scenes;
-    std::string currentSceneName;
+		std::unordered_map<std::string, std::unique_ptr<Scene>> scenes;
+		std::string currentSceneName;
+		friend class Scene;
 	};
 }
