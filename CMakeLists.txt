@@ -16,6 +16,12 @@ set(PROJECT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 include_directories("${PROJECT_INCLUDE_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}")
 
+ADD_CUSTOM_COMMAND(
+  OUTPUT 3rdparty/agc/kozet_coroutine/build/libkozet_coroutine.a
+  COMMAND make
+  WORKING_DIRECTORY 3rdparty/agc/kozet_coroutine/
+)
+
 ADD_SUBDIRECTORY(FileUtil)
 ADD_SUBDIRECTORY(AGL)
 ADD_SUBDIRECTORY(AGLTest)

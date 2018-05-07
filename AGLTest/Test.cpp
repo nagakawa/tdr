@@ -91,7 +91,7 @@ public:
 		fboSS = std::move(ft.ss.fbo);
 		fboMS = std::move(ft.ms.fbo);
 		boxes = new Boxes(this);
-		stex = std::move(agl::Texture("textures/fuckyou.png"));
+		stex = agl::Texture("textures/fuckyou.png");
 		sprites = new agl::Sprite2D(&stex);
 		sprites->setApp(this);
 		sprites->addSprite({
@@ -139,7 +139,7 @@ public:
 		});
 		view->setUp();
 		for (int i = 0; i < NUM_WORDS; ++i) {
-			mixer.addSound(i, std::move(agl::Sound(fnames[i])));
+			mixer.addSound(i, agl::Sound(fnames[i]));
 			wasPressed[i] = false;
 		}
 		PaError stat = Pa_Initialize();
@@ -349,9 +349,6 @@ int main(int argc, char** argv) {
 		// AGLTest* a = new AGLTest(800, 600, 0, 0, u8"AGL Test App", 3, 3, false);
 		a->start();
 	} catch (char const* s) {
-		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
-		getchar();
-	} catch (char* s) {
 		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
 		getchar();
 	}

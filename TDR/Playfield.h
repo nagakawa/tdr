@@ -27,6 +27,10 @@ namespace tdr {
     int getHeight() const { return h; }
     int getActualWidth() const { return aw; }
     int getActualHeight() const { return ah; }
+    int getOffsetX() const { return offw; }
+    int getOffsetY() const { return offh; }
+    int getActualOffsetX() const { return aoffw; }
+    int getActualOffsetY() const { return aoffh; }
     int getFBOID() const { return fbo.id; }
     agl::Rect getActualBounds() const {
       return {

@@ -56,9 +56,14 @@ INCLUDE_DIRECTORIES(${VORBIS_INCLUDE_DIRS})
 
 SET(PROJECT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/FileUtil)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/3rdparty/agc/kozet_fixed_point/include)
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/3rdparty/agc/zekku/include)
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/3rdparty/plf_colony)
+INCLUDE_DIRECTORIES(
+  ${CMAKE_SOURCE_DIR}/3rdparty/agc/kozet_fixed_point/include)
+INCLUDE_DIRECTORIES(
+  ${CMAKE_SOURCE_DIR}/3rdparty/agc/zekku/include)
+INCLUDE_DIRECTORIES(
+  ${CMAKE_SOURCE_DIR}/3rdparty/agc/kozet_coroutine/include)
+INCLUDE_DIRECTORIES(
+  ${CMAKE_SOURCE_DIR}/3rdparty/plf_colony)
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)

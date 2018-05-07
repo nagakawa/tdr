@@ -18,6 +18,14 @@ tdr::Game::Game(Shotsheet&& ss,
     p.getActualBounds(),
   });
   bullets.setUp();
+  man.setAdvanceOnExit(false);
+  man.spawn([this]() {
+    while (true) {
+      mainLoop();
+      kcr::yield();
+      kcr::exit();
+    }
+  });
 }
 
 tdr::Game::~Game() {
@@ -34,7 +42,7 @@ void tdr::Game::setShotsheet(Shotsheet&& shotsheet) {
 }
 
 void tdr::Game::update() {
-  mainLoop();
+  man.enter();
   bullets.updatePositions(
     { 0, 0, (int16_t) p.getWidth(), (int16_t) p.getHeight() });
 }

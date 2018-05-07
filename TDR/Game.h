@@ -4,6 +4,8 @@
 
 #include <memory>
 
+#include <kozet_coroutine/kcr.h>
+
 #include <Scene.h>
 #include <Sprite2D.h>
 #include <Texture.h>
@@ -33,6 +35,7 @@ namespace tdr {
     BulletList bullets;
     agl::Sprite2D pfSprite;
     Replay r;
+    kcr::Manager man;
     bool reading;
   };
 }

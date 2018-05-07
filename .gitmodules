@@ -7,3 +7,6 @@
 [submodule "3rdparty/agc/zekku"]
 	path = 3rdparty/agc/zekku
 	url = https://github.com/nagakawa/zekku
+[submodule "3rdparty/agc/kozet_coroutine"]
+	path = 3rdparty/agc/kozet_coroutine
+	url = https://github.com/nagakawa/kozet_coroutine
