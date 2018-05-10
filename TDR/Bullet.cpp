@@ -183,7 +183,7 @@ void tdr::BulletList::updatePositions(const agl::IRect16& bounds) {
 	for (Bullet& b : bullets) {
 		b.update();
 		if (b.deleteWhenOutOfBounds && 
-				!b.hitbox.c.isWithin({
+				!b.hitbox.c.intersects(zekku::AABB<kfp::s16_16>{
 					{
 						kfp::s16_16(bounds.left + bounds.right) / 2,
 						kfp::s16_16(bounds.top + bounds.bottom) / 2,

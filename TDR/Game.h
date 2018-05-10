@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include <memory>
+#include <random>
 
 #include <kozet_coroutine/kcr.h>
 
@@ -31,6 +32,7 @@ namespace tdr {
     BulletList& getBulletList() { return bullets; }
     bool isReplay() const { return reading; }
     virtual void mainLoop() = 0;
+    void startStage(int stage);
   private:
     Playfield p;
     Player gp;
@@ -41,5 +43,6 @@ namespace tdr {
     Replay r;
     kcr::Manager man;
     bool reading;
+    std::mt19937_64 rng;
   };
 }
