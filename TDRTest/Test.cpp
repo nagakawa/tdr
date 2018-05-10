@@ -71,8 +71,10 @@ void test() {
 		/* .visualRadius = */ 8,
 		/* .collisionRadius = */ 4,
 	};
+	agl::Texture stgFrame("textures-tdr/astgframe.png");
 	app->insertScene("Ultima loves MS", std::make_unique<TDRTest>(
 		std::move(s),
+		std::move(stgFrame),
 		500, 800, 80, 80
 	));
 	app->changeScene("Ultima loves MS");

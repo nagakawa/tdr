@@ -18,7 +18,9 @@
 namespace tdr {
   class Game : public agl::Scene {
   public:
-    Game(Shotsheet&& ss,
+    Game(
+      Shotsheet&& ss,
+      agl::Texture&& stgFrame,
       int w, int h,
       int offw = 0, int offh = 0, int aw = 0, int ah = 0);
     ~Game();
@@ -34,6 +36,8 @@ namespace tdr {
     Player gp;
     BulletList bullets;
     agl::Sprite2D pfSprite;
+    agl::Texture stgFrame;
+    agl::Sprite2D stgFrameSprite;
     Replay r;
     kcr::Manager man;
     bool reading;

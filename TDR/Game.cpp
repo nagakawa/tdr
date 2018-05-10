@@ -8,11 +8,16 @@
 
 using namespace tdr;
 
-tdr::Game::Game(Shotsheet&& ss,
+tdr::Game::Game(
+  Shotsheet&& ss,
+  agl::Texture&& stgFrame,
   int w, int h, int offw, int offh, int aw, int ah) :
     p(w, h, offw, offh, aw, ah),
     gp(kfp::s16_16(w) / 2, kfp::s16_16(h) * 3 / 4),
-    bullets(&p, std::move(ss)), pfSprite(&(p.getTexture())) {
+    bullets(&p, std::move(ss)),
+    pfSprite(&(p.getTexture())),
+    stgFrame(std::move(stgFrame)),
+    stgFrameSprite(&this->stgFrame) {
   pfSprite.addSprite(agl::Sprite2DInfo{
     p.getActualBoundsZero(),
     p.getActualBounds(),
@@ -35,6 +40,12 @@ void tdr::Game::initialise() {
   // nothing yet
   pfSprite.setApp(app);
   pfSprite.setUp();
+  stgFrameSprite.addSprite(agl::Sprite2DInfo{
+    { 0, 0, (float) app->getWidth(), (float) app->getHeight() },
+    { 0, 0, (float) app->getWidth(), (float) app->getHeight() }
+  });
+  stgFrameSprite.setApp(app);
+  stgFrameSprite.setUp();
 }
 
 void tdr::Game::setShotsheet(Shotsheet&& shotsheet) {
@@ -55,4 +66,5 @@ void tdr::Game::render() {
   p.blit();
   agl::setDefaultFBOAsActive();
   pfSprite.tick();
+  stgFrameSprite.tick();
 }
