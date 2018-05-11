@@ -8,15 +8,13 @@
 #endif
 
 namespace agl {
-	struct Rect {
-		GLfloat left, top, right, bottom;
+	template<typename T>
+	struct TRect {
+		T left, top, right, bottom;
 	};
-	struct UIRect16 {
-		uint16_t left, top, right, bottom;
-	};
-	struct IRect16 {
-		int16_t left, top, right, bottom;
-	};
+	using Rect = TRect<GLfloat>;
+	using UIRect16 = TRect<uint16_t>;
+	using IRect16 = TRect<int16_t>;
 	const GLfloat rectangleVertices[] = {
 		0.0f, 0.0f,
 		1.0f, 0.0f,

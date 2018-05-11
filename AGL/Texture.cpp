@@ -26,16 +26,16 @@ agl::Texture::Texture(const uint8_t* buffer, int bufferLength, const TexInitInfo
 	//std::cerr << fname << " ~> " << id << '\n';
 }
 
-agl::Texture::Texture(int w, int h, unsigned char* data, const TexInitInfo& info) {
+agl::Texture::Texture(int w, int h, const unsigned char* data, const TexInitInfo& info) {
 	setTexture(w, h, data, info);
 }
 
 #include <debug.h>
-void agl::Texture::setTexture(int w, int h, unsigned char* data, const TexInitInfo& info) {
+void agl::Texture::setTexture(int w, int h, const unsigned char* data, const TexInitInfo& info) {
 	changeTexture(w, h, data, info, true);
 }
 
-void agl::Texture::changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info, bool genNew) {
+void agl::Texture::changeTexture(int w, int h, const unsigned char* data, const TexInitInfo& info, bool genNew) {
 	width = w;
 	height = h;
 	ms = info.multisample;
@@ -119,15 +119,15 @@ agl::Texture3::Texture3(const uint8_t* buffer, int divide, int bufferLength, con
 	//std::cerr << fname << " ~> " << id << '\n';
 }
 
-agl::Texture3::Texture3(int w, int h, int d, unsigned char* data, const TexInitInfo& info) {
+agl::Texture3::Texture3(int w, int h, int d, const unsigned char* data, const TexInitInfo& info) {
 	setTexture(w, h, d, data, info);
 }
 
-void agl::Texture3::setTexture(int w, int h, int d, unsigned char* data, const TexInitInfo& info) {
+void agl::Texture3::setTexture(int w, int h, int d, const unsigned char* data, const TexInitInfo& info) {
 	changeTexture(w, h, d, data, info, true);
 }
 
-void agl::Texture3::changeTexture(int w, int h, int d, unsigned char* data, const TexInitInfo& info, bool genNew) {
+void agl::Texture3::changeTexture(int w, int h, int d, const unsigned char* data, const TexInitInfo& info, bool genNew) {
 	width = w;
 	height = h;
 	depth = d;

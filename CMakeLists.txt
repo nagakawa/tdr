@@ -22,6 +22,9 @@ ADD_CUSTOM_COMMAND(
   WORKING_DIRECTORY 3rdparty/agc/kozet_coroutine/
 )
 
+# dependencies
+ADD_SUBDIRECTORY(3rdparty/msdfgen)
+
 ADD_SUBDIRECTORY(FileUtil)
 ADD_SUBDIRECTORY(AGL)
 ADD_SUBDIRECTORY(AGLTest)

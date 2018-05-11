@@ -31,6 +31,7 @@ SET(AGL_library_SRCS
     sound/Mixer.cpp
     sound/Reader.cpp
     text/GlyphDrawList.cpp
+    text/Font.cpp
 )
 
 # Headers:
@@ -61,6 +62,7 @@ SET(AGL_library_HDRS
     sound/Mixer.h
     sound/Reader.h
     text/GlyphDrawList.h
+    text/Font.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")

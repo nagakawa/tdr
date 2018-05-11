@@ -22,7 +22,7 @@ namespace agl {
 		// Using int instead of size_t for the buffer size here, because SOIL uses
 		// that type in SOIL_load_image_from_memory. Uugghh.
 		Texture(const uint8_t* buffer, int bufferLength, const TexInitInfo& info = DEFAULT_TEX_INIT);
-		Texture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		Texture(int w, int h, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		// Texture(const Texture& t);
 		Texture(Texture&& t);
 		Texture();
@@ -32,13 +32,13 @@ namespace agl {
 		void bindTo(GLint slot);
 		GLint getWidth() const { return width; }
 		GLint getHeight() const { return height; }
-		void changeTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT, bool genNew = false);
+		void changeTexture(int w, int h, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT, bool genNew = false);
 		GLuint id;
 	private:
 		GLint width;
 		GLint height;
 		bool ms = false;
-		void setTexture(int w, int h, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		void setTexture(int w, int h, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 	};
 	class Texture3 {
 	public:
@@ -46,7 +46,7 @@ namespace agl {
 		// Using int instead of size_t for the buffer size here, because SOIL uses
 		// that type in SOIL_load_image_from_memory. Uugghh.
 		Texture3(const uint8_t* buffer, int divide, int bufferLength, const TexInitInfo& info = DEFAULT_TEX_INIT);
-		Texture3(int w, int h, int d, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		Texture3(int w, int h, int d, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 		// Texture(const Texture& t);
 		Texture3(Texture3&& t);
 		Texture3();
@@ -56,13 +56,14 @@ namespace agl {
 		GLint getWidth() const { return width; }
 		GLint getHeight() const { return height; }
 		GLint getDepth() const { return depth; }
-		void changeTexture(int w, int h, int d, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT, bool genNew = false);
+		bool isMultisample() const { return ms; }
+		void changeTexture(int w, int h, int d, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT, bool genNew = false);
 		GLuint id;
 	private:
 		GLint width;
 		GLint height;
 		GLint depth;
 		bool ms = false;
-		void setTexture(int w, int h, int d, unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
+		void setTexture(int w, int h, int d, const unsigned char* data, const TexInitInfo& info = DEFAULT_TEX_INIT);
 	};
 }

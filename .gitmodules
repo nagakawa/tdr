@@ -10,3 +10,6 @@
 [submodule "3rdparty/agc/kozet_coroutine"]
 	path = 3rdparty/agc/kozet_coroutine
 	url = https://github.com/nagakawa/kozet_coroutine
+[submodule "3rdparty/msdfgen"]
+	path = 3rdparty/msdfgen
+	url = https://github.com/Chlumsky/msdfgen.git
