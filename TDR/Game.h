@@ -33,9 +33,11 @@ namespace tdr {
     bool isReplay() const { return reading; }
     virtual void mainLoop() = 0;
     void startStage(int stage);
+  protected:
+    std::mt19937_64 rng;
+    Player gp;
   private:
     Playfield p;
-    Player gp;
     BulletList bullets;
     agl::Sprite2D pfSprite;
     agl::Texture stgFrame;
@@ -43,6 +45,5 @@ namespace tdr {
     Replay r;
     kcr::Manager man;
     bool reading;
-    std::mt19937_64 rng;
   };
 }

@@ -13,8 +13,8 @@ namespace tdr {
     Shotsheet&& ss,
     agl::Texture&& stgFrame,
     int w, int h, int offw, int offh, int aw, int ah) :
-      p(w, h, offw, offh, aw, ah),
       gp(kfp::s16_16(w) / 2, kfp::s16_16(h) * 3 / 4),
+      p(w, h, offw, offh, aw, ah),
       bullets(&p, std::move(ss)),
       pfSprite(&(p.getTexture())),
       stgFrame(std::move(stgFrame)),
@@ -61,8 +61,9 @@ namespace tdr {
   }
 
   void Game::render() {
-    //p.getFBO().setActive();
     glClearColor(0.5f, 0.7f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    p.getFBOMS().setActive();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     bullets.render();
     p.blit();

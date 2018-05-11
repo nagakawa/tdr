@@ -1,4 +1,9 @@
-﻿// GLEW
+﻿#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+// GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 // GLFW
@@ -9,6 +14,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <kozet_fixed_point/kfp_random.h>
 
 #include <Test.h>
 #include <GLFWApplication.h>
@@ -24,13 +31,6 @@
 #include <Bullet.h>
 #include <Game.h>
 
-// Others
-#include <iostream>
-#include <cstddef>
-#include <cstdio>
-#include <cstdlib>
-#include <cmath>
-
 #ifdef _MSC_VER
 #pragma warning(disable: 4099)
 #endif
@@ -42,7 +42,8 @@ public:
 		// Work
 		readKeys();
 		tdr::BulletList& bl = getBulletList();
-		bl.createShotA1(50, 50, 3, kfp::frac32::raw(0x14828459u), bl.shotsheet.getRectByID(0), 0);
+		kfp::frac32 angle = kfp::UniformFixedDistribution<kfp::frac32>()(rng);
+		bl.createShotA1(250, 250, 3, angle, bl.shotsheet.getRectByID(0), 0);
 	}
 	void readKeys() {
 		if (testKey(GLFW_KEY_ESCAPE))
