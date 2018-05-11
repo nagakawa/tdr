@@ -5,8 +5,7 @@
 #include <kozet_fixed_point/kfp.h>
 #include <kozet_fixed_point/kfp_extra.h>
 #include <BlendMode.h>
-
-#include "embedShader.h"
+#include <embedShader.h>
 
 using namespace tdr;
 

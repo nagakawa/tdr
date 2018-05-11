@@ -6,6 +6,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
+#include <hb.h>
+#include <hb-ft.h>
 
 #include <msdfgen.h>
 
@@ -122,15 +124,19 @@ namespace agl {
     }
   };
 
-  Font::Font(FT_Library ftl, const char* filename, size_t size) {
-    FT_Face face = nullptr;
+  Font::Font(FT_Library ftl, const char* filename, size_t size)
+      : size(size) {
     FT_Error error = FT_New_Face(ftl, filename, 0, &face);
+    if (error != 0) throw FTException(error);
+    error = FT_Set_Char_Size(face, size * 64, size * 64, 0, 0);
     if (error != 0) throw FTException(error);
     uint8_t atlas[ATLAS_SIZE][ATLAS_SIZE][4];
     Node n;
     n.bounds = { 0, 0, ATLAS_SIZE, ATLAS_SIZE };
-    auto stash = [this, atlas]() {
+    size_t texid = 0;
+    auto stash = [this, &atlas, &texid]() {
       texs.emplace_back(ATLAS_SIZE, ATLAS_SIZE, (const uint8_t*) atlas);
+      ++texid;
     };
     // Texture packing algorithm from 
     // http://blackpawn.com/texts/lightmaps/default.html
@@ -186,18 +192,27 @@ namespace agl {
       }
       // Insert glyph info
       rectsByGlyphID.push_back({
-        (float) where->bounds.left / ATLAS_SIZE,
-        (float) where->bounds.top / ATLAS_SIZE,
-        (float) where->bounds.right / ATLAS_SIZE,
-        (float) where->bounds.bottom / ATLAS_SIZE
+        texid,
+        {
+          (float) where->bounds.left / ATLAS_SIZE,
+          (float) where->bounds.top / ATLAS_SIZE,
+          (float) where->bounds.right / ATLAS_SIZE,
+          (float) where->bounds.bottom / ATLAS_SIZE
+        },
+        (int32_t) face->glyph->metrics.width,
+        (int32_t) face->glyph->metrics.height
       });
     }
+    facehb = hb_ft_font_create(face, nullptr);
     rek:
-    FT_Done_Face(face);
     if (error == 0) {
       stash();
       return;
     }
     throw FTException(error);
+  }
+  Font::~Font() {
+    hb_font_destroy(facehb);
+    FT_Done_Face(face);
   }
 }

@@ -1,14 +1,16 @@
 #pragma once
 
+#include <stddef.h>
+#include <memory>
+#include <vector>
+
 #define GLEW_STATIC
 #include <GL/glew.h>
 // GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <cstddef>
-#include <memory>
-#include <vector>
+
 #include "BlendMode.h"
 #include "EBO.h"
 #include "GLFWApplication.h"

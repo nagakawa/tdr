@@ -32,6 +32,7 @@ SET(AGL_library_SRCS
     sound/Reader.cpp
     text/GlyphDrawList.cpp
     text/Font.cpp
+    text/XText.cpp
 )
 
 # Headers:
@@ -63,13 +64,33 @@ SET(AGL_library_HDRS
     sound/Reader.h
     text/GlyphDrawList.h
     text/Font.h
+    text/XText.h
 )
 
 INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_INCLUDE_DIR}")
 
+SET(SHADER_CONTENTS_LOCATION
+${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/AGL.dir)
+
+SET_SOURCE_FILES_PROPERTIES(
+CMakeFiles/AGL.dir/shader-contents.o
+PROPERTIES
+EXTERNAL_OBJECT true
+GENERATED true
+)
+
+ADD_CUSTOM_COMMAND(OUTPUT CMakeFiles/AGL.dir/shader-contents.o
+    COMMAND ld -r -b binary -o ${SHADER_CONTENTS_LOCATION}/shader-contents.o *.glsl
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+    COMMAND objcopy --rename-section .data=.rodata,alloc,load,readonly,data,contents ${SHADER_CONTENTS_LOCATION}/shader-contents.o ${SHADER_CONTENTS_LOCATION}/shader-contents.o
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.glsl
+)
+
 # actual target:
-ADD_LIBRARY(${PROJECT_NAME} STATIC ${AGL_library_SRCS})
+ADD_LIBRARY(${PROJECT_NAME} STATIC
+    ${AGL_library_SRCS}
+    CMakeFiles/AGL.dir/shader-contents.o)
 
 # add install target:
 INSTALL(TARGETS AGL DESTINATION lib)
