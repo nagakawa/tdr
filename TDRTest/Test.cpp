@@ -9,7 +9,7 @@
 // GLFW
 #include <GLFW/glfw3.h>
 // SOIL
-#include <SOIL.h>
+#include <SOIL/SOIL.h>
 // GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

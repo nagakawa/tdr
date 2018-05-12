@@ -145,9 +145,7 @@ namespace agl {
         myX += run.width;
       }
       cursorX = 0;
-      std::cerr << "Before: " << cursorY << "\n";
       cursorY += maxh + layout.lineSkip * 64;
-      std::cerr << "After: " << cursorY << "\n";
     };
     for (i = 0; i < runs.size(); ++i) {
       const Run& run = runs[i];

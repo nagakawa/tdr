@@ -1,6 +1,7 @@
 #include "Font.h"
 
 #include <string.h>
+#include <time.h>
 #include <iostream>
 #include <memory>
 
@@ -142,16 +143,17 @@ namespace agl {
   Font::Font(FT_Library ftl, const char* filename, size_t s)
       : size(s) {
     std::cerr << "Creating font from " << filename << "\n";
+    clock_t cl = clock();
     FT_Error error = FT_New_Face(ftl, filename, 0, &face);
     if (error != 0) throw FTException(error);
     error = FT_Set_Char_Size(face, size * 64, size * 64, 0, 0);
     if (error != 0) throw FTException(error);
-    uint8_t* atlas = new uint8_t[ATLAS_SIZE * ATLAS_SIZE * 4];
+    uint32_t* atlas = new uint32_t[ATLAS_SIZE * ATLAS_SIZE];
     Node n;
     n.bounds = { 0, 0, ATLAS_SIZE, ATLAS_SIZE };
     size_t texid = 0;
     auto stash = [this, atlas, &texid]() {
-      texs.emplace_back(ATLAS_SIZE, ATLAS_SIZE, atlas, atlasInfo);
+      texs.emplace_back(ATLAS_SIZE, ATLAS_SIZE, (uint8_t*) atlas, atlasInfo);
       ++texid;
     };
     // Texture packing algorithm from 
@@ -201,14 +203,12 @@ namespace agl {
           int ty = y - where->bounds.top;
           if (tx >= bm.width() || ty >= bm.height()) abort();
           auto col = bm(tx, ty);
-          uint8_t* pixel = atlas + 4 * (ATLAS_SIZE * y + x);
-          pixel[0] =
-            (uint8_t) (std::min(1.0f, std::max(0.0f, col.r)) * 255);
-          pixel[1] =
-            (uint8_t) (std::min(1.0f, std::max(0.0f, col.g)) * 255);
-          pixel[2] =
-            (uint8_t) (std::min(1.0f, std::max(0.0f, col.b)) * 255);
-          pixel[3] = 255;
+          uint32_t pixel =
+            (uint32_t) (std::min(1.0f, std::max(0.0f, col.r)) * 255) |
+            ((uint32_t) (std::min(1.0f, std::max(0.0f, col.g)) * 255) << 8) |
+            ((uint32_t) (std::min(1.0f, std::max(0.0f, col.b)) * 255) << 16) |
+            0xFF000000;
+          atlas[ATLAS_SIZE * y + x] = pixel;
         }
       }
       // Insert glyph info
@@ -227,6 +227,8 @@ namespace agl {
     if (error == 0) {
       stash();
       delete[] atlas;
+      std::cerr << (double) (clock() - cl) / CLOCKS_PER_SEC <<
+        " seconds elapsed\n";
       return;
     }
     delete[] atlas;
