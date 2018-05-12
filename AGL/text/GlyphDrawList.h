@@ -7,6 +7,7 @@ namespace agl {
   struct GlyphInfo {
     uint32_t index;
     int32_t x, y; // 6 fractional bits
+    int32_t w, h;
   };
   struct Run {
     std::vector<GlyphInfo> glyphs;

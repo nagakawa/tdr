@@ -1,6 +1,7 @@
 #include "Font.h"
 
 #include <string.h>
+#include <iostream>
 #include <memory>
 
 #include <ft2build.h>
@@ -84,13 +85,13 @@ namespace agl {
 
   struct Node {
     std::unique_ptr<Node> child[2];
-    TRect<uint32_t> bounds;
-    size_t glyph;
-    Node* insert(size_t w, size_t h) {
+    UIRect16 bounds;
+    size_t glyph = -1U;
+    Node* insert(uint16_t w, uint16_t h, size_t gid) {
       if (child[0] != nullptr) {
-        Node* nn = child[0]->insert(w, h);
+        Node* nn = child[0]->insert(w, h, gid);
         if (nn != nullptr) return nn;
-        return child[1]->insert(w, h);
+        return child[1]->insert(w, h, gid);
       }
       if (glyph != -1U) return nullptr;
       if (w > bounds.right - bounds.left ||
@@ -99,50 +100,65 @@ namespace agl {
       }
       if (w == bounds.right - bounds.left &&
           h == bounds.bottom - bounds.top) {
+        glyph = gid;
         return this;
       }
       child[0] = std::make_unique<Node>();
       child[1] = std::make_unique<Node>();
-      uint32_t dw = bounds.right - bounds.left - w;
-      uint32_t dh = bounds.bottom - bounds.top - h;
+      uint16_t dw = bounds.right - bounds.left - w;
+      uint16_t dh = bounds.bottom - bounds.top - h;
       if (dw > dh) {
         child[0]->bounds = {
-          bounds.left, bounds.top, bounds.left + dw, bounds.bottom
+          bounds.left, bounds.top,
+          (uint16_t) (bounds.left + w), bounds.bottom
         };
         child[1]->bounds = {
-          bounds.left + dw, bounds.top, bounds.right, bounds.bottom
+          (uint16_t) (bounds.left + w), bounds.top,
+          bounds.right, bounds.bottom
         };
       } else {
         child[0]->bounds = {
-          bounds.left, bounds.top, bounds.right, bounds.top + dh
+          bounds.left, bounds.top,
+          bounds.right, uint16_t(bounds.top + h)
         };
         child[1]->bounds = {
-          bounds.left, bounds.top + dh, bounds.right, bounds.bottom
+          bounds.left, uint16_t(bounds.top + h),
+          bounds.right, bounds.bottom
         };
       }
-      return child[0]->insert(w, h);
+      return child[0]->insert(w, h, gid);
     }
   };
 
-  Font::Font(FT_Library ftl, const char* filename, size_t size)
-      : size(size) {
+  TexInitInfo atlasInfo = {
+    /* internalFormat = */ GL_RGBA,
+    /* texFormat = */ GL_RGBA,
+    /* pixelType = */ GL_UNSIGNED_BYTE,
+    /* checkForNullData = */ false,
+    /* genMipMap = */ false,
+    /* multisample = */ false
+  };
+
+  Font::Font(FT_Library ftl, const char* filename, size_t s)
+      : size(s) {
+    std::cerr << "Creating font from " << filename << "\n";
     FT_Error error = FT_New_Face(ftl, filename, 0, &face);
     if (error != 0) throw FTException(error);
     error = FT_Set_Char_Size(face, size * 64, size * 64, 0, 0);
     if (error != 0) throw FTException(error);
-    uint8_t atlas[ATLAS_SIZE][ATLAS_SIZE][4];
+    uint8_t* atlas = new uint8_t[ATLAS_SIZE * ATLAS_SIZE * 4];
     Node n;
     n.bounds = { 0, 0, ATLAS_SIZE, ATLAS_SIZE };
     size_t texid = 0;
-    auto stash = [this, &atlas, &texid]() {
-      texs.emplace_back(ATLAS_SIZE, ATLAS_SIZE, (const uint8_t*) atlas);
+    auto stash = [this, atlas, &texid]() {
+      texs.emplace_back(ATLAS_SIZE, ATLAS_SIZE, atlas, atlasInfo);
       ++texid;
     };
     // Texture packing algorithm from 
     // http://blackpawn.com/texts/lightmaps/default.html
     for (unsigned i = 0; i < (size_t) face->num_glyphs; ++i) {
       // Load the glyph
-      error = FT_Load_Glyph(face, i, FT_LOAD_NO_SCALE | FT_LOAD_NO_BITMAP);
+      error = FT_Load_Glyph(face, i, FT_LOAD_NO_BITMAP);
       if (error != 0) goto rek;
       msdfgen::Shape output;
       output.contours.clear();
@@ -160,8 +176,8 @@ namespace agl {
       msdfgen::edgeColoringSimple(output, 3.0);
       size_t margin = size / 8;
       msdfgen::Bitmap<msdfgen::FloatRGB> bm(
-        (size * face->glyph->linearHoriAdvance >> 16) + 2 * margin,
-        size + 2 * margin
+        face->glyph->metrics.width / 64 + 2 * margin,
+        face->glyph->metrics.height / 64 + 2 * margin
       );
       msdfgen::generateMSDF(
         bm,
@@ -171,44 +187,54 @@ namespace agl {
         msdfgen::Vector2(margin, margin)
       );
       // Copy the MSDF into the texture
-      Node* where = n.insert(bm.width(), bm.height());
+      Node* where = n.insert(bm.width(), bm.height(), i);
       if (where == nullptr) {
         stash();
         n = Node();
         n.bounds = { 0, 0, ATLAS_SIZE, ATLAS_SIZE };
-        where = n.insert(bm.width(), bm.height());
+        where = n.insert(bm.width(), bm.height(), i);
         if (where == nullptr) throw "really?";
       }
       for (uint32_t y = where->bounds.top; y < where->bounds.bottom; ++y) {
         for (uint32_t x = where->bounds.left; x < where->bounds.right; ++x) {
           int tx = x - where->bounds.left;
-          int ty = y - where->bounds.right;
+          int ty = y - where->bounds.top;
+          if (tx >= bm.width() || ty >= bm.height()) abort();
           auto col = bm(tx, ty);
-          atlas[y][x][0] = (uint8_t) (col.r * 255);
-          atlas[y][x][1] = (uint8_t) (col.g * 255);
-          atlas[y][x][2] = (uint8_t) (col.b * 255);
-          atlas[y][x][3] = 255;
+          uint8_t* pixel = atlas + 4 * (ATLAS_SIZE * y + x);
+          pixel[0] =
+            (uint8_t) (std::min(1.0f, std::max(0.0f, col.r)) * 255);
+          pixel[1] =
+            (uint8_t) (std::min(1.0f, std::max(0.0f, col.g)) * 255);
+          pixel[2] =
+            (uint8_t) (std::min(1.0f, std::max(0.0f, col.b)) * 255);
+          pixel[3] = 255;
         }
       }
       // Insert glyph info
       rectsByGlyphID.push_back({
         texid,
         {
-          (float) where->bounds.left / ATLAS_SIZE,
-          (float) where->bounds.top / ATLAS_SIZE,
-          (float) where->bounds.right / ATLAS_SIZE,
-          (float) where->bounds.bottom / ATLAS_SIZE
+          where->bounds.left, where->bounds.top,
+          where->bounds.right, where->bounds.bottom
         },
-        (int32_t) face->glyph->metrics.width,
-        (int32_t) face->glyph->metrics.height
+        (int32_t) face->glyph->metrics.width / 64,
+        (int32_t) face->glyph->metrics.height / 64
       });
+      std::cerr << "Glyph #" << i << ": (";
+      std::cerr << where->bounds.left << ", " << where->bounds.top << ") -- (";
+      std::cerr << where->bounds.right << ", " << where->bounds.bottom;
+      std::cerr << ") width = " << (int32_t) face->glyph->metrics.width;
+      std::cerr << " height = " << (int32_t) face->glyph->metrics.height << "\n";
     }
     facehb = hb_ft_font_create(face, nullptr);
     rek:
     if (error == 0) {
       stash();
+      delete[] atlas;
       return;
     }
+    delete[] atlas;
     throw FTException(error);
   }
   Font::~Font() {

@@ -1,6 +1,7 @@
 #include "text/GlyphDrawList.h"
 
 #include <string.h>
+#include <iostream>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -23,6 +24,7 @@ namespace agl {
   std::vector<GlyphInfo> layoutText(
       const char* utf8,
       const LayoutInfo& layout) {
+    std::cerr << "Laying out text: " << utf8 << "\n";
     size_t fontSize = layout.f->getSize();
     UErrorCode status = U_ZERO_ERROR;
     // Initialise bidi stuffs
@@ -46,7 +48,7 @@ namespace agl {
     std::vector<Run> runs;
     ubidi_setPara(
       para,
-      s.getBuffer(-1),
+      s.getBuffer(),
       len,
       UBIDI_DEFAULT_LTR,
       nullptr, &status
@@ -56,6 +58,10 @@ namespace agl {
          p != icu::BreakIterator::DONE; ) {
       int32_t pn = bi->next();
       int32_t limit = (pn == icu::BreakIterator::DONE) ? len : pn;
+      if (p == limit) {
+        p = pn;
+        continue;
+      }
       // Do bidi stuffs
       ubidi_setLine(para, p, limit, line, &status);
       if (U_FAILURE(status)) abort();
@@ -70,7 +76,7 @@ namespace agl {
         run.len = len;
         // Layout using HarfBuzz
         hb_buffer_clear_contents(hbb);
-        hb_buffer_add_utf16(hbb, s.getBuffer(-1) + start, len, 0, len);
+        hb_buffer_add_utf16(hbb, s.getBuffer() + p + start, len, 0, len);
         hb_buffer_guess_segment_properties(hbb);
         hb_font_t* font = layout.f->getHBFont();
         hb_shape(font, hbb, nullptr, 0);
@@ -89,17 +95,21 @@ namespace agl {
           // to get the size we want.
           int32_t x = cursorX + glyphPos[i].x_offset * layout.fontSize / fontSize;
           int32_t y = cursorY + glyphPos[i].y_offset * layout.fontSize / fontSize;
+          Font::GlyphInfo& gi = layout.f->getInfo(glyphInfo[i].codepoint);
           run.glyphs[i] = {
             /* .index = */ glyphInfo[i].codepoint,
             /* .x = */ x,
-            /* .y = */ y
+            /* .y = */ y,
+            /* .w = */ (int32_t) (gi.w * layout.fontSize / fontSize),
+            /* .h = */ (int32_t) (gi.h * layout.fontSize / fontSize)
           };
-          Font::GlyphInfo& gi = layout.f->getInfo(glyphInfo[i].codepoint);
           minX = std::min(minX, x); minY = std::min(minY, y);
           maxX = std::max(maxX, x + gi.w); maxY = std::max(maxY, y + gi.h);
           cursorX += glyphPos[i].x_advance * layout.fontSize / fontSize;
           cursorY += glyphPos[i].y_advance * layout.fontSize / fontSize;
         }
+        minX = std::min(minX, cursorX); minY = std::min(minY, cursorY);
+        maxX = std::max(maxX, cursorX); maxY = std::max(maxY, cursorY);
         run.width = maxX - minX + layout.margin;
         run.height = maxY - minY + layout.margin;
         run.offx = -layout.margin - minX;
@@ -114,7 +124,7 @@ namespace agl {
     size_t cursorX = 0;
     size_t netWidth = layout.maxWidth - layout.margin;
     size_t start = 0, i;
-    auto genLine = [&runs, &out, &cursorY, &cursorX, &start, &i]() {
+    auto genLine = [&runs, &out, &cursorY, &cursorX, &start, &i, &layout]() {
       // Get max height of runs
       int32_t maxh = 0;
       for (size_t j = start; j < i; ++j) {
@@ -127,13 +137,13 @@ namespace agl {
         for (const GlyphInfo& gi : run.glyphs) {
           int32_t newX = gi.x + myX - run.offx;
           int32_t newY = gi.y + cursorY - run.offy;
-          GlyphInfo newGI = {gi.index, newX, newY};
+          GlyphInfo newGI = {gi.index, newX, newY, gi.w, gi.h};
           out.push_back(newGI);
         }
         myX += run.width;
       }
       cursorX = 0;
-      cursorY += maxh;
+      cursorY += maxh + layout.lineSkip;
     };
     for (i = 0; i < runs.size(); ++i) {
       const Run& run = runs[i];

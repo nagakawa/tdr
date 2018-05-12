@@ -20,8 +20,8 @@ namespace agl {
 	  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*) 0);
     instanceVBO.setActive();
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(
-      1, 4, GL_FLOAT, false, sizeof(RInfo),
+    glVertexAttribIPointer(
+      1, 4, GL_SHORT, sizeof(RInfo),
       (GLvoid*) (offsetof(RInfo, bounds))
     );
     glVertexAttribDivisor(1, 1);
@@ -31,6 +31,12 @@ namespace agl {
       (GLvoid*) (offsetof(RInfo, pos))
     );
     glVertexAttribDivisor(2, 1);
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(
+      3, 2, GL_FLOAT, false, sizeof(RInfo),
+      (GLvoid*) (offsetof(RInfo, glyphSize))
+    );
+    glVertexAttribDivisor(3, 1);
     agl::resetVBO();
     agl::resetVAO();
   }
@@ -48,7 +54,8 @@ namespace agl {
       toPush.emplace_back();
       RInfo& entry = toPush.back();
       entry.bounds = props.box;
-      entry.pos = { gi.x / 64.0f, gi.y / 64.0f };
+      entry.pos = { gi.x / 64.0, gi.y / 64.0 };
+      entry.glyphSize = { gi.w, gi.h };
     }
     // Update offsets vector
     offsets.resize(rinfo.size() + 1);
@@ -71,8 +78,10 @@ namespace agl {
     }
   }
   void XText::setUniforms1() {
+    GLfloat tc[4] = { 1, 1, 1, 1 };
     vao.setActive();
     program.use();
+    SETUNSPV(program, 4fv, "textColour", tc);
     if (hasSetUniforms) return;
     SETUNSP2(program, 2f, "screenDimensions",
       (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
@@ -80,6 +89,7 @@ namespace agl {
   }
   void XText::setUniforms2(size_t page) {
     Texture& t = layout.f->texs[page];
+    t.bind();
     t.bindTo(0);
     SETUNSP(program, 1i, "tex", 0);
     SETUNSP2(program, 2f, "texDimensions",

@@ -26,10 +26,10 @@ namespace agl {
   public:
     struct GlyphInfo {
       size_t texid;
-      Rect box;
+      UIRect16 box;
       int32_t w, h;
     };
-    Font(FT_LibraryRec_* ftl, const char* filename, size_t size);
+    Font(FT_LibraryRec_* ftl, const char* filename, size_t s);
     ~Font();
     FT_FaceRec_* getFont() { return face; }
     hb_font_t* getHBFont() { return facehb; }

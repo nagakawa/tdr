@@ -35,8 +35,9 @@ namespace agl {
     void setText(std::string&& s);
   private:
     struct RInfo {
-      Rect bounds;
+      UIRect16 bounds;
       glm::vec2 pos;
+      glm::vec2 glyphSize;
     };
     void spurt(std::vector<GlyphInfo>& gis);
     void update();
@@ -47,7 +48,7 @@ namespace agl {
     bool hasInitialisedProgram = false;
     bool hasSetUniforms = false;
     glm::vec2 dimensions;
-		glm::vec2 position;
+		glm::vec2 position = {0, 0};
     LayoutInfo layout;
     std::string text;
 		VBO vbo;

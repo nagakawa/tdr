@@ -11,6 +11,10 @@
 #include <glm/gtc/type_ptr.hpp>
 // PA
 #include <portaudio.h>
+// FreeType
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_OUTLINE_H
 
 #include "Test.h"
 #include "GLFWApplication.h"
@@ -28,6 +32,7 @@
 #include "sound/Mixer.h"
 #include "sound/Reader.h"
 #include "sound/Sound.h"
+#include "text/XText.h"
 
 // Others
 #include <iostream>
@@ -114,7 +119,7 @@ public:
 			});
 		}
 		sprites->setUp();
-		fy = new agl::Text();
+		fy = std::make_unique<agl::Text>();
 		fy->setApp(this);
 		fy->setMargin(240);
 		fy->setFont("Segoe UI");
@@ -138,6 +143,19 @@ public:
 			{640, 0, 800, 120}
 		});
 		view->setUp();
+		std::vector<agl::Texture> test;
+		if (FT_Init_FreeType(&ftl) != 0) throw "Failed to initialise FreeType.";
+		agl::LayoutInfo l;
+		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 16);
+		l.f = afont.get();
+		l.fontSize = 64;
+		l.margin = 4;
+		l.maxWidth = 400;
+		l.lineSkip = 20;
+		xt = std::make_unique<agl::XText>(l);
+		xt->setApp(this);
+		xt->setUp();
+		xt->setText("ti et test");
 		for (int i = 0; i < NUM_WORDS; ++i) {
 			mixer.addSound(i, agl::Sound(fnames[i]));
 			wasPressed[i] = false;
@@ -166,6 +184,7 @@ public:
 		sprites->tick();
 		if (relayoutText) fy->relayout();
 		fy->tick();
+		xt->render();
 		fboMS.blitTo(fboSS, 800, 600);
 		agl::setDefaultFBOAsActive();
 		glClearColor(1.0f, 0.5f, 0.7f, 1.0f);
@@ -236,8 +255,8 @@ public:
 	~AGLTest() {
 		delete boxes;
 		delete sprites;
-		delete fy;
 		delete view;
+		FT_Done_FreeType(ftl);
 		mixer.stop();
 		Pa_Terminate();
 	}
@@ -256,12 +275,15 @@ public:
 	agl::Texture stex;
 	agl::Texture vtex;
 	agl::Sprite2D* sprites;
-	agl::Text* fy;
+	std::unique_ptr<agl::Text> fy;
 	agl::FBO fboMS;
 	agl::FBO fboSS;
 	agl::Texture fboTex;
 	agl::Texture fboTexMS;
 	agl::Sprite2D* view;
+	FT_Library ftl;
+	std::unique_ptr<agl::XText> xt;
+	std::unique_ptr<agl::Font> afont;
 	int frame = 0;
 	void setDigit(int i, int v) {
 		agl::Sprite2DInfo* spr = sprites->getLoc(3 + i);
