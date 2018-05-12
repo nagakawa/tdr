@@ -10,27 +10,28 @@ For other compilers / IDEs, you're unfortunately on your own. Note that your C++
 
 * Make sure you have the following dependencies:
   * Those that can be installed by installing GTK2: GObject, GLib, Cairo, Pango, PangoCairo
+  * Miscellaneous dependencies used for rendering text: HarfBuzz, FreeType, ICU
   * OpenGL-related stuff: OpenGL itself, GLFW, GLEW, SOIL, and GLM
   * CMake, to build TDR itself
+  * PortAudio
 * Clone this repository
 * Navigate to the directory that you just cloned
 * Type `cmake .` followed by `make` (if you want to use `make`, that is)
 * Note: the build system assumes that you are running the test executables while your PWD is the `build/` directory. The `magic` and `magict` scripts temporarily navigate to `build/` to run `AGLTest` and `TDRTest`, respectively.
 
-To get the dependencies with `apt-get`:
+To get the dependencies with `apt`:
 
-    sudo apt-get install libglfw3-dev libglew-dev libsoil-dev libglm-dev \
+    sudo apt install libglfw3-dev libglew-dev libsoil-dev libglm-dev \
       libcairo2-dev libpango1.0-dev libglib2.0-dev libasound2-dev \
-      libogg-dev libvorbis-dev cmake
-
-and build PortAudio yourself.
+      libogg-dev libvorbis-dev libfreetype6-dev libharfbuzz-dev \
+      libicu-dev portaudio19-dev cmake
 
 ### Looking Around
 
 At the time of writing, TDR consists of two components:
 
 * FileUtil: a library to settle encoding differences between Windows and other OSes
-* AGL: a C++ wrapper around OpenGL.
+* AGL: a C++ wrapper around OpenGL, plus more extra goodies.
 * TDR: the engine itself (WIP)
 * Some future scripting layer
 
