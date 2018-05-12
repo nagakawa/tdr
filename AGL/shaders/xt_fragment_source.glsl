@@ -11,10 +11,9 @@ float median(float r, float g, float b) {
 }
 
 void main() {
-  vec2 msdfUnit = 0.5 / texDimensions;
   vec3 sample = texture(tex, tc).rgb;
   float sigDist = median(sample.r, sample.g, sample.b) - 0.5;
-  sigDist *= dot(msdfUnit, 0.5 / fwidth(tc));
+  sigDist *= 8.0;
   float opacity = clamp(sigDist + 0.5, 0.0, 1.0);
   vec4 background = vec4(textColour.rgb, 0.0);
   colour = mix(background, textColour, opacity);

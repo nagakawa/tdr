@@ -146,7 +146,7 @@ public:
 		std::vector<agl::Texture> test;
 		if (FT_Init_FreeType(&ftl) != 0) throw "Failed to initialise FreeType.";
 		agl::LayoutInfo l;
-		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 16);
+		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 32);
 		l.f = afont.get();
 		l.fontSize = 64;
 		l.margin = 4;
@@ -155,7 +155,7 @@ public:
 		xt = std::make_unique<agl::XText>(l);
 		xt->setApp(this);
 		xt->setUp();
-		xt->setText("ti et test");
+		xt->setText("ti et test <=>");
 		for (int i = 0; i < NUM_WORDS; ++i) {
 			mixer.addSound(i, agl::Sound(fnames[i]));
 			wasPressed[i] = false;

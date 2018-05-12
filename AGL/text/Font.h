@@ -27,6 +27,7 @@ namespace agl {
     struct GlyphInfo {
       size_t texid;
       UIRect16 box;
+      // This is WITHOUT the margins.
       int32_t w, h;
     };
     Font(FT_LibraryRec_* ftl, const char* filename, size_t s);
@@ -34,6 +35,7 @@ namespace agl {
     FT_FaceRec_* getFont() { return face; }
     hb_font_t* getHBFont() { return facehb; }
     size_t getSize() { return size; }
+    size_t margin() { return size / 8; }
     GlyphInfo& getInfo(uint32_t glyphID) {
       return rectsByGlyphID[glyphID];
     }

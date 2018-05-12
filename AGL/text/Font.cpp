@@ -174,17 +174,17 @@ namespace agl {
       // Generate the MSDF
       output.normalize();
       msdfgen::edgeColoringSimple(output, 3.0);
-      size_t margin = size / 8;
+      size_t m = margin();
       msdfgen::Bitmap<msdfgen::FloatRGB> bm(
-        face->glyph->metrics.width / 64 + 2 * margin,
-        face->glyph->metrics.height / 64 + 2 * margin
+        face->glyph->metrics.width / 64 + 2 * m,
+        face->glyph->metrics.height / 64 + 2 * m
       );
       msdfgen::generateMSDF(
         bm,
         output,
-        margin,
+        m,
         1.0,
-        msdfgen::Vector2(margin, margin)
+        msdfgen::Vector2(m, m)
       );
       // Copy the MSDF into the texture
       Node* where = n.insert(bm.width(), bm.height(), i);
@@ -221,11 +221,6 @@ namespace agl {
         (int32_t) face->glyph->metrics.width / 64,
         (int32_t) face->glyph->metrics.height / 64
       });
-      std::cerr << "Glyph #" << i << ": (";
-      std::cerr << where->bounds.left << ", " << where->bounds.top << ") -- (";
-      std::cerr << where->bounds.right << ", " << where->bounds.bottom;
-      std::cerr << ") width = " << (int32_t) face->glyph->metrics.width;
-      std::cerr << " height = " << (int32_t) face->glyph->metrics.height << "\n";
     }
     facehb = hb_ft_font_create(face, nullptr);
     rek:

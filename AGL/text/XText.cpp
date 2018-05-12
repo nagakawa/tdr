@@ -45,17 +45,19 @@ namespace agl {
     // to the `rinfo` vector. This vector will then be used by
     // the render code to draw the glyphs.
     for (auto& ri : rinfo) ri.clear();
-    rinfo.resize(layout.f->texs.size());
+    Font* f = layout.f;
+    rinfo.resize(f->texs.size());
+    float marginCorrected = f->margin() * layout.fontSize / f->getSize();
     for (const GlyphInfo& gi : gis) {
       uint32_t id = gi.index;
-      Font::GlyphInfo& props = layout.f->getInfo(id);
+      Font::GlyphInfo& props = f->getInfo(id);
       // Where should we push?
       auto& toPush = rinfo[props.texid];
       toPush.emplace_back();
       RInfo& entry = toPush.back();
       entry.bounds = props.box;
-      entry.pos = { gi.x / 64.0, gi.y / 64.0 };
-      entry.glyphSize = { gi.w, gi.h };
+      entry.pos = { gi.x / 64.0 - marginCorrected, gi.y / 64.0 - marginCorrected };
+      entry.glyphSize = { gi.w + 2 * marginCorrected, gi.h + 2 * marginCorrected };
     }
     // Update offsets vector
     offsets.resize(rinfo.size() + 1);

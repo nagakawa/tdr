@@ -88,7 +88,7 @@ namespace agl {
         run.glyphs.resize(nGlyphs);
         int32_t cursorX = 0, cursorY = 0;
         int32_t minX = INT32_MAX, minY = INT32_MAX;
-        int32_t maxX = INT32_MIN, maxY = INT32_MAX;
+        int32_t maxX = INT32_MIN, maxY = INT32_MIN;
         for (unsigned i = 0; i < nGlyphs; ++i) {
           // These fields are in font units times 64.
           // Divide by the font's size and multiply by the requested size
@@ -96,15 +96,17 @@ namespace agl {
           int32_t x = cursorX + glyphPos[i].x_offset * layout.fontSize / fontSize;
           int32_t y = cursorY + glyphPos[i].y_offset * layout.fontSize / fontSize;
           Font::GlyphInfo& gi = layout.f->getInfo(glyphInfo[i].codepoint);
+          int32_t w = (int32_t) (gi.w * layout.fontSize / fontSize);
+          int32_t h = (int32_t) (gi.h * layout.fontSize / fontSize);
           run.glyphs[i] = {
             /* .index = */ glyphInfo[i].codepoint,
             /* .x = */ x,
             /* .y = */ y,
-            /* .w = */ (int32_t) (gi.w * layout.fontSize / fontSize),
-            /* .h = */ (int32_t) (gi.h * layout.fontSize / fontSize)
+            /* .w = */ w,
+            /* .h = */ h
           };
           minX = std::min(minX, x); minY = std::min(minY, y);
-          maxX = std::max(maxX, x + gi.w); maxY = std::max(maxY, y + gi.h);
+          maxX = std::max(maxX, x + w * 64); maxY = std::max(maxY, y + h * 64);
           cursorX += glyphPos[i].x_advance * layout.fontSize / fontSize;
           cursorY += glyphPos[i].y_advance * layout.fontSize / fontSize;
         }
@@ -143,7 +145,9 @@ namespace agl {
         myX += run.width;
       }
       cursorX = 0;
-      cursorY += maxh + layout.lineSkip;
+      std::cerr << "Before: " << cursorY << "\n";
+      cursorY += maxh + layout.lineSkip * 64;
+      std::cerr << "After: " << cursorY << "\n";
     };
     for (i = 0; i < runs.size(); ++i) {
       const Run& run = runs[i];
