@@ -87,6 +87,8 @@ namespace agl {
     if (hasSetUniforms) return;
     SETUNSP2(program, 2f, "screenDimensions",
       (GLfloat) app->getWidth(), (GLfloat) app->getHeight());
+    glm::vec2 ndc = positionAsNDC();
+    SETUNSP2(program, 2f, "globalOffset", ndc.x, ndc.y);
     hasSetUniforms = true;
   }
   void XText::setUniforms2(size_t page) {
@@ -123,5 +125,17 @@ namespace agl {
     text = std::move(s);
     std::vector<GlyphInfo> glyphs = layoutText(text.c_str(), layout);
     spurt(glyphs);
+  }
+  glm::vec2 XText::positionAsNDC() const {
+    glm::vec2 screen((GLfloat) app->getWidth(), (GLfloat) app->getHeight());
+    glm::vec2 res = 2.0f * (position / screen) - 1.0f;
+    return res * glm::vec2(1.0f, -1.0f);
+  }
+  void XText::setPos(glm::vec2 p) {
+    position = p;
+    if (hasInitialisedProgram) {
+      glm::vec2 ndc = positionAsNDC();
+      SETUNSP2(program, 2f, "globalOffset", ndc.x, ndc.y);
+    }
   }
 }

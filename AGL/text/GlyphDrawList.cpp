@@ -127,11 +127,9 @@ namespace agl {
     size_t netWidth = layout.maxWidth - layout.margin;
     size_t start = 0, i;
     auto genLine = [&runs, &out, &cursorY, &cursorX, &start, &i, &layout]() {
-      // Get max height of runs
-      int32_t maxh = 0;
-      for (size_t j = start; j < i; ++j) {
-        maxh = std::max(maxh, runs[j].height);
-      }
+      cursorX = 0;
+      cursorY -=
+        layout.f->getFont()->size->metrics.height + layout.lineSkip * 64;
       int32_t myX = 0;
       // Copy runs
       for (size_t j = start; j < i; ++j) {
@@ -144,8 +142,6 @@ namespace agl {
         }
         myX += run.width;
       }
-      cursorX = 0;
-      cursorY += maxh + layout.lineSkip * 64;
     };
     for (i = 0; i < runs.size(); ++i) {
       const Run& run = runs[i];

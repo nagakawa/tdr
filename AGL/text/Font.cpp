@@ -165,10 +165,14 @@ namespace agl {
       msdfgen::Shape output;
       output.contours.clear();
       output.inverseYAxis = false;
+      FT_Outline* outline = &(face->glyph->outline);
+      // Deduce outline direction
+      bool reversed =
+        FT_Outline_Get_Orientation(outline) == FT_ORIENTATION_POSTSCRIPT;
       FtContext ctx;
       ctx.shape = &output;
       error = FT_Outline_Decompose(
-        &(face->glyph->outline),
+        outline,
         &myOutlineFuncs,
         &ctx
       );
@@ -181,6 +185,7 @@ namespace agl {
         face->glyph->metrics.width / 64 + 2 * m,
         face->glyph->metrics.height / 64 + 2 * m
       );
+      uint32_t w = bm.width(), h = bm.height();
       msdfgen::generateMSDF(
         bm,
         output,
@@ -188,21 +193,32 @@ namespace agl {
         1.0,
         msdfgen::Vector2(m, m)
       );
+      if (reversed) {
+        for (uint32_t y = 0; y < h; ++y) {
+          for (uint32_t x = 0; x < w; ++x) {
+            auto& p = bm(x, y);
+            p.r = 1 - p.r;
+            p.g = 1 - p.g;
+            p.b = 1 - p.b;
+          }
+        }
+      }
       // Copy the MSDF into the texture
-      Node* where = n.insert(bm.width(), bm.height(), i);
+      Node* where = n.insert(w + 1, h + 1, i);
       if (where == nullptr) {
         stash();
         n = Node();
         n.bounds = { 0, 0, ATLAS_SIZE, ATLAS_SIZE };
-        where = n.insert(bm.width(), bm.height(), i);
+        where = n.insert(w + 1, h + 1, i);
         if (where == nullptr) throw "really?";
       }
-      for (uint32_t y = where->bounds.top; y < where->bounds.bottom; ++y) {
-        for (uint32_t x = where->bounds.left; x < where->bounds.right; ++x) {
-          int tx = x - where->bounds.left;
-          int ty = y - where->bounds.top;
-          if (tx >= bm.width() || ty >= bm.height()) abort();
-          auto col = bm(tx, ty);
+      const auto& bounds = where->bounds;
+      for (uint32_t y = bounds.top; y < bounds.bottom - 1; ++y) {
+        int ty = y - bounds.top;
+        msdfgen::FloatRGB* p = &(bm(0, ty));
+        for (uint32_t x = bounds.left; x < bounds.right - 1; ++x) {
+          int tx = x - bounds.left;
+          auto col = p[tx];
           uint32_t pixel =
             (uint32_t) (std::min(1.0f, std::max(0.0f, col.r)) * 255) |
             ((uint32_t) (std::min(1.0f, std::max(0.0f, col.g)) * 255) << 8) |
@@ -215,8 +231,8 @@ namespace agl {
       rectsByGlyphID.push_back({
         texid,
         {
-          where->bounds.left, where->bounds.top,
-          where->bounds.right, where->bounds.bottom
+          bounds.left, bounds.top,
+          bounds.right, bounds.bottom
         },
         (int32_t) face->glyph->metrics.width / 64,
         (int32_t) face->glyph->metrics.height / 64

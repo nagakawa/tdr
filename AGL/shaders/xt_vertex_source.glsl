@@ -7,11 +7,14 @@ layout (location = 3) in vec2 glyphSize;
 out vec2 tc;
 uniform vec2 texDimensions;
 uniform vec2 screenDimensions;
+// NDC
+uniform vec2 globalOffset;
 
 void main() {
   tc = mix(bounds.xy, bounds.zw, quad) / texDimensions;
   vec2 realPos = pos + quad * glyphSize;
   realPos /= screenDimensions;
-  realPos = realPos * 2.0f - 1.0f;
+  realPos *= 2.0;
+  realPos += globalOffset;
   gl_Position = vec4(realPos, 1.0f, 1.0f);
 }

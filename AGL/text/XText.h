@@ -33,6 +33,9 @@ namespace agl {
     void setUp();
     void render();
     void setText(std::string&& s);
+    const std::string& getText() const { return text; }
+    void setPos(glm::vec2 p);
+    glm::vec2 getPos() const { return position; }
   private:
     struct RInfo {
       UIRect16 bounds;
@@ -43,6 +46,7 @@ namespace agl {
     void update();
     void setUniforms1();
     void setUniforms2(size_t page);
+    glm::vec2 positionAsNDC() const;
     std::vector<std::vector<RInfo>> rinfo;
     std::vector<size_t> offsets;
     bool hasInitialisedProgram = false;

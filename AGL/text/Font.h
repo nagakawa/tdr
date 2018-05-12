@@ -13,7 +13,7 @@ struct hb_font_t;
 namespace agl {
   constexpr size_t ATLAS_SIZE = 4096;
   const char* ftErrorToString(int code);
-  class FTException : std::exception {
+  class FTException : public std::exception {
   public:
     FTException(int code) : code(code) {}
     const char* what() const noexcept {

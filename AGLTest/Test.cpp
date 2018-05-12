@@ -37,6 +37,7 @@
 // Others
 #include <iostream>
 #include <memory>
+#include <stdexcept>
 #include <string>
 #include <cstdio>
 #include <cstdlib>
@@ -146,16 +147,18 @@ public:
 		std::vector<agl::Texture> test;
 		if (FT_Init_FreeType(&ftl) != 0) throw "Failed to initialise FreeType.";
 		agl::LayoutInfo l;
-		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 32);
+		afont = std::make_unique<agl::Font>(ftl, "textures/ltfont.otf", 32);
 		l.f = afont.get();
-		l.fontSize = 64;
+		l.fontSize = 56;
 		l.margin = 4;
 		l.maxWidth = 400;
 		l.lineSkip = 20;
 		xt = std::make_unique<agl::XText>(l);
 		xt->setApp(this);
 		xt->setUp();
-		xt->setText("ti et test <=>");
+		// makan mëšël nyara, mešel nïl.
+		xt->setText("MKaaN MXvvL NYxaRa, MXeeL NLm.");
+		xt->setPos(glm::vec2(50, 120));
 		for (int i = 0; i < NUM_WORDS; ++i) {
 			mixer.addSound(i, agl::Sound(fnames[i]));
 			wasPressed[i] = false;
@@ -372,6 +375,9 @@ int main(int argc, char** argv) {
 		a->start();
 	} catch (char const* s) {
 		std::cerr << u8"An error has Okuued!\n\n" << s << u8"\n\n";
+		getchar();
+	} catch (std::exception& e) {
+		std::cerr << u8"An error has Okuued!\n\n" << e.what() << u8"\n\n";
 		getchar();
 	}
 	glfwTerminate();
