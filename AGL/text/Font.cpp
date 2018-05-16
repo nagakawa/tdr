@@ -181,9 +181,13 @@ namespace agl {
       output.normalize();
       msdfgen::edgeColoringSimple(output, 3.0);
       size_t m = margin();
+      FT_BBox bb;
+      FT_Outline_Get_CBox(outline, &bb);
+      uint32_t gw = (bb.xMax - bb.xMin + 32) / 64;
+      uint32_t gh = (bb.yMax - bb.yMin + 32) / 64;
       msdfgen::Bitmap<msdfgen::FloatRGB> bm(
-        face->glyph->metrics.width / 64 + 2 * m,
-        face->glyph->metrics.height / 64 + 2 * m
+        gw + 2 * m,
+        gh + 2 * m
       );
       uint32_t w = bm.width(), h = bm.height();
       msdfgen::generateMSDF(
@@ -234,8 +238,8 @@ namespace agl {
           bounds.left, bounds.top,
           bounds.right, bounds.bottom
         },
-        (int32_t) face->glyph->metrics.width / 64,
-        (int32_t) face->glyph->metrics.height / 64
+        (int32_t) gw,
+        (int32_t) gh,
       });
     }
     facehb = hb_ft_font_create(face, nullptr);
@@ -243,6 +247,7 @@ namespace agl {
     if (error == 0) {
       stash();
       delete[] atlas;
+      std::cerr << texs.size() << " page(s)\n";
       std::cerr << (double) (clock() - cl) / CLOCKS_PER_SEC <<
         " seconds elapsed\n";
       return;

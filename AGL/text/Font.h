@@ -11,7 +11,7 @@ struct FT_FaceRec_;
 struct hb_font_t;
 
 namespace agl {
-  constexpr size_t ATLAS_SIZE = 4096;
+  constexpr size_t ATLAS_SIZE = 1024;
   const char* ftErrorToString(int code);
   class FTException : public std::exception {
   public:
@@ -35,7 +35,7 @@ namespace agl {
     FT_FaceRec_* getFont() { return face; }
     hb_font_t* getHBFont() { return facehb; }
     size_t getSize() { return size; }
-    size_t margin() { return size / 8; }
+    size_t margin() { return size / 4; }
     GlyphInfo& getInfo(uint32_t glyphID) {
       return rectsByGlyphID[glyphID];
     }

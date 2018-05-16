@@ -122,14 +122,20 @@ namespace agl {
     }
     // How many runs fit on a line?
     std::vector<GlyphInfo> out;
-    size_t cursorY = 0;
+    auto nativeHeight = layout.f->getFont()->size->metrics.height;
+    auto lineHeight = nativeHeight * layout.fontSize / fontSize;
+    size_t cursorY =
+      -layout.f->getFont()->size->metrics.ascender
+      * layout.fontSize / fontSize;
     size_t cursorX = 0;
     size_t netWidth = layout.maxWidth - layout.margin;
     size_t start = 0, i;
-    auto genLine = [&runs, &out, &cursorY, &cursorX, &start, &i, &layout]() {
+    auto genLine = [
+        &runs, &out,
+        &cursorY, &cursorX,
+        &start, &i,
+        &layout, lineHeight]() {
       cursorX = 0;
-      cursorY -=
-        layout.f->getFont()->size->metrics.height + layout.lineSkip * 64;
       int32_t myX = 0;
       // Copy runs
       for (size_t j = start; j < i; ++j) {
@@ -142,6 +148,7 @@ namespace agl {
         }
         myX += run.width;
       }
+      cursorY -= lineHeight + layout.lineSkip * 64;
     };
     bool wasPrevNewline = false;
     for (i = 0; i < runs.size(); ++i) {
@@ -154,7 +161,6 @@ namespace agl {
         start = i;
       }
       cursorX += run.width;
-      std::cerr << run.start << " " << run.len << "\n";
       wasPrevNewline = s[run.start + run.len - 1] == '\n';
     }
     genLine();

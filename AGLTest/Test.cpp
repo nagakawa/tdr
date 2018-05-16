@@ -147,9 +147,9 @@ public:
 		std::vector<agl::Texture> test;
 		if (FT_Init_FreeType(&ftl) != 0) throw "Failed to initialise FreeType.";
 		agl::LayoutInfo l;
-		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 32);
+		afont = std::make_unique<agl::Font>(ftl, "textures/kardinal.ttf", 64);
 		l.f = afont.get();
-		l.fontSize = 56;
+		l.fontSize = 72;
 		l.margin = 4;
 		l.maxWidth = 400;
 		l.lineSkip = 20;
@@ -158,7 +158,7 @@ public:
 		xt->setUp();
 		// makan mëšël nyara, mešel nïl.
 		xt->setText("tu et arka.\nh\n\nsoonoyun!");
-		xt->setPos(glm::vec2(50, 120));
+		xt->setPos(glm::vec2(50, 90));
 		for (int i = 0; i < NUM_WORDS; ++i) {
 			mixer.addSound(i, agl::Sound(fnames[i]));
 			wasPressed[i] = false;
