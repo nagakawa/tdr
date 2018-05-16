@@ -72,7 +72,7 @@ namespace agl {
         Run& run = runs.back();
         int32_t start, len;
         ubidi_getVisualRun(line, rIndex, &start, &len);
-        run.start = start;
+        run.start = start + p;
         run.len = len;
         // Layout using HarfBuzz
         hb_buffer_clear_contents(hbb);
@@ -143,15 +143,19 @@ namespace agl {
         myX += run.width;
       }
     };
+    bool wasPrevNewline = false;
     for (i = 0; i < runs.size(); ++i) {
       const Run& run = runs[i];
       // Does this run fit on the line?
       // If this will be the only run on the line, then let it overflow.
-      if (run.width + cursorX > netWidth * 64 && cursorX != 0) {
+      bool isTooBig = run.width + cursorX > netWidth * 64;
+      if ((isTooBig && cursorX != 0) || wasPrevNewline) {
         genLine();
         start = i;
       }
       cursorX += run.width;
+      std::cerr << run.start << " " << run.len << "\n";
+      wasPrevNewline = s[run.start + run.len - 1] == '\n';
     }
     genLine();
     return out;
