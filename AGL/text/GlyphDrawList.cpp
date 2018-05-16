@@ -76,7 +76,9 @@ namespace agl {
         run.len = len;
         // Layout using HarfBuzz
         hb_buffer_clear_contents(hbb);
-        hb_buffer_add_utf16(hbb, s.getBuffer() + p + start, len, 0, len);
+        // Discard '\n', since this is treated specially anyway
+        hb_buffer_add_utf16(
+          hbb, s.getBuffer() + p + start, len, 0, len);
         hb_buffer_guess_segment_properties(hbb);
         hb_font_t* font = layout.f->getHBFont();
         hb_shape(font, hbb, nullptr, 0);
@@ -100,8 +102,8 @@ namespace agl {
           int32_t h = (int32_t) (gi.h * layout.fontSize / fontSize);
           run.glyphs[i] = {
             /* .index = */ glyphInfo[i].codepoint,
-            /* .x = */ x,
-            /* .y = */ y,
+            /* .x = */ x + gi.xoffset,
+            /* .y = */ y + gi.yoffset,
             /* .w = */ w,
             /* .h = */ h
           };

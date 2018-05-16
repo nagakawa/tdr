@@ -18,6 +18,7 @@ void main() {
   float edgeWidth = 0.7 * length(vec2(dFdx(dist), dFdy(dist)));
   float opacity = smoothstep(0.5 - edgeWidth, 0.5 + edgeWidth, dist);
   vec4 background = vec4(textColour.rgb, 0.0);
+  //vec4 background = vec4(0.0, 0.0, 0.0, 1.0);
   colour = mix(background, textColour, opacity);
   //colour = sigDist >= 0 ? textColour : background;
 }

@@ -79,7 +79,6 @@ namespace agl {
 		aw = actualWidth;
 		ah = actualHeight;
 		mfps = maxFPS;
-		projection = glm::scale(projection, glm::vec3(1.0f / width, 1.0f / height, 1));
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, glMajor);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, glMinor);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

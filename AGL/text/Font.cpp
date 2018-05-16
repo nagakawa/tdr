@@ -195,7 +195,7 @@ namespace agl {
         output,
         m,
         1.0,
-        msdfgen::Vector2(m, m)
+        msdfgen::Vector2(m - bb.xMin / 64, m - bb.yMin / 64)
       );
       if (reversed) {
         for (uint32_t y = 0; y < h; ++y) {
@@ -240,6 +240,8 @@ namespace agl {
         },
         (int32_t) gw,
         (int32_t) gh,
+        (int32_t) bb.xMin,
+        (int32_t) bb.yMin,
       });
     }
     facehb = hb_ft_font_create(face, nullptr);

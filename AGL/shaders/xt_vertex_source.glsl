@@ -11,7 +11,7 @@ uniform vec2 screenDimensions;
 uniform vec2 globalOffset;
 
 void main() {
-  tc = mix(bounds.xy, bounds.zw, quad) / texDimensions;
+  tc = (mix(bounds.xy, bounds.zw, quad) - 0.5) / texDimensions;
   vec2 realPos = pos + quad * glyphSize;
   realPos /= screenDimensions;
   realPos *= 2.0;

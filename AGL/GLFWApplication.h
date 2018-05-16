@@ -79,7 +79,6 @@ namespace agl {
 		GLdouble currentTime;
 		GLdouble cumulDelta;
 		GLint currInRF;
-		glm::mat4 projection;
 		GLint w;
 		GLint h;
 		GLint aw;
