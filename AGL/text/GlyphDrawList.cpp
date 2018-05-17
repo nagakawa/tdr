@@ -74,11 +74,13 @@ namespace agl {
         ubidi_getVisualRun(line, rIndex, &start, &len);
         run.start = start + p;
         run.len = len;
+        int32_t lenwon = len;
+        while (s[start + p + lenwon - 1] == '\n') --lenwon;
         // Layout using HarfBuzz
         hb_buffer_clear_contents(hbb);
         // Discard '\n', since this is treated specially anyway
         hb_buffer_add_utf16(
-          hbb, s.getBuffer() + p + start, len, 0, len);
+          hbb, s.getBuffer() + p + start, lenwon, 0, lenwon);
         hb_buffer_guess_segment_properties(hbb);
         hb_font_t* font = layout.f->getHBFont();
         hb_shape(font, hbb, nullptr, 0);
@@ -100,10 +102,12 @@ namespace agl {
           Font::GlyphInfo& gi = layout.f->getInfo(glyphInfo[i].codepoint);
           int32_t w = (int32_t) (gi.w * layout.fontSize / fontSize);
           int32_t h = (int32_t) (gi.h * layout.fontSize / fontSize);
+          int32_t xoff = (int32_t) (gi.xoffset * layout.fontSize / fontSize);
+          int32_t yoff = (int32_t) (gi.yoffset * layout.fontSize / fontSize);
           run.glyphs[i] = {
             /* .index = */ glyphInfo[i].codepoint,
-            /* .x = */ x + gi.xoffset,
-            /* .y = */ y + gi.yoffset,
+            /* .x = */ x + xoff,
+            /* .y = */ y + yoff,
             /* .w = */ w,
             /* .h = */ h
           };

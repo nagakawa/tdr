@@ -157,7 +157,7 @@ public:
 		xt->setApp(this);
 		xt->setUp();
 		// makan mëšël nyara, mešel nïl.
-		xt->setText("tu et arka.\nh\n\nsoonoyun!");
+		xt->setText("tu et arka.\nh\nasayarala\nsoonoyun!");
 		xt->setPos(glm::vec2(50, 90));
 		for (int i = 0; i < NUM_WORDS; ++i) {
 			mixer.addSound(i, agl::Sound(fnames[i]));

@@ -195,7 +195,7 @@ namespace agl {
         output,
         m,
         1.0,
-        msdfgen::Vector2(m - bb.xMin / 64, m - bb.yMin / 64)
+        msdfgen::Vector2(m - bb.xMin / 64.0, m - bb.yMin / 64.0)
       );
       if (reversed) {
         for (uint32_t y = 0; y < h; ++y) {

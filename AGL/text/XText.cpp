@@ -134,6 +134,7 @@ namespace agl {
   void XText::setPos(glm::vec2 p) {
     position = p;
     if (hasInitialisedProgram) {
+      program.use();
       glm::vec2 ndc = positionAsNDC();
       SETUNSP2(program, 2f, "globalOffset", ndc.x, ndc.y);
     }
