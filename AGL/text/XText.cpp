@@ -56,8 +56,14 @@ namespace agl {
       toPush.emplace_back();
       RInfo& entry = toPush.back();
       entry.bounds = props.box;
-      entry.pos = { gi.x / 64.0 - marginCorrected, gi.y / 64.0 - marginCorrected };
-      entry.glyphSize = { gi.w + 2 * marginCorrected, gi.h + 2 * marginCorrected };
+      entry.pos = {
+        gi.x / 64.0 - marginCorrected,
+        gi.y / 64.0 - marginCorrected
+      };
+      entry.glyphSize = {
+        gi.w + 2 * marginCorrected,
+        gi.h + 2 * marginCorrected
+      };
     }
     // Update offsets vector
     offsets.resize(rinfo.size() + 1);

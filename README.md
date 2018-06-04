@@ -1,5 +1,7 @@
 ## TDR
 
+Moved to [GitLab](https://gitlab.com/nagakawa/tdr).
+
 TDR Dodges Rain.
 
 ### Installation

@@ -89,8 +89,7 @@ class AGLTest : public agl::GLFWApplication {
 public:
 	using agl::GLFWApplication::GLFWApplication;
 	void initialise() {
-		std::cout << "hi\n";
-		//glfwSetInputMode(underlying(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetInputMode(underlying(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		agl::FBOTexMS ft = agl::makeFBOForMeMS(800, 600);
 		fboTex = std::move(ft.ss.texture);
 		fboTexMS = std::move(ft.ms.texture);

@@ -51,7 +51,7 @@ namespace agl {
     std::vector<size_t> offsets;
     bool hasInitialisedProgram = false;
     bool hasSetUniforms = false;
-    glm::vec2 dimensions;
+    //glm::vec2 dimensions;
 		glm::vec2 position = {0, 0};
     LayoutInfo layout;
     std::string text;
